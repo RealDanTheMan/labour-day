@@ -1,5 +1,4 @@
 #include "glfwinterface.hpp"
-#include <GLFW/glfw3.h>
 #include <stdio.h>
 
 using namespace Engine;

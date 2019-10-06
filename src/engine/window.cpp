@@ -4,14 +4,14 @@
 using namespace Engine;
 
 Window::Window():
-m_width(64),
-m_height(64),
+m_width(128),
+m_height(128),
 m_winHandle(nullptr)
 {
     GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "GLFW Window", nullptr, nullptr);
     if(raw != nullptr)
     {
-        m_winHandle = std::unique_ptr<GLFWwindow, GLFWDeleter>(raw);
+        m_winHandle = std::unique_ptr<GLFWwindow, GLFWWindowDeleter>(raw);
         m_ready = true;
     }
 }
@@ -27,7 +27,7 @@ m_winHandle(nullptr)
     GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "GLFW Window", nullptr, nullptr);
     if(raw != nullptr)
     {
-        m_winHandle = std::unique_ptr<GLFWwindow, GLFWDeleter>(raw);
+        m_winHandle = std::unique_ptr<GLFWwindow, GLFWWindowDeleter>(raw);
         m_ready = true;
     }
 }
@@ -44,5 +44,10 @@ const uint32_t Window::GetHeight() const
 
 const bool Window::Ready() const
 {
-    return m_ready && glfwWindowShouldClose(m_winHandle.get());
+    return m_ready && !glfwWindowShouldClose(m_winHandle.get());
+}
+
+GLFWwindow* Window::GetHandle() const
+{
+    return m_winHandle.get();
 }

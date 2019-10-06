@@ -1,6 +1,8 @@
 #ifndef GLFWINTERFACE_H_
 #define GLFWINTERFACE_H_
 
+#include <GLFW/glfw3.h>
+
 namespace Engine
 {
     class GLFWInterface 
