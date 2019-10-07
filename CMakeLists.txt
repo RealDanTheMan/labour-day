@@ -18,6 +18,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Main project (user) source files
 set(SOURCES 
 ${PROJECT_SOURCE_DIR}/main.cpp
+${PROJECT_SOURCE_DIR}/app.cpp
 ${PROJECT_SOURCE_DIR}/engine/glfwinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/enginecore.cpp
 ${PROJECT_SOURCE_DIR}/engine/window.cpp )

@@ -1,29 +1,21 @@
-#include <GLFW/glfw3.h>
-#include "engine/glfwinterface.hpp"
-#include "engine/enginecore.hpp"
-#include "engine/window.hpp"
-
-#include <assert.h>
+#include "app.hpp"
+#include "engine/debugging.hpp"
 
 int main()
 {
+    D_MSG("Runing app ...");
 
-    Engine::EngineCore core = Engine::EngineCore();
-    Engine::EngineCoreSettings settings = Engine::EngineCoreSettings();
-    settings.m_windowWidth = 1280;
-    settings.m_windowHeight = 720;
-
-    if(!core.Initialize(settings))
+    App app = App();
+    if(!app.Initialize())
     {
-        fprintf(stderr, "Failed to initialize engine core !\n");
+        D_ERR("Failed to initialize engine core !");
+        return 1;
     }
 
-    while(core.MainWindowActive())
-    {
-        core.RedrawMainWindow();
-    }
+    app.Run();
+    app.Exit();
 
-    core.Terminate();
+    D_MSG("Exiting app ...");
     
     return 0;
 }
