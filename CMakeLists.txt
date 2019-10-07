@@ -10,6 +10,12 @@ set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Find Dependencies
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+
+if (GLEW_FOUND)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLEW_LIBRARIES})
+endif()
 
 # Project sources
 set(PROJECT_SOURCE_DIR ./src/)
@@ -20,6 +26,7 @@ set(SOURCES
 ${PROJECT_SOURCE_DIR}/main.cpp
 ${PROJECT_SOURCE_DIR}/app.cpp
 ${PROJECT_SOURCE_DIR}/engine/glfwinterface.cpp
+${PROJECT_SOURCE_DIR}/engine/glewinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/enginecore.cpp
 ${PROJECT_SOURCE_DIR}/engine/window.cpp )
 
