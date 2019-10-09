@@ -28,6 +28,8 @@ ${PROJECT_SOURCE_DIR}/app.cpp
 ${PROJECT_SOURCE_DIR}/engine/glfwinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/glewinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/enginecore.cpp
+${PROJECT_SOURCE_DIR}/engine/shadersource.cpp
+${PROJECT_SOURCE_DIR}/engine/shaderprog.cpp
 ${PROJECT_SOURCE_DIR}/engine/window.cpp )
 
 add_executable(labour-day ${SOURCES})
