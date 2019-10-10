@@ -19,6 +19,10 @@ namespace Engine
         const uint32_t VertexCount() const;
         const uint32_t IndexCount() const;
 
+        const GLuint IndexBuffer() const;
+        const GLuint VertexBuffer() const;
+        const GLuint VertexAttributes() const;
+
         private:
 
         void InitBuffers();
@@ -32,6 +36,7 @@ namespace Engine
 
         GLuint m_vbo;
         GLuint m_ibo;
+        GLuint m_vao;
 
     };
 }

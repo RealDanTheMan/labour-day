@@ -7,7 +7,10 @@ m_vertices(nullptr),
 m_indices(nullptr),
 m_shader(nullptr),
 m_vertexCount(0),
-m_indexCount(0)
+m_indexCount(0),
+m_vbo(0),
+m_ibo(0),
+m_vao(0)
 {
 
 }
@@ -34,6 +37,7 @@ void Renderable::Free()
 {
     glDeleteBuffers(1, &m_vbo);
     glDeleteBuffers(1, &m_ibo);
+    glDeleteVertexArrays(1, &m_vao);
     
     m_vertices.reset(nullptr);
     m_indices.reset(nullptr);
@@ -68,6 +72,7 @@ void Renderable::InitBuffers()
 {
     assert (m_vbo == 0);
     assert (m_ibo == 0);
+    assert (m_vao == 0);
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -77,6 +82,26 @@ void Renderable::InitBuffers()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(uint32_t), m_indices.get(), GL_STATIC_DRAW);
 
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+const GLuint Renderable::IndexBuffer() const
+{
+    return m_ibo;
+}
+
+const GLuint Renderable::VertexBuffer() const
+{
+    return m_vbo;
+}
+
+const GLuint Renderable::VertexAttributes() const
+{
+    return m_vao;
 }
