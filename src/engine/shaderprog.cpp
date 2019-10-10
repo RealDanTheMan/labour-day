@@ -46,12 +46,11 @@ const std::string ShaderProg::GetLog() const
         return "";
     }
 
-    GLint size;
-    glGetProgramiv(m_handle, GL_INFO_LOG_LENGTH, &size);
-
-    char* log = new char[size];
     GLint len;
-    glGetProgramInfoLog(m_handle, size, &len, log); 
+    glGetProgramiv(m_handle, GL_INFO_LOG_LENGTH, &len);
+
+    char* log = new char[len];
+    glGetProgramInfoLog(m_handle, len, &len, log); 
 
     std::string logstr = std::string(log, len);
     delete[] log;
