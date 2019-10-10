@@ -64,8 +64,6 @@ const std::string ShaderSource::GetLog() const
     assert (m_handle != 0);
 
     GLint len;
-    GLsizei size;
-
     glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &len);
     if(len == 0)
     {
@@ -73,7 +71,7 @@ const std::string ShaderSource::GetLog() const
     }
 
     GLchar* log = new GLchar[len];
-    glGetInfoLogARB(m_handle, size, &len, log);
+    glGetInfoLogARB(m_handle, len, &len, log);
     std::string logstr = std::string(log);
     delete[] log;
     log = nullptr;
