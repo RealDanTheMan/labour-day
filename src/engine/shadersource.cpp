@@ -24,7 +24,13 @@ void ShaderSource::Compile()
     char* src = new char[m_len];
     strcpy(src, m_source);
 
-    m_handle = glCreateShader(GL_VERTEX_SHADER);
+    switch(m_type)
+    {
+        case ShaderSourceType::Vertex: m_handle = glCreateShader(GL_VERTEX_SHADER); break;
+        case ShaderSourceType::Pixel: m_handle = glCreateShader(GL_FRAGMENT_SHADER); break;
+    }
+
+    assert (m_handle != 0);
     glShaderSourceARB(m_handle, 1, &m_source, &m_len);
     glCompileShader(m_handle);
 
