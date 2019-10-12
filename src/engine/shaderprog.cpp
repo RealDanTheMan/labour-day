@@ -1,4 +1,5 @@
 #include "shaderprog.hpp"
+#include "shadersemantics.hpp"
 #include "debugging.hpp"
 #include <memory>
 
@@ -13,6 +14,7 @@ ShaderProg::ShaderProg(const ShaderSource &vs, const ShaderSource &ps)
 
     glAttachShader(m_handle, vs.GetHandle());
     glAttachShader(m_handle, ps.GetHandle());
+    glBindFragDataLocation(m_handle, 0, SV_OUT_COLOR);
     glLinkProgram(m_handle);
     glDetachShader(m_handle, vs.GetHandle());
     glDetachShader(m_handle, ps.GetHandle());
@@ -37,6 +39,11 @@ void ShaderProg::Free()
 const bool ShaderProg::Ready() const
 {
     return m_ready;
+}
+
+const GLuint ShaderProg::GetHandle() const
+{
+    return m_handle;
 }
 
 const std::string ShaderProg::GetLog() const

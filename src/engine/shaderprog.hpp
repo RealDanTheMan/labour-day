@@ -14,6 +14,7 @@ namespace Engine
         void Free();
         const bool Ready() const;
         const std::string GetLog() const;
+        const GLuint GetHandle() const;
 
         private:
 
