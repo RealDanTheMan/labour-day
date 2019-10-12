@@ -37,6 +37,5 @@ add_executable(labour-day ${SOURCES})
 
 
 # Link GLFW and OpenGL
-target_link_libraries(labour-day glfw)
 target_include_directories(labour-day PUBLIC ${OPENGL_INCLUDE_DIR})
-target_link_libraries(labour-day ${OPENGL_gl_LIBRARY})
+target_link_libraries(labour-day glfw OpenGL::GL)
