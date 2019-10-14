@@ -16,7 +16,7 @@ m_compiled(false)
 
 void ShaderSource::Compile()
 {
-    assert(m_source != nullptr);
+    assert (m_source != nullptr);
     assert (m_len > 0);
     assert (!m_compiled);
     assert (m_handle == 0);
@@ -50,8 +50,7 @@ void ShaderSource::Free()
     glDeleteShader(m_handle);
     m_handle = 0;
     m_len = 0;
-    delete[] m_source;
-    m_source = nullptr;
+    m_source = "";
     m_compiled = false;
 }
 
