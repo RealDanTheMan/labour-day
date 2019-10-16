@@ -14,7 +14,7 @@ namespace Engine
         Renderable();
         void Init(glm::vec3 *vertices, uint32_t *indices, const uint32_t vCount, const uint32_t iCount);
         void Free();
-        void BindShader(ShaderProg* shader);
+        void BindShader(const ShaderProg* shader);
         const ShaderProg* GetShader() const;
         const uint32_t VertexCount() const;
         const uint32_t IndexCount() const;
@@ -31,7 +31,7 @@ namespace Engine
 
         std::unique_ptr<glm::vec3[]> m_vertices;
         std::unique_ptr<unsigned int[]> m_indices;
-        ShaderProg* m_shader;
+        const ShaderProg* m_shader;
         uint32_t m_vertexCount;
         uint32_t m_indexCount;
 

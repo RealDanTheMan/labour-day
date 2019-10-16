@@ -50,7 +50,7 @@ void Renderable::Free()
     m_indexCount = 0;
 }
 
-void Renderable::BindShader(ShaderProg* shader)
+void Renderable::BindShader(const ShaderProg* shader)
 {
     m_shader = shader;
 }
