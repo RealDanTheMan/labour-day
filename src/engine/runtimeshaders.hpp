@@ -19,7 +19,7 @@ namespace Engine
         std::unique_ptr<ShaderProg> m_flatWhite;
     };
 
-    const char* const FLAT_WHITE_VERT_SRC = R"(
+    const std::string FLAT_WHITE_VERT_SRC = R"(
         #version 330
 
         layout(location = 0) in vec3 SV_VERTEX;
@@ -30,7 +30,7 @@ namespace Engine
         }
     )";
 
-    const char* const FLAT_WHITE_PIX_SRC = R"(
+    const std::string FLAT_WHITE_PIX_SRC = R"(
         #version 330
 
         out vec4 SV_OUT_COLOR;
