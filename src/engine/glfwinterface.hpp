@@ -1,5 +1,5 @@
-#ifndef GLFWINTERFACE_H_
-#define GLFWINTERFACE_H_
+#ifndef GLFWINTERFACE_HPP_
+#define GLFWINTERFACE_HPP_
 
 #include <GLFW/glfw3.h>
 

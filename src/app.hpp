@@ -1,5 +1,5 @@
-#ifndef APP_H_
-#define APP_H_
+#ifndef APP_HPP_
+#define APP_HPP_
 
 #include "engine/enginecore.hpp"
 

@@ -1,5 +1,5 @@
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef RENDERABLE_HPP_
+#define RENDERABLE_HPP_
 
 #include "shaderprog.hpp"
 #include <glm/vec3.hpp>

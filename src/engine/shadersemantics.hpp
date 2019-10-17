@@ -1,5 +1,5 @@
-#ifndef SHADER_SEMANTICS_H_
-#define SHADER_SEMANTICS_H_
+#ifndef SHADER_SEMANTICS_HPP_
+#define SHADER_SEMANTICS_HPP_
 
 namespace Engine
 {

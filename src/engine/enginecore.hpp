@@ -1,5 +1,5 @@
-#ifndef ENGINECORE_H_
-#define ENGINECORE_H_
+#ifndef ENGINECORE_HPP_
+#define ENGINECORE_HPP_
 
 #include "glewinterface.hpp"
 #include "glfwinterface.hpp"

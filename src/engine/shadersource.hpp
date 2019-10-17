@@ -1,5 +1,5 @@
-#ifndef SHADERSOURCE_H_
-#define SHADERSOURCE_H_
+#ifndef SHADERSOURCE_HPP_
+#define SHADERSOURCE_HPP_
 
 #include "glewinterface.hpp"
 #include <string>
