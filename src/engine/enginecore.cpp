@@ -37,6 +37,7 @@ bool EngineCore::Initialize()
         return false;
     }
 
+    m_renderer = std::make_unique<CommonRenderer>();
     return true;
 }
 
@@ -64,7 +65,8 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
         D_ERR("Failed to initialize GLEW context !");
         return false;
     }
-    
+
+    m_renderer = std::make_unique<CommonRenderer>();    
     return true;
 }
 
@@ -84,8 +86,10 @@ void EngineCore::RedrawMainWindow()
     assert (m_glfw->Initialized());
     assert (m_mainWin != nullptr);
     assert (m_mainWin->Ready());
+    assert (m_renderer != nullptr);
 
     glfwPollEvents();
+    m_renderer->DrawRenderables();
     glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
@@ -96,4 +100,9 @@ const bool EngineCore::MainWindowActive() const
     assert (m_mainWin != nullptr);
 
     return m_mainWin->Ready();
+}
+
+CommonRenderer* EngineCore::Renderer()
+{
+    return m_renderer.get();
 }

@@ -9,6 +9,7 @@ class App
     bool Initialize();
     void Run();
     void Exit();
+    Engine::EngineCore* Engine();
 
     private:
     std::unique_ptr<Engine::EngineCore> m_core;

@@ -36,3 +36,8 @@ void App::Exit()
     m_core.reset(nullptr);
     m_core = nullptr;
 }
+
+Engine::EngineCore* App::Engine()
+{
+    return m_core.get();
+}

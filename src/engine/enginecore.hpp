@@ -4,6 +4,7 @@
 #include "glewinterface.hpp"
 #include "glfwinterface.hpp"
 #include "window.hpp"
+#include "commonrenderer.hpp"
 #include <memory>
 
 namespace Engine
@@ -20,6 +21,7 @@ namespace Engine
         std::unique_ptr<GLEWInterface> m_glew;
         std::unique_ptr<GLFWInterface> m_glfw;
         std::unique_ptr<Window> m_mainWin;
+        std::unique_ptr<CommonRenderer> m_renderer;
 
         public:
         EngineCore();
@@ -28,6 +30,7 @@ namespace Engine
         void Terminate();
         void RedrawMainWindow();
         const bool MainWindowActive() const;
+        CommonRenderer* Renderer();
     };
 }
 
