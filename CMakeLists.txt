@@ -34,6 +34,7 @@ ${PROJECT_SOURCE_DIR}/engine/runtimeshaders.cpp
 ${PROJECT_SOURCE_DIR}/engine/mesh.cpp
 ${PROJECT_SOURCE_DIR}/engine/meshgen.cpp
 ${PROJECT_SOURCE_DIR}/engine/renderable.cpp
+${PROJECT_SOURCE_DIR}/engine/commonrenderer.cpp
 ${PROJECT_SOURCE_DIR}/engine/window.cpp )
 
 add_executable(labour-day ${SOURCES})
