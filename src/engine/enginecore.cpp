@@ -4,7 +4,7 @@
 using namespace Engine;
 
 EngineCore::EngineCore():
-m_glew(nullptr),
+m_gfx(nullptr),
 m_glfw(nullptr),
 m_mainWin(nullptr)
 {
@@ -12,7 +12,7 @@ m_mainWin(nullptr)
 
 bool EngineCore::Initialize()
 {
-    assert (m_glew == nullptr);
+    assert (m_gfx == nullptr);
     assert (m_glfw == nullptr);
     
     m_glfw = std::make_unique<GLFWInterface>();
@@ -30,10 +30,10 @@ bool EngineCore::Initialize()
     }
 
     glfwMakeContextCurrent(m_mainWin->GetHandle());
-    m_glew = std::make_unique<GLEWInterface>();
-    if(!m_glew->Initialize())
+    m_gfx = std::make_unique<Gfx>();
+    if(!m_gfx->Init())
     {
-        D_ERR("Failed to initialize GLEW context !");
+        D_ERR("Failed to initialize gfx !");
         return false;
     }
 
@@ -43,7 +43,9 @@ bool EngineCore::Initialize()
 
 bool EngineCore::Initialize(const EngineCoreSettings &settings)
 {
+    assert (m_gfx == nullptr);
     assert (m_glfw == nullptr);
+
     m_glfw = std::make_unique<GLFWInterface>();
 
     if(!m_glfw->Initialize())
@@ -59,10 +61,10 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     }
 
     glfwMakeContextCurrent(m_mainWin->GetHandle());
-    m_glew = std::make_unique<GLEWInterface>();
-    if(!m_glew->Initialize())
+    m_gfx = std::make_unique<Gfx>();
+    if(!m_gfx->Init())
     {
-        D_ERR("Failed to initialize GLEW context !");
+        D_ERR("Failed to initialize gfx !");
         return false;
     }
 

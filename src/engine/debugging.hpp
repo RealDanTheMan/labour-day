@@ -1,5 +1,5 @@
-#ifndef DEBUGGING_H_
-#define DEBUGGING_H_
+#ifndef DEBUGGING_HPP_
+#define DEBUGGING_HPP_
 
 #include <iostream>
 #include <assert.h>

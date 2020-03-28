@@ -1,5 +1,5 @@
-#ifndef MESHGEN_H_
-#define MESHGEN_H_
+#ifndef MESHGEN_HPP_
+#define MESHGEN_HPP_
 
 #include "mesh.hpp"
 #include <memory>

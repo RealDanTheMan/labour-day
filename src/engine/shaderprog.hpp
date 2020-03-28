@@ -1,5 +1,5 @@
-#ifndef SHADERPROG_H_
-#define SHADERPROG_H_
+#ifndef SHADERPROG_HPP_
+#define SHADERPROG_HPP_
 
 #include "shadersource.hpp"
 #include <string>

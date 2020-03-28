@@ -1,5 +1,5 @@
-#ifndef RUNTIME_SHADERS_H_
-#define RUNTIME_SHADERS_H_
+#ifndef RUNTIME_SHADERS_HPP_
+#define RUNTIME_SHADERS_HPP_
 
 #include "shaderprog.hpp"
 #include <memory>

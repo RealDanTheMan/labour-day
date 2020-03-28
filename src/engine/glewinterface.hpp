@@ -1,5 +1,5 @@
-#ifndef GLEWINTERFACE_H_
-#define GLEWINTERFACE_H_
+#ifndef GLEWINTERFACE_HPP_
+#define GLEWINTERFACE_HPP_
 
 #include <GL/glew.h>
 
