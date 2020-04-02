@@ -22,11 +22,16 @@ namespace Engine
     const std::string FLAT_WHITE_VERT_SRC = R"(
         #version 330
 
+        uniform mat4 SV_PROJECTION;
+        uniform mat4 SV_VIEW;
+
+        mat4x4 VP = SV_VIEW * SV_PROJECTION;
+
         layout(location = 0) in vec3 SV_VERTEX;
 
         void main(void)
         {
-            gl_Position = vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
+            gl_Position = VP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
         }
     )";
 
