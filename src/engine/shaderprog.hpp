@@ -1,6 +1,7 @@
 #ifndef SHADERPROG_HPP_
 #define SHADERPROG_HPP_
 
+#include "shadersemantics.hpp"
 #include "shadersource.hpp"
 #include <string>
 

@@ -3,8 +3,11 @@
 
 namespace Engine
 {
-    const char* SV_VERTEX = "SV_VERTEX";
-    const char* SV_OUT_COLOR = "SV_OUT_COLOR";
+    extern const char* SV_VERTEX;
+    extern const char* SV_OUT_COLOR;
+    extern const char* SV_PROJECTION;
+    extern const char* SV_VIEW;
+     
 }
 
 #endif
