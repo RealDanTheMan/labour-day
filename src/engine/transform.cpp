@@ -4,13 +4,26 @@
 using namespace Engine;
 
 
-Transform::Transform()
+Transform::Transform():
+m_translation(Transform::IdentityMatrix()),
+m_scale(Transform::IdentityMatrix()),
+m_rotX(Transform::IdentityMatrix()),
+m_rotY(Transform::IdentityMatrix()),
+m_rotZ(Transform::IdentityMatrix()),
+m_composite(Transform::IdentityMatrix())
 {
-    m_translation = Transform::IdentityMatrix();
-    m_scale = Transform::IdentityMatrix();
-    m_rotX = Transform::IdentityMatrix();
-    m_rotY = Transform::IdentityMatrix();
-    m_rotZ = Transform::IdentityMatrix();
+
+}
+
+Transform::Transform(const Transform &rhs):
+m_translation(rhs.m_translation),
+m_scale(rhs.m_scale),
+m_rotX(rhs.m_rotX),
+m_rotY(rhs.m_rotY),
+m_rotZ(rhs.m_rotZ),
+m_composite(rhs.m_composite)
+{
+
 }
 
 Mat4 Transform::IdentityMatrix()

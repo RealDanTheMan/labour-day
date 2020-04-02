@@ -17,6 +17,7 @@ namespace Engine
 
         public:
         Transform();
+        Transform(const Transform &rhs);
         const Mat4& Matrix() const;
 
         void Translate(const Vec3 &translation);
