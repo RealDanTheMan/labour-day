@@ -1,5 +1,4 @@
 #include "shaderprog.hpp"
-#include "shadersemantics.hpp"
 #include "debugging.hpp"
 #include <memory>
 
