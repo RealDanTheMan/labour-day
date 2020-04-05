@@ -5,6 +5,7 @@
 #include "glfwinterface.hpp"
 #include "window.hpp"
 #include "commonrenderer.hpp"
+#include "runtimeshaders.hpp"
 #include "gfx.hpp"
 #include <memory>
 
@@ -23,6 +24,7 @@ namespace Engine
         std::unique_ptr<Gfx> m_gfx;
         std::unique_ptr<Window> m_mainWin;
         std::unique_ptr<CommonRenderer> m_renderer;
+        std::unique_ptr<RuntimeShaders> m_runtimeShaders;
 
         public:
         EngineCore();
@@ -30,8 +32,10 @@ namespace Engine
         bool Initialize(const EngineCoreSettings &settings);
         void Terminate();
         void RedrawMainWindow();
+        void ClearMainWindow();
         const bool MainWindowActive() const;
         CommonRenderer* Renderer();
+        RuntimeShaders* Shaders() const;
     };
 }
 

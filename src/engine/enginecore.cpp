@@ -1,5 +1,6 @@
 #include "enginecore.hpp"
 #include "debugging.hpp"
+#include "inputmanager.hpp"
 
 using namespace Engine;
 
@@ -68,7 +69,11 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
         return false;
     }
 
-    m_renderer = std::make_unique<CommonRenderer>();    
+    InputManager::Instance().Initialize(*m_mainWin);
+    m_renderer = std::make_unique<CommonRenderer>();
+    m_runtimeShaders = std::make_unique<RuntimeShaders>();
+    m_runtimeShaders->Init();
+
     return true;
 }
 
@@ -95,6 +100,11 @@ void EngineCore::RedrawMainWindow()
     glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
+void EngineCore::ClearMainWindow()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 const bool EngineCore::MainWindowActive() const
 {
     assert (m_glfw != nullptr);
@@ -107,4 +117,9 @@ const bool EngineCore::MainWindowActive() const
 CommonRenderer* EngineCore::Renderer()
 {
     return m_renderer.get();
+}
+
+RuntimeShaders* EngineCore::Shaders() const
+{
+    return m_runtimeShaders.get();
 }

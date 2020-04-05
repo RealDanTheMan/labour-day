@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include "engine/debugging.hpp"
+#include "engine/inputmanager.hpp"
 
 bool App::Initialize()
 {
@@ -15,6 +16,11 @@ bool App::Initialize()
         return false;
     }
 
+    m_testScene = std::make_unique<TestScene>();
+    m_testScene->Initialize(m_core.get());
+    m_core->Renderer()->SetCamera(m_testScene->Cam());
+    m_core->Renderer()->AddToQueue(m_testScene->TestTriangle());
+
     return true;
 }
 
@@ -22,10 +28,13 @@ void App::Run()
 {
     assert (m_core != nullptr);
     
-    while(m_core->MainWindowActive())
+    while(m_core->MainWindowActive() && !Engine::InputManager::Instance().CheckKey(KEY_ESCAPE))
     {
-        m_core->RedrawMainWindow();
+        Engine::InputManager::Instance().Poll();
+        UpdateGame();
+        DrawGame();
     }
+    
 }
 
 void App::Exit()
@@ -40,4 +49,17 @@ void App::Exit()
 Engine::EngineCore* App::Engine()
 {
     return m_core.get();
+}
+
+void App::UpdateGame()
+{
+    assert (m_testScene != nullptr);
+    m_testScene->Update();
+}
+
+void App::DrawGame()
+{
+    assert (m_core != nullptr);
+    m_core->ClearMainWindow();
+    m_core->RedrawMainWindow();
 }
