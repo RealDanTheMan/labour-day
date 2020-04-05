@@ -31,3 +31,8 @@ const Mat4& Camera::Projection() const
 {
     return m_proj.Matrix();
 }
+
+Transform& Camera::GetTransform()
+{
+    return m_transform;
+}

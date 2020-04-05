@@ -19,6 +19,7 @@ namespace Engine
 
         const Mat4 &View() const;
         const Mat4 &Projection() const;
+        Transform& GetTransform();
 
     };
 }
