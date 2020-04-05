@@ -18,21 +18,6 @@ int main()
         return 1;
     }
 
-    //Engine::Camera cam;
-//
-    //std::unique_ptr<Engine::RuntimeShaders> shaders = std::make_unique<Engine::RuntimeShaders>();
-    //shaders->Init();
-    //assert (shaders->Ready());
-    //
-    //std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Triangle(1.0f);
-    //std::unique_ptr<Engine::Renderable> tri = std::make_unique<Engine::Renderable>();
-    //tri->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
-    //tri->BindShader(shaders->FlatWhite());
-//
-    //assert (tri->Ready());
-    //app.Engine()->Renderer()->SetCamera(&cam);
-    //app.Engine()->Renderer()->AddToQueue(tri.get());
-
     app.Run();
     app.Exit();
 
