@@ -20,6 +20,9 @@ namespace Engine
             template<typename T> 
             T* const  Add();
 
+            template<typename T>
+            T* const Get();
+
         private:
             uint32_t m_count;
             std::vector<std::unique_ptr<EntityComponent>> m_components;
@@ -33,6 +36,21 @@ namespace Engine
         m_components.push_back(std::move(com));
 
         return dynamic_cast<T*>(m_components.back().get());
+    }
+
+    template<typename T>
+    T* const EntityComponentCollection::Get()
+    {
+        for(auto& com : m_components)
+        {
+            auto match = dynamic_cast<T*>(com.get());
+            if(match)
+            {
+                return match;
+            }
+        }
+
+        return nullptr;
     }
 }
 
