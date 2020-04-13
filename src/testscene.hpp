@@ -8,6 +8,7 @@ class TestScene
 {
     private:
     std::unique_ptr<Engine::Renderable> m_triangle;
+    std::unique_ptr<Engine::Entity> m_asset;
     std::unique_ptr<Engine::Camera> m_camera;
     Engine::EngineCore* m_core;
 
@@ -16,6 +17,7 @@ class TestScene
     void Update();
 
     Engine::Renderable* TestTriangle();
+    Engine::Entity* Asset();
     Engine::Camera* Cam();
 
 };

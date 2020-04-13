@@ -1,4 +1,5 @@
 #include "testscene.hpp"
+#include "testentity.hpp"
 #include "engine/meshgen.hpp"
 
 
@@ -15,6 +16,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_triangle->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
     m_triangle->BindShader(m_core->Shaders()->FlatWhite());
 
+    m_asset = TestEntity::Create();
+    assert (m_asset != nullptr);
+
     assert (m_triangle->Ready());
     m_camera = std::make_unique<Engine::Camera>();
 }
@@ -22,6 +26,11 @@ void TestScene::Initialize(Engine::EngineCore *core)
 Engine::Renderable* TestScene::TestTriangle()
 {
     return m_triangle.get();
+}
+
+Engine::Entity* TestScene::Asset()
+{
+    return m_asset.get();
 }
 
 Engine::Camera* TestScene::Cam()
