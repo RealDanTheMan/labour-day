@@ -41,7 +41,11 @@ ${PROJECT_SOURCE_DIR}/engine/camera.cpp
 ${PROJECT_SOURCE_DIR}/engine/window.cpp 
 ${PROJECT_SOURCE_DIR}/engine/transform.cpp
 ${PROJECT_SOURCE_DIR}/engine/inputmanager.cpp
-${PROJECT_SOURCE_DIR}/testscene.cpp)
+${PROJECT_SOURCE_DIR}/engine/entity.cpp
+${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
+${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
+${PROJECT_SOURCE_DIR}/testscene.cpp
+${PROJECT_SOURCE_DIR}/testentity.cpp )
 
 add_executable(labour-day ${SOURCES})
 
