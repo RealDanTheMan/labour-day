@@ -14,7 +14,7 @@ m_winHandle(nullptr)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-    GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "GLFW Window", nullptr, nullptr);
+    GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "Labour-Day", nullptr, nullptr);
     if(raw != nullptr)
     {
         m_winHandle = std::unique_ptr<GLFWwindow, GLFWWindowDeleter>(raw);
@@ -36,7 +36,7 @@ m_winHandle(nullptr)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-    GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "GLFW Window", nullptr, nullptr);
+    GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "Labour-Day", nullptr, nullptr);
     if(raw != nullptr)
     {
         m_winHandle = std::unique_ptr<GLFWwindow, GLFWWindowDeleter>(raw);
