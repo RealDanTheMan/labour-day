@@ -44,6 +44,8 @@ ${PROJECT_SOURCE_DIR}/engine/inputmanager.cpp
 ${PROJECT_SOURCE_DIR}/engine/entity.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
+${PROJECT_SOURCE_DIR}/engine/model.cpp
+${PROJECT_SOURCE_DIR}/engine/components/modelcomponent.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
 ${PROJECT_SOURCE_DIR}/testentity.cpp )
 
