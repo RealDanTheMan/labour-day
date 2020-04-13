@@ -3,6 +3,7 @@
 
 #include "engine/enginecore.hpp"
 #include "engine/renderable.hpp"
+#include "engine/entity.hpp"
 
 class TestScene
 {

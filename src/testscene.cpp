@@ -1,6 +1,7 @@
 #include "testscene.hpp"
 #include "testentity.hpp"
 #include "engine/meshgen.hpp"
+#include "engine/components/modelcomponent.hpp"
 
 
 void TestScene::Initialize(Engine::EngineCore *core)
@@ -18,6 +19,10 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     m_asset = TestEntity::Create();
     assert (m_asset != nullptr);
+    auto com = m_asset->Components().Get<Engine::Components::ModelComponent>();
+    assert (com != nullptr);
+
+    
 
     assert (m_triangle->Ready());
     m_camera = std::make_unique<Engine::Camera>();
