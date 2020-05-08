@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 
-./build.sh
-./run.sh
+./build.sh || exit 1
+./run.sh || exit 1

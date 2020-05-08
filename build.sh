@@ -8,15 +8,15 @@ mkdir ./build
 
 echo Runing cmake commands ...
 echo 
-cmake . -Bbuild
-cmake . --build build
+cmake . -Bbuild || exit 1
+cmake . --build build -DCMAKE_BUILD_TYPE=Debug || exit 2
 
 echo 
 echo Runing make commands ...
 echo
 
 cd ./build
-make
+make || exit 3
 
 
 echo
