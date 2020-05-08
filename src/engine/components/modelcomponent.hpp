@@ -4,6 +4,7 @@
 
 #include "../entity.hpp"
 #include "../model.hpp"
+#include "../renderable.hpp"
 
 namespace Engine::Components
 {
@@ -13,8 +14,9 @@ namespace Engine::Components
         ModelComponent();
         ModelComponent(const ModelComponent &rhs);
 
-        void SetModel(const Model *model);
-        const Model* const ModelHandle() const;
+        void SetModel(Model * const model);
+        Model* const ModelHandle() const;
+        Renderable* const GetRenderable() const;
 
         private:
         Model *m_model;

@@ -33,6 +33,7 @@ namespace Engine
         void Terminate();
         void RedrawMainWindow();
         void ClearMainWindow();
+        void PresentMainWindow();
         const bool MainWindowActive() const;
         CommonRenderer* Renderer();
         RuntimeShaders* Shaders() const;

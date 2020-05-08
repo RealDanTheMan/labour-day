@@ -15,12 +15,23 @@ ModelComponent::ModelComponent(const ModelComponent &rhs):
 
 }
 
-void ModelComponent::SetModel(const Model *model)
+void ModelComponent::SetModel(Model * const model)
 {
-    m_model = m_model;
+    m_model = model;
 }
 
-const Engine::Model* const ModelComponent::ModelHandle() const
+Engine::Model* const ModelComponent::ModelHandle() const
 {
     return m_model;
+}
+
+Engine::Renderable * const ModelComponent::GetRenderable() const 
+{
+    if(m_model == nullptr)
+    {
+        return nullptr;
+    }
+
+    assert (m_model->GetRenderable().Ready());
+    return &(m_model->GetRenderable());
 }

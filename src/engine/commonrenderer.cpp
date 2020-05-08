@@ -18,6 +18,9 @@ void CommonRenderer::DrawRenderables() const
 
 void CommonRenderer::DrawRenderable(const Renderable *renderable) const
 {
+    assert (renderable != nullptr);
+    assert (renderable->Ready());
+
     glUseProgram(renderable->GetShader()->GetHandle());
     PushUniformShaderParams(renderable->GetShader());
 
@@ -26,6 +29,16 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable) const
 
     glUseProgram(0);
     glBindVertexArray(0);
+}
+
+void CommonRenderer::DrawModel(const Components::ModelComponent *model) const
+{
+    assert (model != nullptr);
+    assert (model->ModelHandle() != nullptr);
+    assert (model->ModelHandle()->GetRenderable().Ready());
+
+    Renderable &h = model->ModelHandle()->GetRenderable();
+    DrawRenderable(&h);
 }
 
 void CommonRenderer::ClearQueue()

@@ -97,12 +97,22 @@ void EngineCore::RedrawMainWindow()
 
     glfwPollEvents();
     m_renderer->DrawRenderables();
-    glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
 void EngineCore::ClearMainWindow()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void EngineCore::PresentMainWindow()
+{
+    assert (m_glfw != nullptr);
+    assert (m_glfw->Initialized());
+    assert (m_mainWin != nullptr);
+    assert (m_mainWin->Ready());
+    assert (m_renderer != nullptr);
+
+    glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
 const bool EngineCore::MainWindowActive() const
