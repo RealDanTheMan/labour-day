@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "engine/debugging.hpp"
 #include "engine/inputmanager.hpp"
+#include "engine/components/modelcomponent.hpp"
 
 bool App::Initialize()
 {
@@ -19,7 +20,6 @@ bool App::Initialize()
     m_testScene = std::make_unique<TestScene>();
     m_testScene->Initialize(m_core.get());
     m_core->Renderer()->SetCamera(m_testScene->Cam());
-    m_core->Renderer()->AddToQueue(m_testScene->TestTriangle());
 
     return true;
 }
@@ -34,7 +34,6 @@ void App::Run()
         UpdateGame();
         DrawGame();
     }
-    
 }
 
 void App::Exit()
@@ -62,4 +61,9 @@ void App::DrawGame()
     assert (m_core != nullptr);
     m_core->ClearMainWindow();
     m_core->RedrawMainWindow();
+
+    // TMP Test
+    auto modelcmp = m_testScene->Asset()->Components().Get<Engine::Components::ModelComponent>();
+    m_core->Renderer()->DrawModel(modelcmp);
+    m_core->PresentMainWindow();
 }

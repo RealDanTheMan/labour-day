@@ -16,15 +16,17 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_triangle = std::make_unique<Engine::Renderable>();
     m_triangle->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
     m_triangle->BindShader(m_core->Shaders()->FlatWhite());
+    assert (m_triangle->Ready());
 
+    m_triangleModel = std::make_unique<Engine::Model>(*m_triangle);
     m_asset = TestEntity::Create();
     assert (m_asset != nullptr);
-    auto com = m_asset->Components().Get<Engine::Components::ModelComponent>();
-    assert (com != nullptr);
+    auto cmodel = m_asset->Components().Get<Engine::Components::ModelComponent>();
+    assert (cmodel != nullptr);
+    cmodel->SetModel(m_triangleModel.get());
 
+    assert (cmodel->ModelHandle() != nullptr);
     
-
-    assert (m_triangle->Ready());
     m_camera = std::make_unique<Engine::Camera>();
 }
 
@@ -48,5 +50,5 @@ void TestScene::Update()
     assert (TestTriangle() != nullptr);
     assert (Cam() != nullptr);
 
-    Cam()->GetTransform().Translate(Vec3(0.01, 0.0, 0.0));
+    Cam()->GetTransform().Translate(Vec3(0.001, 0.0, 0.0));
 }
