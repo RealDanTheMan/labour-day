@@ -39,6 +39,12 @@ bool EngineCore::Initialize()
     }
 
     m_renderer = std::make_unique<CommonRenderer>();
+    m_runtimeShaders = std::make_unique<RuntimeShaders>();
+    m_runtimeShaders->Init();
+
+    m_ecs = std::make_unique<ECSSys>();
+    m_ecs->Init(128);
+
     return true;
 }
 
@@ -74,6 +80,9 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
 
+    m_ecs = std::make_unique<ECSSys>();
+    m_ecs->Init(128);
+
     return true;
 }
 
@@ -81,6 +90,9 @@ void EngineCore::Terminate()
 {
     assert (m_glfw != nullptr);
     assert (m_glfw->Initialized());
+    assert (m_ecs != nullptr);
+
+    m_ecs->Terminate();
 
     m_glfw->Terminate();
     m_glfw.release();
@@ -132,4 +144,9 @@ CommonRenderer* EngineCore::Renderer()
 RuntimeShaders* EngineCore::Shaders() const
 {
     return m_runtimeShaders.get();
+}
+
+ECSSys* EngineCore::ECS() const
+{
+    return m_ecs.get();
 }
