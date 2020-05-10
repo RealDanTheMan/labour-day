@@ -32,6 +32,7 @@ namespace Engine
     template <typename T>
     T* const EntityComponentCollection::Add()
     {
+        static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
         auto com = std::make_unique<T>();
         m_components.push_back(std::move(com));
 
@@ -41,6 +42,7 @@ namespace Engine
     template<typename T>
     T* const EntityComponentCollection::Get()
     {
+        static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
         for(auto& com : m_components)
         {
             auto match = dynamic_cast<T*>(com.get());
