@@ -46,8 +46,11 @@ ${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
 ${PROJECT_SOURCE_DIR}/engine/model.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/modelcomponent.cpp
+${PROJECT_SOURCE_DIR}/engine/ecssys.cpp
+${PROJECT_SOURCE_DIR}/engine/entityprocess.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
-${PROJECT_SOURCE_DIR}/testentity.cpp )
+${PROJECT_SOURCE_DIR}/testentity.cpp 
+${PROJECT_SOURCE_DIR}/testproc.cpp)
 
 add_executable(labour-day ${SOURCES})
 
