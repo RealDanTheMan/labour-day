@@ -54,16 +54,27 @@ void App::UpdateGame()
 {
     assert (m_testScene != nullptr);
     m_testScene->Update();
+    m_core->ECS()->Update();
 }
 
 void App::DrawGame()
 {
     assert (m_core != nullptr);
     m_core->ClearMainWindow();
+
+    // Old common rendering
     m_core->RedrawMainWindow();
 
-    // TMP Test
-    auto modelcmp = m_testScene->Asset()->Components().Get<Engine::Components::ModelComponent>();
-    m_core->Renderer()->DrawModel(modelcmp);
+    // Component Based Rendering
+    std::vector<Engine::Entity*> rEntities;
+    m_core->ECS()->AssetsByComponent<Engine::Components::ModelComponent>(rEntities);
+    for (auto &entity : rEntities)
+    {
+        auto cmodel = entity->Components().Get<Engine::Components::ModelComponent>();
+        assert (cmodel != nullptr);
+        m_core->Renderer()->DrawModel(cmodel);
+    }
+    
+    // Swap buffers
     m_core->PresentMainWindow();
 }
