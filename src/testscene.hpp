@@ -11,9 +11,9 @@ class TestScene
     private:
     std::unique_ptr<Engine::Renderable> m_triangle;
     std::unique_ptr<Engine::Model> m_triangleModel;
-    std::unique_ptr<Engine::Entity> m_asset;
     std::unique_ptr<Engine::Camera> m_camera;
     Engine::EngineCore* m_core;
+    Engine::Entity* m_asset;
 
     public:
     void Initialize(Engine::EngineCore *core);

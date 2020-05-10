@@ -1,5 +1,6 @@
 #include "testscene.hpp"
 #include "testentity.hpp"
+#include "testproc.hpp"
 #include "engine/meshgen.hpp"
 #include "engine/components/modelcomponent.hpp"
 
@@ -19,14 +20,13 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (m_triangle->Ready());
 
     m_triangleModel = std::make_unique<Engine::Model>(*m_triangle);
-    m_asset = TestEntity::Create();
+    m_asset = m_core->ECS()->CreateEntity();
     assert (m_asset != nullptr);
-    auto cmodel = m_asset->Components().Get<Engine::Components::ModelComponent>();
-    assert (cmodel != nullptr);
+    auto cmodel = m_asset->Components().Add<Engine::Components::ModelComponent>();
     cmodel->SetModel(m_triangleModel.get());
-
     assert (cmodel->ModelHandle() != nullptr);
     
+    m_core->ECS()->CreateProcess<TestProc>();
     m_camera = std::make_unique<Engine::Camera>();
 }
 
@@ -37,7 +37,7 @@ Engine::Renderable* TestScene::TestTriangle()
 
 Engine::Entity* TestScene::Asset()
 {
-    return m_asset.get();
+    return m_asset;
 }
 
 Engine::Camera* TestScene::Cam()
