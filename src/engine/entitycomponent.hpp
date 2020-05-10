@@ -1,5 +1,5 @@
 #ifndef ENTITY_COMPONENT_HPP_
-#define ENTIRY_COMPONENT_HPP_
+#define ENTITY_COMPONENT_HPP_
 
 namespace Engine
 {
