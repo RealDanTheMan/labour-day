@@ -1,4 +1,5 @@
 #include "transform.hpp"
+#include "glm/gtx/transform.hpp"
 
 
 using namespace Engine;
@@ -40,7 +41,7 @@ Mat4 Transform::IdentityMatrix()
 
 void Transform::ComputeMatrix()
 {
-    Mat4 rot = m_rotX * m_rotY * m_rotZ;
+    Mat4 rot = m_rotZ * m_rotY * m_rotX;
     m_composite = m_scale * rot * m_translation;
 }
 
@@ -67,6 +68,21 @@ void Transform::Scale(const float scale)
     m_scale[0][0] *= scale;
     m_scale[1][1] *= scale;
     m_scale[2][2] *= scale;
+
+    ComputeMatrix();
+}
+
+void Transform::Rotate(const Vec3 &degAngles)
+{
+    Vec3 rads = degAngles * 0.0174533f;
+
+    const Mat4 x = glm::rotate(rads.x, Vec3(1.0, 0.0, 0.0));
+    const Mat4 y = glm::rotate(rads.y, Vec3(0.0, 1.0, 0.0));
+    const Mat4 z = glm::rotate(rads.z, Vec3(0.0, 0.0, 1.0));
+
+    m_rotX *= x;
+    m_rotY *= y;
+    m_rotZ *= z;
 
     ComputeMatrix();
 }

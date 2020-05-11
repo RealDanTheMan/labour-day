@@ -24,6 +24,8 @@ namespace Engine
         void Scale(const Vec3 &scale);
         void Scale(const float scale);
 
+        void Rotate(const Vec3 &degAngles);
+
         static Mat4 IdentityMatrix();
 
         private:
