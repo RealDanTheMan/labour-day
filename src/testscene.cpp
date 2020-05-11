@@ -50,5 +50,5 @@ void TestScene::Update()
     assert (TestTriangle() != nullptr);
     assert (Cam() != nullptr);
 
-    Cam()->GetTransform().Translate(Vec3(0.001, 0.0, 0.0));
+    //Cam()->GetTransform().Translate(Vec3(0.001, 0.0, 0.0));
 }

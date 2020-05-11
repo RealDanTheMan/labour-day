@@ -27,6 +27,8 @@ namespace Engine
 
         template <typename T>
         void AssetsByComponent(std::vector<Entity*>& outVec);
+        void AllAssets(std::vector<Entity*>& outVec);
+
 
         private:
         std::vector<std::unique_ptr<Entity>> m_liveEntities;

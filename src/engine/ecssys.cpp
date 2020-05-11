@@ -20,6 +20,7 @@ void ECSSys::Update()
     for(uint32_t i=0; i < m_procs.size(); i++)
     {
         std::vector<Entity*> entities;
+        AllAssets(entities);
         m_procs[i]->ProcessEntities(entities);
     }
 }
@@ -40,4 +41,12 @@ Entity* ECSSys::CreateEntity()
 
     m_liveEntities.push_back(std::move(h));
     return m_liveEntities.back().get();
+}
+
+void ECSSys::AllAssets(std::vector<Entity*>& outVec)
+{
+    for(uint32_t i=0; i < m_liveEntities.size(); i++)
+    {
+        outVec.push_back(m_liveEntities[i].get());
+    }
 }
