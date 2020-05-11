@@ -24,14 +24,15 @@ namespace Engine
 
         uniform mat4 SV_PROJECTION;
         uniform mat4 SV_VIEW;
+        uniform mat4 SV_MODEL;
 
-        mat4x4 VP = SV_VIEW * SV_PROJECTION;
+        mat4x4 MVP = SV_MODEL * SV_VIEW * SV_PROJECTION;
 
         layout(location = 0) in vec3 SV_VERTEX;
 
         void main(void)
         {
-            gl_Position = VP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
+            gl_Position = MVP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
         }
     )";
 
