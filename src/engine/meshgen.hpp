@@ -11,6 +11,7 @@ namespace Engine
         public:
 
         static std::unique_ptr<Mesh> Triangle(const float scale);
+        static std::unique_ptr<Mesh> Cube(const float scale);
     };
 }
 
