@@ -91,3 +91,13 @@ const Mat4& Transform::Matrix() const
 {
     return m_composite;
 }
+
+Vec3 Transform::Translation() const
+{
+    return Vec3(m_translation[3][0], m_translation[3][1], m_translation[3][2]);
+}
+
+Vec3 Transform::Scale() const 
+{
+    return Vec3(m_scale[0][0], m_scale[1][1], m_scale[2][2]);
+}
