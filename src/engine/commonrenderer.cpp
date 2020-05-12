@@ -26,7 +26,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
     PushUniformShaderParams(renderable->GetShader(), tr);
 
     glBindVertexArray(renderable->VertexAttributes());
-    glDrawElements(GL_TRIANGLES, renderable->VertexCount(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
 
     glUseProgram(0);
     glBindVertexArray(0);
