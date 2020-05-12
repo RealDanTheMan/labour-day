@@ -28,6 +28,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     
     m_core->ECS()->CreateProcess<TestProc>();
     m_camera = std::make_unique<Engine::Camera>();
+    m_camera->GetTransform().Translate(Vec3(0, 0, -1));
 }
 
 Engine::Renderable* TestScene::TestTriangle()
@@ -49,6 +50,4 @@ void TestScene::Update()
 {
     assert (TestTriangle() != nullptr);
     assert (Cam() != nullptr);
-
-    //Cam()->GetTransform().Translate(Vec3(0.001, 0.0, 0.0));
 }
