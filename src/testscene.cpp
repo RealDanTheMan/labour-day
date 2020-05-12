@@ -13,13 +13,13 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (m_core->Shaders() != nullptr);
     assert (m_core->Shaders()->Ready());
 
-    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Triangle(1.0f);
-    m_triangle = std::make_unique<Engine::Renderable>();
-    m_triangle->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
-    m_triangle->BindShader(m_core->Shaders()->FlatWhite());
-    assert (m_triangle->Ready());
+    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Cube(1.0f);
+    m_mesh = std::make_unique<Engine::Renderable>();
+    m_mesh->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
+    m_mesh->BindShader(m_core->Shaders()->FlatWhite());
+    assert (m_mesh->Ready());
 
-    m_triangleModel = std::make_unique<Engine::Model>(*m_triangle);
+    m_triangleModel = std::make_unique<Engine::Model>(*m_mesh);
     m_asset = m_core->ECS()->CreateEntity();
     assert (m_asset != nullptr);
     auto cmodel = m_asset->Components().Add<Engine::Components::ModelComponent>();
@@ -28,12 +28,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     
     m_core->ECS()->CreateProcess<TestProc>();
     m_camera = std::make_unique<Engine::Camera>();
-    m_camera->GetTransform().Translate(Vec3(0, 0, -1));
+    m_camera->GetTransform().Translate(Vec3(0, 0, -4));
 }
 
 Engine::Renderable* TestScene::TestTriangle()
 {
-    return m_triangle.get();
+    return m_mesh.get();
 }
 
 Engine::Entity* TestScene::Asset()
