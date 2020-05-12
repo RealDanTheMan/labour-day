@@ -26,7 +26,7 @@ namespace Engine
         uniform mat4 SV_VIEW;
         uniform mat4 SV_MODEL;
 
-        mat4x4 MVP = SV_MODEL * SV_VIEW * SV_PROJECTION;
+        mat4x4 MVP = SV_PROJECTION * SV_VIEW * SV_MODEL;
 
         layout(location = 0) in vec3 SV_VERTEX;
 
