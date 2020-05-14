@@ -38,9 +38,9 @@ bool EngineCore::Initialize()
         return false;
     }
 
-    m_renderer = std::make_unique<CommonRenderer>();
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
@@ -76,9 +76,10 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     }
 
     InputManager::Instance().Initialize(*m_mainWin);
-    m_renderer = std::make_unique<CommonRenderer>();
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);

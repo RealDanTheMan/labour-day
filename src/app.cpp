@@ -72,7 +72,10 @@ void App::DrawGame()
     {
         auto cmodel = entity->Components().Get<Engine::Components::ModelComponent>();
         assert (cmodel != nullptr);
+        
         m_core->Renderer()->DrawModel(cmodel);
+        m_core->Renderer()->DrawModelWire(cmodel);
+        
     }
     
     // Swap buffers

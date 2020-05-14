@@ -13,10 +13,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (m_core->Shaders() != nullptr);
     assert (m_core->Shaders()->Ready());
 
-    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Cube(1.0f);
+    //std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Cube(1.0f);
+    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
     m_mesh = std::make_unique<Engine::Renderable>();
-    m_mesh->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
-    m_mesh->BindShader(m_core->Shaders()->FlatWhite());
+    //m_mesh->Init(msh->Vertices(), msh->Indices(), msh->VertexCount(), msh->IndexCount());
+    m_mesh->Init(*msh);
+    m_mesh->BindShader(m_core->Shaders()->Diff());
     assert (m_mesh->Ready());
 
     m_triangleModel = std::make_unique<Engine::Model>(*m_mesh);
@@ -27,8 +29,8 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (cmodel->ModelHandle() != nullptr);
     
     m_core->ECS()->CreateProcess<TestProc>();
-    m_camera = std::make_unique<Engine::Camera>();
-    m_camera->GetTransform().Translate(Vec3(0, 0, -4));
+    m_camera = std::make_unique<Engine::Camera>(1280, 720, 30, 1.7777);
+    m_camera->GetTransform().Translate(Vec3(0, 0, -10));
 }
 
 Engine::Renderable* TestScene::TestTriangle()
