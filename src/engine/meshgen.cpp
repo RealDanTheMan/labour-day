@@ -172,6 +172,16 @@ std::unique_ptr<Mesh> MeshGen::Box(const float width, const float height, const 
         Vec3(1.0f, 0.0f, 0.0f)
 
     };
+
+    const Vec2 texcoords[24] =
+    {
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0),
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0),
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0),
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0),
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0),
+        Vec2(0.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 1.0), Vec2(1.0, 1.0)
+    };
     
     const unsigned int indices[36] = 
     {
@@ -203,6 +213,7 @@ std::unique_ptr<Mesh> MeshGen::Box(const float width, const float height, const 
     std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
     mesh->SetMeshData(vertices, indices, 24, 36);
     mesh->SetNormals(normals, 24);
+    mesh->SetTexcoords(texcoords, 24, 0);
 
     return mesh;
 }

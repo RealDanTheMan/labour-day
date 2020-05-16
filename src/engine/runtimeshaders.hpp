@@ -66,13 +66,16 @@ namespace Engine
 
         layout(location = 0) in vec3 SV_VERTEX;
         layout(location = 1) in vec3 SV_NORMAL;
+        layout(location = 2) in vec2 SV_TEXCOORD0;
 
         out vec3 vnormal;
+        out vec2 texcoord0;
 
         void main(void)
         {
             gl_Position = MVP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
             vnormal = (SV_MODEL * vec4(SV_NORMAL.x, SV_NORMAL.y, SV_NORMAL.z, 0.0)).xyz;
+            texcoord0 = SV_TEXCOORD0;
         }
     )";
 
@@ -80,6 +83,7 @@ namespace Engine
         #version 330
 
         in vec3 vnormal;
+        in vec2 texcoord0;
 
         out vec4 SV_OUT_COLOR;
         void main()
@@ -88,6 +92,8 @@ namespace Engine
             float ndotl = dot(lightdir, normalize(vnormal));
             float hLambert = ndotl * 0.5 + 0.5;
             vec3 diff = hLambert * vec3(1, 1, 1);
+            diff.x *= texcoord0.x;
+            diff.y *= texcoord0.y;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
     )";

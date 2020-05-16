@@ -53,6 +53,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
     glBindVertexArray(renderable->VertexAttributes());
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
     switch (mode)
     {
@@ -71,6 +72,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
     glUseProgram(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }
 
