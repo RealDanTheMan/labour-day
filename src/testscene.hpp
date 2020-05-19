@@ -5,13 +5,17 @@
 #include "engine/renderable.hpp"
 #include "engine/model.hpp"
 #include "engine/entity.hpp"
+#include "engine/gltex.hpp"
 
 class TestScene
 {
     private:
     std::unique_ptr<Engine::Renderable> m_mesh;
-    std::unique_ptr<Engine::Model> m_triangleModel;
+    std::unique_ptr<Engine::GLTex> m_tex;
+    std::unique_ptr<Engine::Model> m_model;
+    std::unique_ptr<Engine::Material> m_mat;
     std::unique_ptr<Engine::Camera> m_camera;
+    
     Engine::EngineCore* m_core;
     Engine::Entity* m_asset;
 

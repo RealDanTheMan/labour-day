@@ -22,7 +22,7 @@ namespace Engine
 
         void Clear() const;
         void DrawRenderables() const;
-        void DrawRenderable(const Renderable *renderable, const Transform* tr, const DrawMode mode) const;
+        void DrawRenderable(const Renderable *renderable, const Transform* tr, const DrawMode mode, const Material * const mat) const;
         void DrawModel(const Components::ModelComponent *model) const;
         void DrawModelWire(const Components::ModelComponent *model) const;
         void ClearQueue();
@@ -32,6 +32,7 @@ namespace Engine
         private:
 
         void PushUniformShaderParams(const ShaderProg *shader, const Transform *transform) const;
+        void PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const;
         std::vector<const Renderable*> m_queue;
         const Camera* m_activeCam;
         const RuntimeShaders * const m_runtimeShaders;

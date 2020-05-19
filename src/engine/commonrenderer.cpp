@@ -27,11 +27,11 @@ void CommonRenderer::DrawRenderables() const
 {
     for (uint32_t i=0; i < m_queue.size(); i++)
     {
-        DrawRenderable(m_queue[i], nullptr, DrawMode::Fill);
+        DrawRenderable(m_queue[i], nullptr, DrawMode::Fill, nullptr);
     }
 }
 
-void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transform *tr, const DrawMode mode) const
+void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transform *tr, const DrawMode mode, const Material * const mat) const
 {
     assert (renderable != nullptr);
     assert (m_runtimeShaders != nullptr);
@@ -47,6 +47,10 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
         default:
             glUseProgram(renderable->GetShader()->GetHandle());
             PushUniformShaderParams(renderable->GetShader(), tr);
+            if(mat != nullptr)
+            {
+                PushMaterialShaderParams(*renderable->GetShader(), *mat);
+            }
             break;
     }
 
@@ -84,7 +88,8 @@ void CommonRenderer::DrawModel(const Components::ModelComponent *model) const
 
     Renderable &h = model->ModelHandle()->GetRenderable();
     Transform *tr = &model->ModelHandle()->GetTransform();
-    DrawRenderable(&h, tr, DrawMode::Fill);
+    const Material * const mat = model->ModelHandle()->GetMaterial();
+    DrawRenderable(&h, tr, DrawMode::Fill, mat);
 }
 
 void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) const
@@ -96,7 +101,7 @@ void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) cons
     Renderable &h = model->ModelHandle()->GetRenderable();
     Transform *tr = &model->ModelHandle()->GetTransform();
 
-    DrawRenderable(&h, tr, DrawMode::Wireframe);
+    DrawRenderable(&h, tr, DrawMode::Wireframe, nullptr);
 }
 
 void CommonRenderer::ClearQueue()
@@ -116,6 +121,9 @@ void CommonRenderer::SetCamera(const Camera *cam)
 
 void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Transform *tr) const
 {
+    assert (shader != nullptr);
+    assert (tr != nullptr);
+
     GLint svViewLoc = glGetUniformLocation(shader->GetHandle(), SV_VIEW);
     GLint svProjLoc = glGetUniformLocation(shader->GetHandle(), SV_PROJECTION);
     GLint svModelLoc = glGetUniformLocation(shader->GetHandle(), SV_MODEL);
@@ -128,4 +136,61 @@ void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Tra
     glUniformMatrix4fv(svViewLoc, 1, GL_FALSE, &m_activeCam->View()[0][0]);
     glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_activeCam->Projection()[0][0]);
     glUniformMatrix4fv(svModelLoc, 1, GL_FALSE, &tr->Matrix()[0][0]);
+}
+
+void CommonRenderer::PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const
+{
+    GLint count;
+    glGetProgramiv(shader.GetHandle(), GL_ACTIVE_UNIFORMS, &count);
+    for(uint32_t i=0; i < count; i++)
+    {
+        GLchar paramName[256];
+        GLenum paramType;
+        GLint paramSize;
+        GLsizei paramLen;
+
+        glGetActiveUniform(shader.GetHandle(), (GLuint)i, (GLsizei)sizeof(paramName), &paramLen, &paramSize, &paramType, paramName);
+        std::string name((char*)&paramName[0], paramLen);
+        if(name.size() > 1 &&
+            name[0] != 'S' && name[1] != 'V')
+        {
+            GLint loc = glGetUniformLocation(shader.GetHandle(), name.c_str());
+            assert (loc != 1);
+
+            switch(paramType)
+            {
+                case GL_FLOAT:  { glUniform1f(loc, mat.GetValue<float>(name)); break; }
+                case GL_UNSIGNED_INT: { glUniform1ui(loc, mat.GetValue<uint32_t>(name)); break; }
+                case GL_INT: { glUniform1i(loc, mat.GetValue<int>(name)); break; }
+                case GL_BOOL: { glUniform1i(loc, mat.GetValue<bool>(name)); break; }
+                case GL_FLOAT_VEC2: 
+                {
+                    auto val = mat.GetValue<Vec2>(name);
+                    glUniform2f(loc, val.x, val.y); 
+                    break; 
+                }
+                case GL_FLOAT_VEC3: 
+                {
+                    auto val = mat.GetValue<Vec3>(name);
+                    glUniform3f(loc, val.x, val.y, val.z); 
+                    break; 
+                }
+                case GL_FLOAT_VEC4: 
+                {
+                    auto val = mat.GetValue<Vec4>(name);
+                    glUniform4f(loc, val.x, val.y, val.z, val.w); 
+                    break; 
+                }
+                case GL_FLOAT_MAT4: 
+                { 
+                    glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.GetValue<Mat4>(name)[0][0]);
+                    break; 
+                }
+                case GL_SAMPLER_2D: 
+                {
+                     break; 
+                }
+            }
+        }
+    }
 }
