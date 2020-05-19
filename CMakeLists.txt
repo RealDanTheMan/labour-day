@@ -53,6 +53,7 @@ ${PROJECT_SOURCE_DIR}/engine/gltex.cpp
 ${PROJECT_SOURCE_DIR}/engine/sysutils.cpp
 ${PROJECT_SOURCE_DIR}/engine/material.cpp
 ${PROJECT_SOURCE_DIR}/engine/shaderparam.cpp
+${PROJECT_SOURCE_DIR}/engine/shaderparamcollection.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
 ${PROJECT_SOURCE_DIR}/testentity.cpp 
 ${PROJECT_SOURCE_DIR}/testproc.cpp)

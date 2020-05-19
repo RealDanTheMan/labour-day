@@ -23,7 +23,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     assert (m_core->Shaders()->Ready());
     m_mat = std::make_unique<Engine::Material>(*m_core->Shaders()->Diff());
-    m_mat->SetValue<Vec3>("tint", Vec3(1, 0, 0));
+    m_mat->ShaderParameters()->SetValue("tint", Vec3(1, 0, 0));
 
     std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
     m_mesh = std::make_unique<Engine::Renderable>();
@@ -67,5 +67,5 @@ void TestScene::Update()
     auto g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     auto b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-    m_model->GetMaterial()->SetValue("tint", Vec3(r, g, b));
+    m_model->GetMaterial()->ShaderParameters()->SetValue("tint", Vec3(r, g, b));
 }

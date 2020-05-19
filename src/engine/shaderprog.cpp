@@ -22,6 +22,7 @@ ShaderProg::ShaderProg(const ShaderSource &vs, const ShaderSource &ps)
     glGetProgramiv(m_handle, GL_LINK_STATUS, &status);
     if(status == GL_TRUE)
     {
+        m_params = ShaderParamCollection::Create(m_handle);
         m_ready = true;
     }
 }
@@ -43,6 +44,11 @@ const bool ShaderProg::Ready() const
 const GLuint ShaderProg::GetHandle() const
 {
     return m_handle;
+}
+
+ShaderParamCollection * const ShaderProg::ShaderParameters() const
+{
+    return m_params.get();
 }
 
 const std::string ShaderProg::GetLog() const

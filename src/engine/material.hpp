@@ -17,53 +17,12 @@ namespace Engine
         Material(const ShaderProg &shader);
         Material(const Material &rhs) = delete;
 
-        public:
-        const uint32_t Count() const;
-        const std::vector<std::string> AllKeys() const;
-
-        template <typename T>
-        void SetValue(const std::string &name, const T &val);
-        template <typename T>
-        const T GetValue(const std::string &name) const;
+        ShaderParamCollection* const ShaderParameters();
+        const ShaderParamCollection* const ShaderParameters() const;
 
         private:
-        template <typename T>
-        void AddParameter(const std::string &name);
-
-        private:
-        std::map<const std::string, std::unique_ptr<ShaderParam>> m_paramMap;
+        std::unique_ptr<ShaderParamCollection> m_params;
     };
-
-    template <typename T>
-    void Material::AddParameter(const std::string &name)
-    {
-        m_paramMap[name] = std::make_unique<ShaderParamValue<T>>(name);
-    }
-
-    template <typename T>
-    const T Material::GetValue(const std::string &name) const
-    {
-        assert (m_paramMap.find(name) != m_paramMap.end());
-
-        const ShaderParam* const  param = m_paramMap.at(name).get();
-        assert (param != nullptr);
-        const ShaderParamValue<T>* paramv = reinterpret_cast<const ShaderParamValue<T>*>(param);
-        assert (paramv != nullptr);
-        return paramv->Get();
-    }
-
-    template <typename T>
-    void Material::SetValue(const std::string &name, const T &val)
-    {
-        assert (m_paramMap.find(name) != m_paramMap.end());
-
-        ShaderParam* param = m_paramMap.at(name).get();
-        assert (param != nullptr);
-        ShaderParamValue<T>* paramv = reinterpret_cast<ShaderParamValue<T>*>(param);
-        assert (paramv != nullptr);
-
-        paramv->Set(val);
-    }
 }
 
 #endif

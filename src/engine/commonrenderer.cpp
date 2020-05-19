@@ -159,31 +159,31 @@ void CommonRenderer::PushMaterialShaderParams(const ShaderProg &shader, const Ma
 
             switch(paramType)
             {
-                case GL_FLOAT:  { glUniform1f(loc, mat.GetValue<float>(name)); break; }
-                case GL_UNSIGNED_INT: { glUniform1ui(loc, mat.GetValue<uint32_t>(name)); break; }
-                case GL_INT: { glUniform1i(loc, mat.GetValue<int>(name)); break; }
-                case GL_BOOL: { glUniform1i(loc, mat.GetValue<bool>(name)); break; }
+                case GL_FLOAT:  { glUniform1f(loc, mat.ShaderParameters()->GetValue<float>(name)); break; }
+                case GL_UNSIGNED_INT: { glUniform1ui(loc, mat.ShaderParameters()->GetValue<uint32_t>(name)); break; }
+                case GL_INT: { glUniform1i(loc, mat.ShaderParameters()->GetValue<int>(name)); break; }
+                case GL_BOOL: { glUniform1i(loc, mat.ShaderParameters()->GetValue<bool>(name)); break; }
                 case GL_FLOAT_VEC2: 
                 {
-                    auto val = mat.GetValue<Vec2>(name);
+                    auto val = mat.ShaderParameters()->GetValue<Vec2>(name);
                     glUniform2f(loc, val.x, val.y); 
                     break; 
                 }
                 case GL_FLOAT_VEC3: 
                 {
-                    auto val = mat.GetValue<Vec3>(name);
+                    auto val = mat.ShaderParameters()->GetValue<Vec3>(name);
                     glUniform3f(loc, val.x, val.y, val.z); 
                     break; 
                 }
                 case GL_FLOAT_VEC4: 
                 {
-                    auto val = mat.GetValue<Vec4>(name);
+                    auto val = mat.ShaderParameters()->GetValue<Vec4>(name);
                     glUniform4f(loc, val.x, val.y, val.z, val.w); 
                     break; 
                 }
                 case GL_FLOAT_MAT4: 
                 { 
-                    glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.GetValue<Mat4>(name)[0][0]);
+                    glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.ShaderParameters()->GetValue<Mat4>(name)[0][0]);
                     break; 
                 }
                 case GL_SAMPLER_2D: 
