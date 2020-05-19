@@ -38,6 +38,23 @@ void RuntimeShaders::Init()
 
     diffVS->Free();
     diffPS->Free();
+
+    std::unique_ptr<ShaderSource> diff1VS = std::make_unique<ShaderSource>(DIFF1_VERT_SRC, ShaderSource::ShaderSourceType::Vertex);
+    std::unique_ptr<ShaderSource> diff1PS = std::make_unique<ShaderSource>(DIFF1_PIX_SRC, ShaderSource::ShaderSourceType::Pixel);
+    diff1VS->Compile();
+    diff1PS->Compile();
+
+    D_MSG(diff1VS->GetLog());
+    D_MSG(diff1PS->GetLog());
+
+    assert (diff1VS->Compiled());
+    assert (diff1PS->Compiled());
+
+    m_diff1 = std::make_unique<ShaderProg>(*diff1VS.get(), *diff1PS.get());
+    assert (m_diff1->Ready());
+
+    diff1VS->Free();
+    diff1PS->Free();
 }
 
 void RuntimeShaders::Free()
@@ -65,16 +82,25 @@ const bool RuntimeShaders::Ready() const
     {
         return false;
     }
+    if(m_diff1 == nullptr || !m_diff1->Ready())
+    {
+        return false;
+    }
 
     return true;
 }
 
-const ShaderProg* RuntimeShaders::FlatWhite() const
+const ShaderProg* const RuntimeShaders::FlatWhite() const
 {
     return m_flatWhite.get();
 }
 
-const ShaderProg* RuntimeShaders::Diff() const
+const ShaderProg* const RuntimeShaders::Diff() const
 {
     return m_diff.get();
+}
+
+const ShaderProg* const RuntimeShaders::Diff1() const
+{
+    return m_diff1.get();
 }
