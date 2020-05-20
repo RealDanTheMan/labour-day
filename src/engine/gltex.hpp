@@ -2,7 +2,6 @@
 #define GLTEX_HPP_
 
 #include "glewinterface.hpp"
-#include "texture2d.hpp"
 
 
 namespace Engine
@@ -10,11 +9,16 @@ namespace Engine
     class GLTex
     {
         public:
-        GLTex(const Texture2D &tex);
+        
+        GLTex();
         bool Ready() const;
-        void Free();
+        void Load(const uint32_t w, const uint32_t h, unsigned char* const data);
+        void Unload();
+        const GLuint Handle() const;
 
         private:
+
+        bool m_loaded;
         GLuint m_tex;
     };
 }

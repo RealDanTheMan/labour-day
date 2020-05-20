@@ -139,7 +139,7 @@ namespace Engine
             float ndotl = dot(lightdir, normalize(vnormal));
             float hLambert = ndotl * 0.5 + 0.5;
             vec3 tex = texture(diff1map, texcoord0).rgb;
-            vec3 diff = hLambert * vec3(1, 1, 1) * tex;
+            vec3 diff = hLambert * tex;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
     )";

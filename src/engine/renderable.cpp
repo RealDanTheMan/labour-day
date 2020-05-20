@@ -63,9 +63,13 @@ void Renderable::Init(const Mesh &mesh)
         m_normals[i] = mesh.Normal(i);
     }
 
-        for(uint32_t i=0; i < m_vertexCount; i++)
+    for(uint32_t i=0; i < m_vertexCount; i++)
     {
-        m_texcoords0[i] = mesh.Texcoord(i, 0);
+        // Flip V texcoord
+        Vec2 texoord = mesh.Texcoord(i, 0);
+        m_texcoords0[i] = Vec2(1.0f - texoord.x, 1.0f - texoord.y);
+
+        //m_texcoords0[i] = mesh.Texcoord(i, 0);
     }
 
     for(uint32_t i=0; i < m_indexCount; i++)

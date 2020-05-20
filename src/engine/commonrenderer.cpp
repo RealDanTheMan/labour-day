@@ -50,6 +50,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             if(mat != nullptr)
             {
                 PushMaterialShaderParams(*renderable->GetShader(), *mat);
+                BindMaterialTextures(*renderable->GetShader(), *mat);
             }
             break;
     }
@@ -71,6 +72,11 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
         default:
             glDrawElements(GL_TRIANGLES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
             break;
+    }
+
+    if(mat != nullptr)
+    {
+        UnbindMaterialTextures(*renderable->GetShader(), *mat);
     }
 
     glUseProgram(0);
@@ -186,11 +192,48 @@ void CommonRenderer::PushMaterialShaderParams(const ShaderProg &shader, const Ma
                     glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.ShaderParameters()->GetValue<Mat4>(name)[0][0]);
                     break; 
                 }
-                case GL_SAMPLER_2D: 
-                {
-                     break; 
-                }
             }
         }
     }
+}
+
+void CommonRenderer::BindMaterialTextures(const ShaderProg &shader, const Material &mat) const
+{
+    std::vector<std::string> texkeys = mat.ShaderParameters()->TextureKeys();
+    for (std::vector<std::string>::iterator it = texkeys.begin() ; it != texkeys.end(); ++it)
+    {
+        const std::string name = *it;
+        const TexVal val = mat.ShaderParameters()->GetTexValue(name);
+        if(val.m_tex != nullptr)
+        {
+            assert (val.m_tex->Ready());
+            assert (val.m_tex->GLReady());
+            glActiveTexture(GL_TEXTURE0 + val.m_idx);
+            glBindTexture(GL_TEXTURE_2D, val.m_tex->GLHandle());
+
+            GLint loc = glGetUniformLocation(shader.GetHandle(), name.c_str());
+            assert (loc != -1);
+            glUniform1i(loc, val.m_idx);
+            glBindTextureUnit(val.m_idx, val.m_tex->GLHandle());
+        }
+    }
+}
+
+void CommonRenderer::UnbindMaterialTextures(const ShaderProg &shader, const Material &mat) const
+{
+    std::vector<std::string> texkeys = mat.ShaderParameters()->TextureKeys();
+    for (std::vector<std::string>::iterator it = texkeys.begin() ; it != texkeys.end(); ++it)
+    {
+        const TexVal val = mat.ShaderParameters()->GetTexValue(*it);
+        if(val.m_tex != nullptr)
+        {
+            assert (val.m_tex->Ready());
+            assert (val.m_tex->GLReady());
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindTextureUnit(val.m_idx, 0);
+
+        }
+    }
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

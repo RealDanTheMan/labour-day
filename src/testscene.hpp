@@ -11,7 +11,7 @@ class TestScene
 {
     private:
     std::unique_ptr<Engine::Renderable> m_mesh;
-    std::unique_ptr<Engine::GLTex> m_tex;
+    std::unique_ptr<Engine::Texture2D> m_tex;
     std::unique_ptr<Engine::Model> m_model;
     std::unique_ptr<Engine::Material> m_mat;
     std::unique_ptr<Engine::Camera> m_camera;

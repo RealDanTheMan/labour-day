@@ -15,20 +15,23 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (m_core->Shaders() != nullptr);
     assert (m_core->Shaders()->Ready());
 
-    std::unique_ptr<Engine::Texture2D> tex = Engine::Texture2D::Load("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg");
-    assert (tex != nullptr);
-    m_tex = std::make_unique<Engine::GLTex>(*tex);
-    tex->Free();
+    m_tex = Engine::Texture2D::Load("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg");
+    assert (m_tex != nullptr);
     assert (m_tex->Ready());
+    m_tex->GLPush();
+    assert (m_tex->GLReady());
+    //Engine::Texture2D::Write(m_tex.get(), "/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01-out.jpg");
 
     assert (m_core->Shaders()->Ready());
-    m_mat = std::make_unique<Engine::Material>(*m_core->Shaders()->Diff());
-    m_mat->ShaderParameters()->SetValue("tint", Vec3(1, 0, 0));
+    m_mat = std::make_unique<Engine::Material>(*m_core->Shaders()->Diff1());
+    m_mat->ShaderParameters()->SetTexValue("diff1map", m_tex.get());
+    //m_mat->ShaderParameters()->SetValue("tint", Vec3(1, 0, 0));
+
 
     std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
     m_mesh = std::make_unique<Engine::Renderable>();
     m_mesh->Init(*msh);
-    m_mesh->BindShader(m_core->Shaders()->Diff());
+    m_mesh->BindShader(m_core->Shaders()->Diff1());
     assert (m_mesh->Ready());
 
     m_model = std::make_unique<Engine::Model>(*m_mesh, m_mat.get());
@@ -67,5 +70,5 @@ void TestScene::Update()
     auto g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     auto b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-    m_model->GetMaterial()->ShaderParameters()->SetValue("tint", Vec3(r, g, b));
+    //m_model->GetMaterial()->ShaderParameters()->SetValue("tint", Vec3(r, g, b));
 }

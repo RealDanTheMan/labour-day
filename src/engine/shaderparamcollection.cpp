@@ -1,4 +1,5 @@
 #include "shaderparamcollection.hpp"
+#include "debugging.hpp"
 
 using namespace Engine;
 
@@ -18,6 +19,7 @@ std::unique_ptr<ShaderParamCollection> ShaderParamCollection::Create(const GLuin
     auto params = std::make_unique<ShaderParamCollection>();
 
     // Fetch all shader uniform params
+    GLuint texCount=0;
     GLint count;
     glGetProgramiv(shader, GL_ACTIVE_UNIFORMS, &count);
     for(uint32_t i=0; i < count; i++)
@@ -42,6 +44,13 @@ std::unique_ptr<ShaderParamCollection> ShaderParamCollection::Create(const GLuin
                 case GL_INT: { params->AddParameter<int>(name); break; }
                 case GL_BOOL: { params->AddParameter<bool>(name); break; }
                 case GL_FLOAT_MAT4: { params->AddParameter<Mat4>(name); break; }
+                case GL_SAMPLER_2D:
+                {
+                    params->AddTexParameter(name, texCount);
+                    texCount++;
+
+                    break;
+                }
             }
         }
     }
@@ -78,4 +87,49 @@ const std::vector<std::string> ShaderParamCollection::AllKeys() const
     }
 
     return keys;
+}
+
+const std::vector<std::string> ShaderParamCollection::TextureKeys() const
+{
+    std::vector<std::string> keys;
+    for(auto it = m_paramMap.begin(); it != m_paramMap.end(); ++it) 
+    {
+        const ShaderParamValue<TexVal>* paramv = reinterpret_cast<const ShaderParamValue<TexVal>*>(it->second);
+        if(paramv != nullptr)
+        {
+            keys.push_back(it->first);
+        }
+    }
+
+    return keys;
+}
+
+const TexVal ShaderParamCollection::GetTexValue(const std::string &name) const 
+{
+    assert (m_paramMap.find(name) != m_paramMap.end());
+    const ShaderParam* const  param = m_paramMap.at(name);
+    assert (param != nullptr);
+    const ShaderParamValue<TexVal>* paramv = reinterpret_cast<const ShaderParamValue<TexVal>*>(param);
+    assert (paramv != nullptr);
+
+    return paramv->Get();
+}
+
+void ShaderParamCollection::SetTexValue(const std::string &name, Texture2D * const tex)
+{
+    assert (m_paramMap.find(name) != m_paramMap.end());
+    ShaderParam* param = m_paramMap.at(name);
+    assert (param != nullptr);
+    ShaderParamValue<TexVal>* paramv = reinterpret_cast<ShaderParamValue<TexVal>*>(param);
+    assert (paramv != nullptr);
+    
+    TexVal val = paramv->Get();
+    val.m_tex = tex;
+    paramv->Set(val);
+}
+
+void ShaderParamCollection::AddTexParameter(const std::string &name, GLuint idx)
+{
+    m_params.push_back(std::make_unique<ShaderParamValue<TexVal>>(name));
+    m_paramMap.insert(std::make_pair(name, m_params.back().get()));
 }

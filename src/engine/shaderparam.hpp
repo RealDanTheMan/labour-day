@@ -28,6 +28,7 @@ namespace Engine
         public:
         ShaderParamValue<T>(const std::string &name, T val);
         ShaderParamValue<T>(const std::string &name);
+        ShaderParamValue<T>(const ShaderParamValue<T> &rhs);
         const T Get() const;
         void Set(T val);
         virtual std::unique_ptr<ShaderParam> Clone() const override;
@@ -40,6 +41,12 @@ namespace Engine
 
     template <class T>
     ShaderParamValue<T>::ShaderParamValue(const std::string &name) : ShaderParam(name)
+    {
+    }
+
+    template <class T>
+    ShaderParamValue<T>::ShaderParamValue(const ShaderParamValue<T> &rhs): ShaderParam(rhs),
+    m_value(rhs.m_value)
     {
     }
 
@@ -59,6 +66,8 @@ namespace Engine
     std::unique_ptr<ShaderParam> ShaderParamValue<T>::Clone() const
     {
         auto clone = std::make_unique<ShaderParamValue<T>>(m_name);
+        clone->m_value = m_value;
+        
         return clone;
     }
 }

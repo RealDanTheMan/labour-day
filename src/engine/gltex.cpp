@@ -3,20 +3,9 @@
 
 using namespace Engine;
 
-GLTex::GLTex(const Texture2D &tex):
+GLTex::GLTex():
 m_tex(0)
 {
-    assert (tex.DataHandle() != nullptr);
-
-    glGenTextures(1, &m_tex);
-    glBindTexture(GL_TEXTURE_2D, m_tex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.Width(), tex.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.DataHandle());
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 bool GLTex::Ready() const 
@@ -29,8 +18,26 @@ bool GLTex::Ready() const
     return true;
 }
 
-void GLTex::Free()
+void GLTex::Load(const uint32_t w, const uint32_t h, unsigned char* const data)
+{
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures(1, &m_tex);
+    glBindTexture(GL_TEXTURE_2D, m_tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    m_loaded = true;
+}
+
+void GLTex::Unload()
 {
     glDeleteTextures(1, &m_tex);
     m_tex = 0;
+    m_loaded = false;
+}
+
+const GLuint GLTex::Handle() const
+{
+    return m_tex;
 }

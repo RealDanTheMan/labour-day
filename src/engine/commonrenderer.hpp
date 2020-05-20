@@ -33,6 +33,8 @@ namespace Engine
 
         void PushUniformShaderParams(const ShaderProg *shader, const Transform *transform) const;
         void PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const;
+        void BindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
+        void UnbindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
         std::vector<const Renderable*> m_queue;
         const Camera* m_activeCam;
         const RuntimeShaders * const m_runtimeShaders;
