@@ -7,6 +7,7 @@
 #include "engine/types.hpp"
 
 
+
 void TestScene::Initialize(Engine::EngineCore *core)
 {
     m_core = core;
@@ -28,7 +29,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
     //m_mat->ShaderParameters()->SetValue("tint", Vec3(1, 0, 0));
 
 
-    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
+    //std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
+    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::FromOBJ("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj");
+    assert (msh != nullptr);
     m_mesh = std::make_unique<Engine::Renderable>();
     m_mesh->Init(*msh);
     m_mesh->BindShader(m_core->Shaders()->Diff1());
