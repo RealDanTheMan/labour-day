@@ -16,35 +16,47 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (m_core->Shaders() != nullptr);
     assert (m_core->Shaders()->Ready());
 
-    m_tex = Engine::Texture2D::Load("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg");
-    assert (m_tex != nullptr);
-    assert (m_tex->Ready());
-    m_tex->GLPush();
-    assert (m_tex->GLReady());
-    //Engine::Texture2D::Write(m_tex.get(), "/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01-out.jpg");
+    // Load asset resources
+    m_cache = std::make_unique<Engine::AssetCache>();
+    m_cache->AddTexture("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg", "test-01");
+    m_cache->AddMesh("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj", "torus");
 
+    D_MSG("Asset cache size");
+    D_MSG(m_cache->Count());
+
+    Engine::Texture2D* ptex = m_cache->GetTexture("test-01");
+    Engine::Mesh* pmsh = m_cache->GetMesh("torus");
+
+    assert (ptex != nullptr);
+    assert (pmsh != nullptr);
+
+
+    // Load texture to GPU
+    assert (ptex->Ready());
+    ptex->GLPush();
+    assert (ptex->GLReady());
+
+    // Setup material properties
     assert (m_core->Shaders()->Ready());
     m_mat = std::make_unique<Engine::Material>(*m_core->Shaders()->Diff1());
-    m_mat->ShaderParameters()->SetTexValue("diff1map", m_tex.get());
-    //m_mat->ShaderParameters()->SetValue("tint", Vec3(1, 0, 0));
+    m_mat->ShaderParameters()->SetTexValue("diff1map", ptex);
 
-
-    //std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::Box(1.0f, 1.0f, 1.0f);
-    std::unique_ptr<Engine::Mesh> msh = Engine::MeshGen::FromOBJ("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj");
-    assert (msh != nullptr);
+    // Load mesh to GPU
     m_mesh = std::make_unique<Engine::Renderable>();
-    m_mesh->Init(*msh);
+    m_mesh->Init(*pmsh);
     m_mesh->BindShader(m_core->Shaders()->Diff1());
     assert (m_mesh->Ready());
 
+    // ECS setup
     m_model = std::make_unique<Engine::Model>(*m_mesh, m_mat.get());
     m_asset = m_core->ECS()->CreateEntity();
     assert (m_asset != nullptr);
     auto cmodel = m_asset->Components().Add<Engine::Components::ModelComponent>();
     cmodel->SetModel(m_model.get());
     assert (cmodel->ModelHandle() != nullptr);
-    
     m_core->ECS()->CreateProcess<TestProc>();
+
+    // Setup main scene camera
     m_camera = std::make_unique<Engine::Camera>(1280, 720, 30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
 }
@@ -74,4 +86,9 @@ void TestScene::Update()
     auto b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
     //m_model->GetMaterial()->ShaderParameters()->SetValue("tint", Vec3(r, g, b));
+}
+
+void TestScene::Free()
+{
+    m_cache->Free();
 }

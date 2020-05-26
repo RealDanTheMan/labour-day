@@ -39,6 +39,7 @@ void App::Run()
 void App::Exit()
 {
     assert (m_core != nullptr);
+    m_testScene->Free();
     
     m_core->Terminate();
     m_core.reset(nullptr);
