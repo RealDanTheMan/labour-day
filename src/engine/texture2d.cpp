@@ -108,7 +108,7 @@ bool Texture2D::GLReady() const
     return m_gltex->Ready();
 }
 
-void Texture2D::Free()
+void Texture2D::Unload()
 {
     if(m_gltex != nullptr && m_gltex->Ready())
     {

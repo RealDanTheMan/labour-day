@@ -2,12 +2,13 @@
 #define MESH_HPP_
 
 #include "types.hpp"
+#include "iresource.hpp"
 #include <memory>
 #include <glm/vec3.hpp>
 
 namespace Engine
 {
-    class Mesh
+    class Mesh : public IResource
     {
         public:
 
@@ -18,7 +19,7 @@ namespace Engine
         void SetMeshData(const Vec3* verts, const unsigned int* indices, const uint32_t vCount, const uint32_t iCount);
         void SetNormals(const Vec3* normals, const uint32_t count);
         void SetTexcoords(const Vec2* texcoords, const uint32_t count, const uint32_t id);
-        void Free();
+        void Unload() override;
         Vec3* Vertices() ;
         Vec3* Normals() ;
         Vec2* Texcoords(const uint32_t id) ;

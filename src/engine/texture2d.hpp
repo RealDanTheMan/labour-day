@@ -1,13 +1,14 @@
 #ifndef TEXTURE2D_HPP_
 #define TEXTURE2D_HPP_
 
+#include "iresource.hpp"
 #include "gltex.hpp"
 #include <memory>
 #include <string>
 
 namespace Engine
 {
-    class Texture2D
+    class Texture2D : public IResource
     {
         public:
 
@@ -22,7 +23,7 @@ namespace Engine
         const uint32_t ChannelCount() const;
         unsigned char* const DataHandle() const;
         const GLuint GLHandle() const;
-        void Free();
+        void Unload() override;
         bool Ready() const;
         bool GLReady() const;
         void GLPush();

@@ -68,7 +68,7 @@ void Mesh::SetTexcoords(const Vec2* texcoords, const uint32_t count, const uint3
     }
 }
 
-void Mesh::Free()
+void Mesh::Unload()
 {
     m_vertices.reset();
     m_normals.reset();
