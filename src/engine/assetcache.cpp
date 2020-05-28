@@ -53,6 +53,21 @@ bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
     return false;
 }
 
+bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
+{
+    auto prf = Prefab::FromJSON(filepath);
+    if(prf != nullptr)
+    {
+        Prefab * pdata = prf.get();
+        prf.release();
+
+        Consume<Prefab>(pdata, key);
+        return true;
+    }
+
+    return false;
+}
+
 bool AssetCache::HasResourceKey(const std::string &key) const
 {
     if(std::find(m_keys.begin(), m_keys.end(), key) != m_keys.end())
@@ -112,5 +127,19 @@ Mesh * const AssetCache::GetMesh(const std::string &key) const
         return pmsh;
     }
 
+    return nullptr;
+}
+
+Prefab * const AssetCache::GetPrefab(const std::string &key) const
+{
+    IResource * const pres = GetResource(key);
+    if(pres != nullptr)
+    {
+        Prefab * const pPrefab = dynamic_cast<Prefab*>(pres);
+        assert (pPrefab != nullptr);
+
+        return pPrefab;
+    }
+    
     return nullptr;
 }
