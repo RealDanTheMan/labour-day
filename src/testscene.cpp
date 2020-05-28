@@ -20,15 +20,18 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_cache = std::make_unique<Engine::AssetCache>();
     m_cache->AddTexture("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg", "test-01");
     m_cache->AddMesh("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj", "torus");
+    m_cache->AddPrefab("/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/test.json", "test-prefab");
 
     D_MSG("Asset cache size");
     D_MSG(m_cache->Count());
 
     Engine::Texture2D* ptex = m_cache->GetTexture("test-01");
     Engine::Mesh* pmsh = m_cache->GetMesh("torus");
+    Engine::Prefab* prf = m_cache->GetPrefab("test-prefab");
 
     assert (ptex != nullptr);
     assert (pmsh != nullptr);
+    assert (prf != nullptr);
 
 
     // Load texture to GPU
