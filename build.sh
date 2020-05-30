@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+ST=$SECONDS
 
 echo Setting up build directory ...
 echo 
@@ -16,8 +17,12 @@ echo Runing make commands ...
 echo
 
 cd ./build
-make || exit 3
+make -j 16 || exit 3
+
+DURATION=$(($SECONDS - ST))
 
 
 echo
 echo Finished !
+echo Time: $DURATION seconds
+echo
