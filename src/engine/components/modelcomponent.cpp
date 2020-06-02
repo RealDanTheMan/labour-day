@@ -35,3 +35,8 @@ Engine::Renderable * const ModelComponent::GetRenderable() const
     assert (m_model->GetRenderable().Ready());
     return &(m_model->GetRenderable());
 }
+
+void ModelComponent::Init()
+{
+    
+}

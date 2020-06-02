@@ -14,6 +14,7 @@ namespace Engine::Components
         ModelComponent();
         ModelComponent(const ModelComponent &rhs);
 
+        virtual void Init() override;
         void SetModel(Model * const model);
         Model* const ModelHandle() const;
         Renderable* const GetRenderable() const;
