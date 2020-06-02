@@ -9,8 +9,7 @@ namespace Engine
             EntityComponent();
             EntityComponent(const EntityComponent &rhs);
 
-            virtual void Init();
-            virtual void Update();
+            virtual void Init()=0;;
     };
 }
 

@@ -1,4 +1,5 @@
 #include "entitycomponent.hpp"
+#include "debugging.hpp"
 
 using namespace Engine;
 
@@ -11,9 +12,5 @@ EntityComponent::EntityComponent(const EntityComponent &rhs)
 }
 
 void EntityComponent::Init()
-{
-}
-
-void EntityComponent::Update()
 {
 }
