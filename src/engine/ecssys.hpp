@@ -5,6 +5,7 @@
 #include "types.hpp"
 #include "entity.hpp"
 #include "entityprocess.hpp"
+#include "prefab.hpp"
 
 #include <vector>
 #include <memory>
@@ -21,6 +22,7 @@ namespace Engine
         void Terminate();
 
         Entity* CreateEntity();
+        Entity* CreateEntity(const Prefab * const pref);
 
         template <typename T>
         T* const CreateProcess();

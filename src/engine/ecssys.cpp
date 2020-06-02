@@ -43,6 +43,11 @@ Entity* ECSSys::CreateEntity()
     return m_liveEntities.back().get();
 }
 
+Entity* ECSSys::CreateEntity(const Prefab * const pref)
+{
+    return nullptr;
+}
+
 void ECSSys::AllAssets(std::vector<Entity*>& outVec)
 {
     for(uint32_t i=0; i < m_liveEntities.size(); i++)
