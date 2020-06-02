@@ -1,9 +1,6 @@
 #include "prefab.hpp"
 #include "debugging.hpp"
 
-#define CONFIGURU_IMPLEMENTATION 1
-#include "../external/configuru.hpp"
-
 using namespace Engine;
 
 std::unique_ptr<Prefab> Prefab::FromJSON(const std::string &filepath)
@@ -25,7 +22,12 @@ std::unique_ptr<Prefab> Prefab::FromJSON(const std::string &filepath)
     if(good)
     {
         auto prf = std::make_unique<Prefab>();
-        return prf;
+        prf->m_entity = EntitySerialiser::Deserialise (cfg);
+
+        if(prf->m_entity != nullptr)
+        {
+            return prf;
+        }
     }
 
     return nullptr;
