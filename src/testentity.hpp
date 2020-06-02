@@ -4,13 +4,6 @@
 #include "engine/entity.hpp"
 #include <memory>
 
-class TestComponent : public Engine::EntityComponent
-{
-    public:
-
-    void Init() override;
-    void Update() override;
-};
 
 class TestEntity
 {
