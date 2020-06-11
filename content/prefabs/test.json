@@ -1,4 +1,17 @@
 {
     "name": "test-prefab-01",
-    "type": "entity"
+    "type": "entity",
+    "components": 
+    [
+        {
+            "type": "model",
+            "properties":
+            [
+                {
+                    "name": "model",
+                    "value": "torus"
+                }
+            ]
+        }
+    ]
 }

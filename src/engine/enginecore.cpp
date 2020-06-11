@@ -44,6 +44,8 @@ bool EngineCore::Initialize()
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
+    m_ecs->RegisterComponentClass({0, "ModelComponentClass"});
+
 
     return true;
 }

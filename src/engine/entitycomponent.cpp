@@ -3,14 +3,13 @@
 
 using namespace Engine;
 
-EntityComponent::EntityComponent()
-{
-}
+std::map<std::string, EntityComponentDesc> EntityComponentFac::m_map = {};
 
-EntityComponent::EntityComponent(const EntityComponent &rhs)
-{
-}
 
-void EntityComponent::Init()
+bool EntityComponentFac::RegieterClass(const EntityComponentDesc &classDesc)
 {
+    assert (EntityComponentFac::m_map.find(classDesc.m_className) != EntityComponentFac::m_map.end());
+    
+    EntityComponentFac::m_map.insert(std::make_pair(classDesc.m_className, classDesc));
+    return true;
 }

@@ -23,6 +23,7 @@ namespace Engine
 
         Entity* CreateEntity();
         Entity* CreateEntity(const Prefab * const pref);
+        void RegisterComponentClass(const EntityComponentDesc &classDesc);
 
         template <typename T>
         T* const CreateProcess();

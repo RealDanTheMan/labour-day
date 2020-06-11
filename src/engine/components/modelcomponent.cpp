@@ -2,11 +2,16 @@
 
 using namespace Engine::Components;
 
+Engine::EntityComponentDesc ModelComponent::m_desc = {
+    1,
+    "ModelComponentClass"
+};
+
 
 ModelComponent::ModelComponent():
     m_model(nullptr)
 {
-
+    Engine::EntityComponentFac::RegieterClass(Engine::EntityComponentDesc());
 }
 
 ModelComponent::ModelComponent(const ModelComponent &rhs):
@@ -39,4 +44,14 @@ Engine::Renderable * const ModelComponent::GetRenderable() const
 void ModelComponent::Init()
 {
     
+}
+
+const Engine::EntityComponentDesc &ModelComponent::StaticDesc()
+{
+    return ModelComponent::m_desc;
+}
+
+const Engine::EntityComponentDesc& ModelComponent::Desc()
+{
+    return ModelComponent::StaticDesc();    
 }
