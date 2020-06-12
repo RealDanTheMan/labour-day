@@ -10,6 +10,8 @@
 #include "ecssys.hpp"
 #include <memory>
 
+#include "components/modelcomponent.hpp"
+
 namespace Engine
 {
     struct EngineCoreSettings
@@ -40,6 +42,9 @@ namespace Engine
         CommonRenderer* Renderer();
         RuntimeShaders* Shaders() const;
         ECSSys* ECS() const;
+
+        private:
+        void RegisterStdComponents();
     };
 }
 

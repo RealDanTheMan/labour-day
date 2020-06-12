@@ -55,8 +55,3 @@ void ECSSys::AllAssets(std::vector<Entity*>& outVec)
         outVec.push_back(m_liveEntities[i].get());
     }
 }
-
-void ECSSys::RegisterComponentClass(const EntityComponentDesc &classDesc)
-{
-    EntityComponentFac::RegieterClass(classDesc);
-}

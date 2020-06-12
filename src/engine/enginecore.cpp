@@ -44,7 +44,7 @@ bool EngineCore::Initialize()
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
-    m_ecs->RegisterComponentClass({0, "ModelComponentClass"});
+    RegisterStdComponents();
 
 
     return true;
@@ -152,4 +152,9 @@ RuntimeShaders* EngineCore::Shaders() const
 ECSSys* EngineCore::ECS() const
 {
     return m_ecs.get();
+}
+
+void EngineCore::RegisterStdComponents()
+{
+    EntitySerialiser::RegisterComponentSerialiser(*Components::ModelComponent::Seriaialiser());
 }

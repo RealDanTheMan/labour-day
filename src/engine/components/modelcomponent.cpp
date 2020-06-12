@@ -2,16 +2,25 @@
 
 using namespace Engine::Components;
 
-Engine::EntityComponentDesc ModelComponent::m_desc = {
-    1,
-    "ModelComponentClass"
-};
+ModelComponentSerialiser::~ModelComponentSerialiser()
+{
+}
 
+bool ModelComponentSerialiser::Deserialise(EntityComponent* pComponent, const configuru::Config &json) const
+{
+    return false;
+}
+
+bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const
+{
+    return false;
+}
+
+ModelComponentSerialiser ModelComponent::m_serialiser = {};
 
 ModelComponent::ModelComponent():
     m_model(nullptr)
 {
-    Engine::EntityComponentFac::RegieterClass(Engine::EntityComponentDesc());
 }
 
 ModelComponent::ModelComponent(const ModelComponent &rhs):
@@ -46,12 +55,7 @@ void ModelComponent::Init()
     
 }
 
-const Engine::EntityComponentDesc &ModelComponent::StaticDesc()
+Engine::EntityComponentSerialiser * const ModelComponent::Seriaialiser()
 {
-    return ModelComponent::m_desc;
-}
-
-const Engine::EntityComponentDesc& ModelComponent::Desc()
-{
-    return ModelComponent::StaticDesc();    
+    return &m_serialiser;
 }

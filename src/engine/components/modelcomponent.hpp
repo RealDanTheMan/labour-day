@@ -3,11 +3,20 @@
 
 
 #include "../entity.hpp"
+#include "../entityserialiser.hpp"
 #include "../model.hpp"
 #include "../renderable.hpp"
 
 namespace Engine::Components
 {
+    class ModelComponentSerialiser : public EntityComponentSerialiser
+    {
+        public:
+        virtual ~ModelComponentSerialiser();
+        bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const override;
+        bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const override;
+    };
+
     class ModelComponent: public EntityComponent
     {
         public:
@@ -15,18 +24,17 @@ namespace Engine::Components
         ModelComponent(const ModelComponent &rhs);
 
         virtual void Init() override;
-        virtual const EntityComponentDesc& Desc() override;
+        static EntityComponentSerialiser * const Seriaialiser();
 
         void SetModel(Model * const model);
         Model* const ModelHandle() const;
         Renderable* const GetRenderable() const;
 
         public:
-        static const EntityComponentDesc& StaticDesc();
 
         private:
         Model *m_model;
-        static EntityComponentDesc m_desc;
+        static ModelComponentSerialiser m_serialiser;
     };
 }
 
