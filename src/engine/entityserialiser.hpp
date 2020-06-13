@@ -3,12 +3,14 @@
 
 #include "../external/configuru.hpp"
 #include "entity.hpp"
+#include <string>
 
 namespace Engine
 {
     class EntityComponentSerialiser
     {
         public:
+        EntityComponentSerialiser(const std::string &className);
         virtual ~EntityComponentSerialiser();
         virtual bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const;
         virtual bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const;
@@ -20,7 +22,7 @@ namespace Engine
     class EntitySerialiser
     {
         public:
-        static void RegisterComponentSerialiser(const EntityComponentSerialiser);
+        static void RegisterComponentSerialiser(const EntityComponentSerialiser &serialiser);
         static std::unique_ptr<Entity> Deserialise(const configuru::Config &json);
 
         private:

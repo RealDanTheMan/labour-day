@@ -1,10 +1,10 @@
 {
     "name": "test-prefab-01",
-    "type": "entity",
+    "type": "Entity",
     "components": 
     [
         {
-            "type": "model",
+            "type": "ModelComponentClass",
             "properties":
             [
                 {

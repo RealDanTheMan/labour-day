@@ -2,6 +2,10 @@
 
 using namespace Engine::Components;
 
+ModelComponentSerialiser::ModelComponentSerialiser() : EntityComponentSerialiser("ModelComponentClass")
+{
+}
+
 ModelComponentSerialiser::~ModelComponentSerialiser()
 {
 }
@@ -16,7 +20,7 @@ bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru::
     return false;
 }
 
-ModelComponentSerialiser ModelComponent::m_serialiser = {};
+ModelComponentSerialiser ModelComponent::m_serialiser = ModelCompo;
 
 ModelComponent::ModelComponent():
     m_model(nullptr)

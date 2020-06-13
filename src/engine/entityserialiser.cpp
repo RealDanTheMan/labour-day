@@ -1,9 +1,15 @@
 #include "entityserialiser.hpp"
+#include "debugging.hpp"
 
 #define CONFIGURU_IMPLEMENTATION 1
 #include "../external/configuru.hpp"
 
 using namespace Engine;
+
+EntityComponentSerialiser::EntityComponentSerialiser(const std::string &className):
+m_className(className)
+{
+}
 
 
 EntityComponentSerialiser::~EntityComponentSerialiser()
@@ -23,7 +29,7 @@ bool EntityComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru:
 
 std::map<std::string, EntityComponentSerialiser> EntitySerialiser::m_cmpSerialisers = {};
 
-void EntitySerialiser::RegisterComponentSerialiser(const EntityComponentSerialiser serialiser)
+void EntitySerialiser::RegisterComponentSerialiser(const EntityComponentSerialiser &serialiser)
 {
     assert (EntitySerialiser::m_cmpSerialisers.find(serialiser.m_className) != EntitySerialiser::m_cmpSerialisers.end());
     EntitySerialiser::m_cmpSerialisers.insert(std::make_pair(serialiser.m_className, serialiser));
@@ -56,12 +62,15 @@ std::unique_ptr<Entity> EntitySerialiser::Deserialise (const configuru::Config &
 
 const EntityComponentSerialiser * const EntitySerialiser::GetComponentSerialiser(const std::string className)
 {
-    return nullptr;
+    D_MSG("class name: ");
+    D_MSG(className);
+
+    assert (m_cmpSerialisers.find(className) != m_cmpSerialisers.end());
+    return &m_cmpSerialisers[className];
 }
 
 void EntitySerialiser::DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser)
 {
     assert (pEntity != nullptr);
     assert (pSerialiser != nullptr);
-
 }
