@@ -12,15 +12,37 @@ ModelComponentSerialiser::~ModelComponentSerialiser()
 
 bool ModelComponentSerialiser::Deserialise(EntityComponent* pComponent, const configuru::Config &json) const
 {
-    return false;
+    assert (pComponent != nullptr);
+
+    auto pCmp = reinterpret_cast<ModelComponent*>(pComponent);
+    assert (pCmp != nullptr);
+
+    if(json.has_key("modelname") && json["modelname"].is_string())
+    {
+        pCmp->m_modelName = (std::string)json["modelname"];
+    }
+    else 
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const
 {
+    assert (pEntity != nullptr);
+    auto pCmp = pEntity->Components().Add<ModelComponent>();
+    assert (pCmp != nullptr);
+
+    bool stat = Deserialise(pCmp, json);
+    if(stat)
+    {
+        return true;
+    }
+
     return false;
 }
-
-ModelComponentSerialiser ModelComponent::m_serialiser = ModelCompo;
 
 ModelComponent::ModelComponent():
     m_model(nullptr)
@@ -30,7 +52,6 @@ ModelComponent::ModelComponent():
 ModelComponent::ModelComponent(const ModelComponent &rhs):
     m_model(rhs.m_model)
 {
-
 }
 
 void ModelComponent::SetModel(Model * const model)
@@ -56,10 +77,8 @@ Engine::Renderable * const ModelComponent::GetRenderable() const
 
 void ModelComponent::Init()
 {
-    
-}
-
-Engine::EntityComponentSerialiser * const ModelComponent::Seriaialiser()
-{
-    return &m_serialiser;
+    if(!m_modelName.empty())
+    {
+        
+    }
 }

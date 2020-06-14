@@ -14,8 +14,8 @@ namespace Engine::Components
         public:
         ModelComponentSerialiser();
         virtual ~ModelComponentSerialiser();
-        bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const override;
-        bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const override;
+        virtual bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const override;
+        virtual bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const override;
     };
 
     class ModelComponent: public EntityComponent
@@ -25,17 +25,16 @@ namespace Engine::Components
         ModelComponent(const ModelComponent &rhs);
 
         virtual void Init() override;
-        static EntityComponentSerialiser * const Seriaialiser();
 
         void SetModel(Model * const model);
         Model* const ModelHandle() const;
         Renderable* const GetRenderable() const;
 
         public:
+        std::string m_modelName;
 
         private:
         Model *m_model;
-        static ModelComponentSerialiser m_serialiser;
     };
 }
 

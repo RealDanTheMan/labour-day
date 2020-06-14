@@ -15,6 +15,8 @@ namespace Engine
         static std::unique_ptr<Prefab> FromJSON(const std::string &filepath);
         void Unload() override;
 
+        const Entity* const PrefabEntity() const;
+
         private:
         std::unique_ptr<Entity> m_entity;
 

@@ -5,13 +5,7 @@
     [
         {
             "type": "ModelComponentClass",
-            "properties":
-            [
-                {
-                    "name": "model",
-                    "value": "torus"
-                }
-            ]
+            "modelname": "torus"
         }
     ]
 }

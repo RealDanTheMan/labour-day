@@ -85,6 +85,7 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
+    RegisterStdComponents();
 
     return true;
 }
@@ -156,5 +157,5 @@ ECSSys* EngineCore::ECS() const
 
 void EngineCore::RegisterStdComponents()
 {
-    EntitySerialiser::RegisterComponentSerialiser(*Components::ModelComponent::Seriaialiser());
+    EntitySerialiser::RegisterComponentSerialiser<Components::ModelComponentSerialiser>();
 }

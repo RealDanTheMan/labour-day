@@ -37,3 +37,8 @@ void Prefab::Unload()
 {
 
 }
+
+const Entity * const Prefab::PrefabEntity() const
+{
+    return m_entity.get();
+}

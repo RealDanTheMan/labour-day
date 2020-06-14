@@ -16,24 +16,12 @@ EntityComponentSerialiser::~EntityComponentSerialiser()
 {
 }
 
-bool EntityComponentSerialiser::Deserialise(EntityComponent* pComponent, const configuru::Config &json) const
+const std::string& EntityComponentSerialiser::ClassName() const
 {
-    return false;
+    return m_className;
 }
 
-bool EntityComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const
-{
-    return false;
-}
-
-
-std::map<std::string, EntityComponentSerialiser> EntitySerialiser::m_cmpSerialisers = {};
-
-void EntitySerialiser::RegisterComponentSerialiser(const EntityComponentSerialiser &serialiser)
-{
-    assert (EntitySerialiser::m_cmpSerialisers.find(serialiser.m_className) != EntitySerialiser::m_cmpSerialisers.end());
-    EntitySerialiser::m_cmpSerialisers.insert(std::make_pair(serialiser.m_className, serialiser));
-}
+std::map<std::string, std::unique_ptr<EntityComponentSerialiser>> EntitySerialiser::m_cmpSerialisers = {};
 
 std::unique_ptr<Entity> EntitySerialiser::Deserialise (const configuru::Config &json)
 {
@@ -49,7 +37,7 @@ std::unique_ptr<Entity> EntitySerialiser::Deserialise (const configuru::Config &
                 std::string className = (std::string)element["type"];
                 const EntityComponentSerialiser *cmpSerialiser = EntitySerialiser::GetComponentSerialiser(className);
                 assert (cmpSerialiser != nullptr);
-                EntitySerialiser::DeserialiserEntityComponent(pEntity.get(), cmpSerialiser);
+                EntitySerialiser::DeserialiserEntityComponent(pEntity.get(), cmpSerialiser, element);
             }
         }
 
@@ -62,15 +50,15 @@ std::unique_ptr<Entity> EntitySerialiser::Deserialise (const configuru::Config &
 
 const EntityComponentSerialiser * const EntitySerialiser::GetComponentSerialiser(const std::string className)
 {
-    D_MSG("class name: ");
-    D_MSG(className);
-
     assert (m_cmpSerialisers.find(className) != m_cmpSerialisers.end());
-    return &m_cmpSerialisers[className];
+    return m_cmpSerialisers.at(className).get();
 }
 
-void EntitySerialiser::DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser)
+void EntitySerialiser::DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser, const configuru::Config &json)
 {
     assert (pEntity != nullptr);
     assert (pSerialiser != nullptr);
+
+    bool deserialised = pSerialiser->DeserialiseAdd(pEntity, json);
+    assert (deserialised);
 }
