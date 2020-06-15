@@ -7,19 +7,20 @@
 
 namespace Engine
 {
-    class Model
+    class Model : IResource
     {
         public:
-        Model(Renderable& renderable, Material * const mat);
-        Model(const Model& rhs);
+        Model(const Mesh& mesh, Material * const mat);
+        Model(const Model& rhs)=delete;
 
-        Renderable& GetRenderable();
+        Renderable* GetRenderable();
         Transform& GetTransform();
         Material* const GetMaterial() const;
+        virtual void Unload() override;
 
         private:
+        std::unique_ptr<Renderable> m_renderable;
         Transform m_tr;
-        Renderable& m_renderable;
         Material* m_mat;
     };
 }

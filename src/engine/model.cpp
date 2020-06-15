@@ -3,25 +3,21 @@
 using namespace Engine;
 
 
-Model::Model(Renderable& renderable, Material * const mat):
-    m_renderable(renderable),
+Model::Model(const Mesh& mesh, Material * const mat):
+    m_renderable(nullptr),
     m_tr(Transform()),
     m_mat(mat)
 {
+    m_renderable = std::make_unique<Renderable>();
+    m_renderable->Init(mesh);
+    m_renderable->BindShader(mat->Shader());
 
+    assert (m_renderable->Ready());
 }
 
-Model::Model(const Model& rhs):
-    m_renderable(rhs.m_renderable),
-    m_tr(rhs.m_tr),
-    m_mat(rhs.m_mat)
+Renderable *Model::GetRenderable()
 {
-
-}
-
-Renderable &Model::GetRenderable()
-{
-    return m_renderable;
+    return m_renderable.get();
 }
 
 Transform &Model::GetTransform()
@@ -32,4 +28,10 @@ Transform &Model::GetTransform()
 Material * const Model::GetMaterial() const
 {
     return m_mat;
+}
+
+void Model::Unload()
+{
+    m_renderable->Free();
+    m_renderable.reset(nullptr);
 }

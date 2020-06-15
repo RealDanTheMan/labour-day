@@ -54,7 +54,6 @@ Engine::EngineCore* App::Engine()
 void App::UpdateGame()
 {
     assert (m_testScene != nullptr);
-    m_testScene->Update();
     m_core->ECS()->Update();
 }
 

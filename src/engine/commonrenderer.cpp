@@ -90,9 +90,10 @@ void CommonRenderer::DrawModel(const Components::ModelComponent *model) const
 {
     assert (model != nullptr);
     assert (model->ModelHandle() != nullptr);
-    assert (model->ModelHandle()->GetRenderable().Ready());
+    assert (model->ModelHandle()->GetRenderable() != nullptr);
+    assert (model->ModelHandle()->GetRenderable()->Ready());
 
-    Renderable &h = model->ModelHandle()->GetRenderable();
+    Renderable &h = *model->ModelHandle()->GetRenderable();
     Transform *tr = &model->ModelHandle()->GetTransform();
     const Material * const mat = model->ModelHandle()->GetMaterial();
     DrawRenderable(&h, tr, DrawMode::Fill, mat);
@@ -102,9 +103,10 @@ void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) cons
 {
     assert (model != nullptr);
     assert (model->ModelHandle() != nullptr);
-    assert (model->ModelHandle()->GetRenderable().Ready());
+    assert (model->ModelHandle()->GetRenderable() != nullptr);
+    assert (model->ModelHandle()->GetRenderable()->Ready());
 
-    Renderable &h = model->ModelHandle()->GetRenderable();
+    Renderable &h = *model->ModelHandle()->GetRenderable();
     Transform *tr = &model->ModelHandle()->GetTransform();
 
     DrawRenderable(&h, tr, DrawMode::Wireframe, nullptr);
