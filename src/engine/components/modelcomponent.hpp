@@ -23,8 +23,10 @@ namespace Engine::Components
         public:
         ModelComponent();
         ModelComponent(const ModelComponent &rhs);
+        virtual ~ModelComponent();
 
         virtual void Init() override;
+        virtual std::unique_ptr<Engine::EntityComponent> Duplicate() const override;
 
         void SetModel(Model * const model);
         Model* const ModelHandle() const;

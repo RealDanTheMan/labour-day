@@ -11,7 +11,9 @@ namespace Engine
     class EntityComponent
     {
         public:
+            virtual ~EntityComponent();
             virtual void Init()=0;
+            virtual std::unique_ptr<EntityComponent> Duplicate() const =0;
     };
 }
 

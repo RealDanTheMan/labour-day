@@ -45,7 +45,14 @@ Entity* ECSSys::CreateEntity()
 
 Entity* ECSSys::CreateEntity(const Prefab * const pref)
 {
-    return nullptr;
+    assert (pref != nullptr);
+    assert (m_pool.size() > 0);
+
+    std::unique_ptr<Entity> h = pref->PrefabEntity()->Duplicate();
+    m_liveEntities.push_back(std::move(h));
+
+    
+    return m_liveEntities.back().get();
 }
 
 void ECSSys::AllAssets(std::vector<Entity*>& outVec)

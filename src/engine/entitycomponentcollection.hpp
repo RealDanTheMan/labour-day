@@ -13,9 +13,10 @@ namespace Engine
     {
         public:
             EntityComponentCollection();
-            EntityComponentCollection(const EntityComponentCollection &rhs);
+            EntityComponentCollection(const EntityComponentCollection &rhs)=delete;
 
             const uint32_t Count() const;
+            std::unique_ptr<EntityComponentCollection> Duplicate() const;
             
             template<typename T> 
             T* const  Add();

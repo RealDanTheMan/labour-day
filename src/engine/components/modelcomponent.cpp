@@ -54,6 +54,10 @@ ModelComponent::ModelComponent(const ModelComponent &rhs):
 {
 }
 
+ModelComponent::~ModelComponent()
+{
+}
+
 void ModelComponent::SetModel(Model * const model)
 {
     m_model = model;
@@ -81,4 +85,17 @@ void ModelComponent::Init()
     {
         
     }
+}
+
+std::unique_ptr<Engine::EntityComponent> ModelComponent::Duplicate() const
+{
+    auto dup = std::make_unique<ModelComponent>();
+    dup->m_modelName = m_modelName;
+
+    if(m_model != nullptr)
+    {
+        dup->SetModel(m_model);
+    }
+
+    return dup;
 }
