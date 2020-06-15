@@ -19,9 +19,11 @@ namespace Engine
 
         ShaderParamCollection* const ShaderParameters();
         const ShaderParamCollection* const ShaderParameters() const;
+        const ShaderProg* Shader() const;
 
         private:
         std::unique_ptr<ShaderParamCollection> m_params;
+        const ShaderProg *m_shader;
     };
 }
 
