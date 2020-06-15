@@ -44,14 +44,8 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_mat = std::make_unique<Engine::Material>(*m_core->Shaders()->Diff1());
     m_mat->ShaderParameters()->SetTexValue("diff1map", ptex);
 
-    // Load mesh to GPU
-    m_mesh = std::make_unique<Engine::Renderable>();
-    m_mesh->Init(*pmsh);
-    m_mesh->BindShader(m_core->Shaders()->Diff1());
-    assert (m_mesh->Ready());
-
     // ECS setup
-    m_model = std::make_unique<Engine::Model>(*m_mesh, m_mat.get());
+    m_model = std::make_unique<Engine::Model>(*pmsh, m_mat.get());
     m_asset = m_core->ECS()->CreateEntity();
     assert (m_asset != nullptr);
     auto cmodel = m_asset->Components().Add<Engine::Components::ModelComponent>();
@@ -64,11 +58,6 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
 }
 
-Engine::Renderable* TestScene::TestTriangle()
-{
-    return m_mesh.get();
-}
-
 Engine::Entity* TestScene::Asset()
 {
     return m_asset;
@@ -77,18 +66,6 @@ Engine::Entity* TestScene::Asset()
 Engine::Camera* TestScene::Cam()
 {
     return m_camera.get();
-}
-
-void TestScene::Update()
-{
-    assert (TestTriangle() != nullptr);
-    assert (Cam() != nullptr);
-
-    auto r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-    auto g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-    auto b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
-    //m_model->GetMaterial()->ShaderParameters()->SetValue("tint", Vec3(r, g, b));
 }
 
 void TestScene::Free()
