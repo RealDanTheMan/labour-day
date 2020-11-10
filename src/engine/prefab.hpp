@@ -12,7 +12,7 @@ namespace Engine
     class Prefab : public IResource
     {
         public:
-        static std::unique_ptr<Prefab> FromJSON(const std::string &filepath);
+        Prefab(const Entity &entity);
         void Unload() override;
 
         const Entity* const PrefabEntity() const;

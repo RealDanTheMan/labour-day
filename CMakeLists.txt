@@ -58,6 +58,7 @@ ${PROJECT_SOURCE_DIR}/engine/shaderparamcollection.cpp
 ${PROJECT_SOURCE_DIR}/engine/iresource.cpp
 ${PROJECT_SOURCE_DIR}/engine/assetcache.cpp
 ${PROJECT_SOURCE_DIR}/engine/prefab.cpp
+${PROJECT_SOURCE_DIR}/engine/contentserialiser.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
 ${PROJECT_SOURCE_DIR}/testentity.cpp 
 ${PROJECT_SOURCE_DIR}/testproc.cpp)

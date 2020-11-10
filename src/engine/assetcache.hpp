@@ -2,8 +2,7 @@
 #define ASSET_CACHE_HPP
 
 #include "texture2d.hpp"
-#include "mesh.hpp"
-#include "prefab.hpp"
+#include "contentserialiser.hpp"
 #include <vector>
 #include <memory>
 #include <string>
@@ -19,6 +18,7 @@ namespace Engine
         uint32_t Count() const;
         bool AddTexture(const std::string &filepath, const std::string &key);
         bool AddMesh(const std::string &filepath, const std::string &key);
+        bool AddModel(const std::string &filepath, const std::string &key);
         bool AddPrefab(const std::string &filepath, const std::string &key);
         void Free();
 

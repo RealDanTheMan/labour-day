@@ -219,38 +219,3 @@ std::unique_ptr<Mesh> MeshGen::Box(const float width, const float height, const 
 
     return mesh;
 }
-
-std::unique_ptr<Mesh> MeshGen::FromOBJ(const std::string &filepath)
-{
-    auto parser = objl::Loader();
-    bool status = parser.LoadFile(filepath);
-    if(status)
-    {
-        std::vector<Vec3> vertices;
-        std::vector<Vec3> normals;
-        std::vector<Vec2> texcoords;
-        std::vector<unsigned int> indices;
-
-        for (std::vector<objl::Vertex>::iterator it = parser.LoadedVertices.begin() ; it != parser.LoadedVertices.end(); ++it)
-        {
-            objl::Vertex data = *it;
-            vertices.push_back(Vec3(data.Position.X, data.Position.Y, data.Position.Z));
-            normals.push_back(Vec3(data.Normal.X, data.Normal.Y, data.Normal.Z));
-            texcoords.push_back(Vec2(data.TextureCoordinate.X, data.TextureCoordinate.Y));
-        }
-
-        for (std::vector<unsigned int>::iterator it = parser.LoadedIndices.begin() ; it != parser.LoadedIndices.end(); ++it)
-        {
-            indices.push_back(*it);
-        }
-
-        auto msh = std::make_unique<Mesh>();
-        msh->SetMeshData(&vertices[0], &indices[0], vertices.size(), indices.size());
-        msh->SetNormals(&normals[0], normals.size());
-        msh->SetTexcoords(&texcoords[0], texcoords.size(), 0);
-
-        return msh;
-    }
-
-    return nullptr;
-}

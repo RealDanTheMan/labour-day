@@ -40,7 +40,7 @@ bool AssetCache::AddTexture(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
 {
-    auto msh = MeshGen::FromOBJ(filepath);
+    auto msh = ContentSerialiser::LoadMesh(filepath);
     if(msh != nullptr)
     {
         Mesh *pdata = msh.get();
@@ -53,9 +53,14 @@ bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
     return false;
 }
 
+bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
+{
+    return false;
+}
+
 bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
 {
-    auto prf = Prefab::FromJSON(filepath);
+    auto prf = ContentSerialiser::LoadPrefab(filepath);
     if(prf != nullptr)
     {
         Prefab * pdata = prf.get();

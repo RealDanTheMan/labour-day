@@ -3,39 +3,14 @@
 
 using namespace Engine;
 
-std::unique_ptr<Prefab> Prefab::FromJSON(const std::string &filepath)
+Prefab::Prefab(const Entity &entity)
 {
-    bool good = false;
-    configuru::Config cfg;
-
-    try
-    {
-        cfg = configuru::parse_file(filepath, configuru::JSON);
-        good = true;
-    }
-    catch(configuru::ParseError  &err)
-    {
-        D_ERR("Failed to parse json prefab file !");
-        D_ERR(err.what());
-    }
-    
-    if(good)
-    {
-        auto prf = std::make_unique<Prefab>();
-        prf->m_entity = EntitySerialiser::Deserialise (cfg);
-
-        if(prf->m_entity != nullptr)
-        {
-            return prf;
-        }
-    }
-
-    return nullptr;
+    m_entity = entity.Duplicate();
 }
 
 void Prefab::Unload()
 {
-
+    m_entity.reset(nullptr);
 }
 
 const Entity * const Prefab::PrefabEntity() const
