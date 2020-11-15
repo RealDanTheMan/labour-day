@@ -11,7 +11,7 @@
 
 namespace Engine
 {
-    class Material
+    class Material : public IResource
     {
         public:
         Material(const ShaderProg &shader);
@@ -20,6 +20,7 @@ namespace Engine
         ShaderParamCollection* const ShaderParameters();
         const ShaderParamCollection* const ShaderParameters() const;
         const ShaderProg* Shader() const;
+        virtual void Unload() override;
 
         private:
         std::unique_ptr<ShaderParamCollection> m_params;

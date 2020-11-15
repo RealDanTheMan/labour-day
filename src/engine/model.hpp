@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-    class Model : IResource
+    class Model : public IResource
     {
         public:
         Model(const Mesh& mesh, Material * const mat);
