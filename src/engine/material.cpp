@@ -26,3 +26,8 @@ const ShaderProg* Material::Shader() const
     assert (m_shader != nullptr);
     return m_shader;
 }
+
+void Material::Unload()
+{
+    // Nothing to do here yet 
+}
