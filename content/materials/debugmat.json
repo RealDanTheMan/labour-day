@@ -1,4 +1,5 @@
 {
-    "type":"material",
-    "shader": ""
+    "type":"Material",
+    "name": "debugmat",
+    "shader": "diff1"
 }

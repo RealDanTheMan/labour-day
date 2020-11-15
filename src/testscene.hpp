@@ -12,8 +12,6 @@ class TestScene
 {
     private:
     std::unique_ptr<Engine::AssetCache> m_cache;
-    std::unique_ptr<Engine::Model> m_model;
-    std::unique_ptr<Engine::Material> m_mat;
     std::unique_ptr<Engine::Camera> m_camera;
     
     Engine::EngineCore* m_core;
