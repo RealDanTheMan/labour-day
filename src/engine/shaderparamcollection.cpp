@@ -1,5 +1,6 @@
 #include "shaderparamcollection.hpp"
 #include "debugging.hpp"
+#include <algorithm>
 
 using namespace Engine;
 
@@ -70,6 +71,11 @@ std::unique_ptr<ShaderParamCollection> ShaderParamCollection::Copy(const ShaderP
         ));
     }
 
+    for(uint32_t i=0; i < rhs.m_texParams.size(); i++)
+    {
+        params->m_texParams.push_back(rhs.m_texParams[i]);
+    }
+
     return params;
 }
 
@@ -94,6 +100,12 @@ const std::vector<std::string> ShaderParamCollection::TextureKeys() const
     std::vector<std::string> keys;
     for(auto it = m_paramMap.begin(); it != m_paramMap.end(); ++it) 
     {
+        // Skip this param if its not tex param
+        if(std::find(m_texParams.begin(), m_texParams.end(), it->first) == m_texParams.end())
+        {
+            continue;
+        }
+
         const ShaderParamValue<TexVal>* paramv = reinterpret_cast<const ShaderParamValue<TexVal>*>(it->second);
         if(paramv != nullptr)
         {
@@ -132,4 +144,5 @@ void ShaderParamCollection::AddTexParameter(const std::string &name, GLuint idx)
 {
     m_params.push_back(std::make_unique<ShaderParamValue<TexVal>>(name));
     m_paramMap.insert(std::make_pair(name, m_params.back().get()));
+    m_texParams.push_back(name);
 }

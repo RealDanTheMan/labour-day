@@ -63,6 +63,7 @@ namespace Engine
 
         private :
         std::vector<std::unique_ptr<ShaderParam>> m_params;
+        std::vector<std::string> m_texParams;
         std::map<const std::string, ShaderParam*> m_paramMap;
     };
 
