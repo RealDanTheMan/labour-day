@@ -3,6 +3,7 @@
 
 #include "texture2d.hpp"
 #include "contentserialiser.hpp"
+#include "runtimeshaders.hpp"
 #include <vector>
 #include <memory>
 #include <string>
@@ -18,12 +19,15 @@ namespace Engine
         uint32_t Count() const;
         bool AddTexture(const std::string &filepath, const std::string &key);
         bool AddMesh(const std::string &filepath, const std::string &key);
+        bool AddMaterial(const std::string &filepath, const std::string &key);
         bool AddModel(const std::string &filepath, const std::string &key);
         bool AddPrefab(const std::string &filepath, const std::string &key);
         void Free();
 
         Texture2D * const GetTexture(const std::string &key) const;
         Mesh * const GetMesh(const std::string &key) const;
+        Material * const GetMaterial(const std::string &key) const;
+        Model * const GetModel(const std::string &key) const;
         Prefab * const GetPrefab(const std::string &key) const;
 
         private:
@@ -37,6 +41,7 @@ namespace Engine
 
         std::vector<std::unique_ptr<IResource>> m_resources;
         std::vector<std::string> m_keys;
+        std::unique_ptr<RuntimeShaders> m_rtShaders;
     };
 
     template <typename T>

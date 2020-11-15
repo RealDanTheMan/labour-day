@@ -7,6 +7,8 @@ using namespace Engine;
 
 AssetCache::AssetCache()
 {
+    m_rtShaders = std::make_unique<RuntimeShaders>();
+    m_rtShaders->Init();
 }
 
 void AssetCache::Free()
@@ -21,6 +23,7 @@ void AssetCache::Free()
 
     m_resources.clear();
     m_keys.clear();
+    m_rtShaders->Free();
 }
 
 bool AssetCache::AddTexture(const std::string &filepath, const std::string &key)
@@ -53,8 +56,47 @@ bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
     return false;
 }
 
+bool AssetCache::AddMaterial(const std::string &filepath, const std::string &key)
+{
+    assert (m_rtShaders->Ready());
+
+    std::unique_ptr<ContentMaterialInfo> matInfo = ContentSerialiser::LoadMaterialInfo(filepath);
+    if(matInfo != nullptr)
+    {
+        // For now we only support built in shaders
+        const ShaderProg* shader = m_rtShaders->GetByName(matInfo->m_shaderKey);
+        assert (shader != nullptr);
+
+        std::unique_ptr<Material> mat = std::make_unique<Material>(*shader);
+        Material *pData = mat.get();
+        mat.release();
+
+        Consume<Material>(pData, key);
+        return true;
+    }
+
+    return false;
+}
+
 bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
 {
+    auto modelInfo = ContentSerialiser::LoadModelInfo(filepath);
+    if(modelInfo != nullptr)
+    {
+        assert (HasResourceKey(modelInfo->m_materialKey));
+        assert (HasResourceKey(modelInfo->m_meshKey));
+
+        Mesh *pMesh = GetMesh(modelInfo->m_meshKey);
+        Material *pMat = GetMaterial(modelInfo->m_materialKey);
+
+        std::unique_ptr<Model> model = std::make_unique<Model>(*pMesh, pMat);
+        Model *pData = model.get();
+        model.release();
+
+        Consume<Model>(pData, key);
+        return true;
+    }
+
     return false;
 }
 
@@ -130,6 +172,34 @@ Mesh * const AssetCache::GetMesh(const std::string &key) const
         assert (pmsh != nullptr);
 
         return pmsh;
+    }
+
+    return nullptr;
+}
+
+Material * const AssetCache::GetMaterial(const std::string &key) const
+{
+    IResource * const pRes = GetResource(key);
+    if(pRes != nullptr)
+    {
+        Material * const pMat = dynamic_cast<Material*>(pRes);
+        assert (pMat != nullptr);
+
+        return pMat;
+    }
+
+    return nullptr;
+}
+
+Model * const AssetCache::GetModel(const std::string &key) const
+{
+    IResource * const pRes = GetResource(key);
+    if(pRes != nullptr)
+    {
+        Model * const pModel = dynamic_cast<Model*>(pRes);
+        assert (pModel != nullptr);
+
+        return pModel;
     }
 
     return nullptr;

@@ -10,14 +10,36 @@
 
 namespace Engine
 {
+    struct ContentModelInfo
+    {
+        public:
+        
+        std::string m_name;
+        std::string m_meshKey;
+        std::string m_materialKey;
+
+        static std::unique_ptr<ContentModelInfo> FromJSON(const configuru::Config &json);
+    };
+
+    struct ContentMaterialInfo
+    {
+        public:
+
+        std::string m_name;
+        std::string m_shaderKey;
+
+        static std::unique_ptr<ContentMaterialInfo> FromJSON(const configuru::Config &json);
+    };
+
     class ContentSerialiser
     {
         public:
 
         static std::unique_ptr<Mesh> LoadMesh(const std::string &filepath);
-        static std::unique_ptr<Material> LoadMaterial(const std::string &filepath);
-        static std::unique_ptr<Model> LoadModel(const std::string &filepath);
         static std::unique_ptr<Prefab> LoadPrefab(const std::string &filepath);
+
+        static std::unique_ptr<ContentMaterialInfo> LoadMaterialInfo(const std::string &filepath);
+        static std::unique_ptr<ContentModelInfo> LoadModelInfo(const std::string &filepath);
     };
 }
 

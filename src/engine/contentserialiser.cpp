@@ -3,6 +3,35 @@
 
 using namespace Engine;
 
+std::unique_ptr<ContentMaterialInfo> ContentMaterialInfo::FromJSON(const configuru::Config &json)
+{
+    if(json.has_key("type") && json["type"] == "Material")
+    {
+        std::unique_ptr<ContentMaterialInfo> info = std::make_unique<ContentMaterialInfo>();
+        info->m_name = json["name"].as_string();
+        info->m_shaderKey = json["shader"].as_string();
+
+        return info;
+    }
+
+    return nullptr;
+}
+
+std::unique_ptr<ContentModelInfo> ContentModelInfo::FromJSON(const configuru::Config &json)
+{
+    if(json.has_key("type") && json["type"] == "Model")
+    {
+        std::unique_ptr<ContentModelInfo> info = std::make_unique<ContentModelInfo>();
+        info->m_name = json["name"].as_string();
+        info->m_materialKey = json["material"].as_string();
+        info->m_meshKey = json["mesh"].as_string();
+
+        return info;
+    }
+
+    return nullptr;
+}
+
 
 std::unique_ptr<Mesh> ContentSerialiser::LoadMesh(const std::string &filepath)
 {
@@ -42,7 +71,7 @@ std::unique_ptr<Mesh> ContentSerialiser::LoadMesh(const std::string &filepath)
     return nullptr;
 }
 
-std::unique_ptr<Model> ContentSerialiser::LoadModel(const std::string &filepath)
+std::unique_ptr<ContentModelInfo> ContentSerialiser::LoadModelInfo(const std::string &filepath)
 {
     if(SysUtils::FileExists(filepath))
     {
@@ -59,8 +88,42 @@ std::unique_ptr<Model> ContentSerialiser::LoadModel(const std::string &filepath)
             D_ERR("Failed to parse json model file !");
             D_ERR(err.what());
         }
+
+        if(good)
+        {
+            auto info = ContentModelInfo::FromJSON(cfg);
+            return info;
+        }
     }
 
+    return nullptr;
+}
+
+std::unique_ptr<ContentMaterialInfo> ContentSerialiser::LoadMaterialInfo(const std::string &filepath)
+{
+    if(SysUtils::FileExists(filepath))
+    {
+        bool good = false;
+        configuru::Config cfg;
+
+        try
+        {
+            cfg = configuru::parse_file(filepath, configuru::JSON);
+            good = true;
+        }
+        catch(configuru::ParseError  &err)
+        {
+            D_ERR("Failed to parse json material file !");
+            D_ERR(err.what());
+        }
+
+        if(good)
+        {
+            auto info = ContentMaterialInfo::FromJSON(cfg);
+            return info;
+        }
+    }
+    
     return nullptr;
 }
 
@@ -93,27 +156,5 @@ std::unique_ptr<Prefab> ContentSerialiser::LoadPrefab(const std::string &filepat
         }
     }
 
-    return nullptr;
-}
-
-std::unique_ptr<Material> ContentSerialiser::LoadMaterial(const std::string &filepath)
-{
-    if(SysUtils::FileExists(filepath))
-    {
-        bool good = false;
-        configuru::Config cfg;
-
-        try
-        {
-            cfg = configuru::parse_file(filepath, configuru::JSON);
-            good = true;
-        }
-        catch(configuru::ParseError  &err)
-        {
-            D_ERR("Failed to parse json material file !");
-            D_ERR(err.what());
-        }
-    }
-    
     return nullptr;
 }
