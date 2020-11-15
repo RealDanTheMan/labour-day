@@ -16,6 +16,7 @@ namespace Engine
         const ShaderProg* const FlatWhite() const;
         const ShaderProg* const Diff() const;
         const ShaderProg* const Diff1() const;
+        const ShaderProg* const GetByName(const std::string &name) const;
 
         private:
         std::unique_ptr<ShaderProg> m_flatWhite;

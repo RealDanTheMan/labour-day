@@ -104,3 +104,24 @@ const ShaderProg* const RuntimeShaders::Diff1() const
 {
     return m_diff1.get();
 }
+
+const ShaderProg* const RuntimeShaders::GetByName(const std::string &name) const
+{
+    // Not the best but good enough to get the shader pipe off the ground 
+    if(name == "flatwhite")
+    {
+        return FlatWhite();
+    }
+
+    if(name == "diff")
+    {
+        return Diff();
+    }
+
+    if(name == "diff1")
+    {
+        return Diff1();
+    }
+
+    return nullptr;
+}
