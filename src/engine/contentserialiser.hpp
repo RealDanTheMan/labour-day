@@ -31,6 +31,22 @@ namespace Engine
         static std::unique_ptr<ContentMaterialInfo> FromJSON(const configuru::Config &json);
     };
 
+    struct ContentPrefabInfo
+    {
+        std::string m_name;
+        std::vector<std::unique_ptr<ContentPrefabComponentInfo>> m_components;
+
+        static std::unique_ptr<ContentPrefabInfo> FromJSON(const configuru::Config &json);
+    };
+
+    struct ContentPrefabComponentInfo
+    {
+        std::string m_type;
+        std::string m_name;
+
+        static std::unique_ptr<ContentPrefabComponentInfo> FromJSON(const configuru::Config &json);
+    };
+
     class ContentSerialiser
     {
         public:
@@ -40,6 +56,7 @@ namespace Engine
 
         static std::unique_ptr<ContentMaterialInfo> LoadMaterialInfo(const std::string &filepath);
         static std::unique_ptr<ContentModelInfo> LoadModelInfo(const std::string &filepath);
+        static std::unique_ptr<ContentPrefabInfo> LoadEntityInfo(const std::string &filepath);
     };
 }
 

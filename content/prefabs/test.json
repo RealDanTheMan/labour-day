@@ -5,7 +5,14 @@
     [
         {
             "type": "ModelComponentClass",
-            "modelname": "torus"
+            "name": "MainModelComponent",
+
+            "properties":
+            [
+                {
+                    "model" : "testmodel"
+                }
+            ]
         }
     ]
 }

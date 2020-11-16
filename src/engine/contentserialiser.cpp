@@ -7,7 +7,7 @@ std::unique_ptr<ContentMaterialInfo> ContentMaterialInfo::FromJSON(const configu
 {
     if(json.has_key("type") && json["type"] == "Material")
     {
-        std::unique_ptr<ContentMaterialInfo> info = std::make_unique<ContentMaterialInfo>();
+        auto info = std::make_unique<ContentMaterialInfo>();
         info->m_name = json["name"].as_string();
         info->m_shaderKey = json["shader"].as_string();
 
@@ -21,12 +21,55 @@ std::unique_ptr<ContentModelInfo> ContentModelInfo::FromJSON(const configuru::Co
 {
     if(json.has_key("type") && json["type"] == "Model")
     {
-        std::unique_ptr<ContentModelInfo> info = std::make_unique<ContentModelInfo>();
+        auto info = std::make_unique<ContentModelInfo>();
         info->m_name = json["name"].as_string();
         info->m_materialKey = json["material"].as_string();
         info->m_meshKey = json["mesh"].as_string();
 
         return info;
+    }
+
+    return nullptr;
+}
+
+std::unique_ptr<ContentPrefabInfo> ContentPrefabInfo::FromJSON(const configuru::Config &json)
+{
+    if(json.has_key("type") && json["type"] == "Entity")
+    {
+        auto info = std::make_unique<ContentPrefabInfo>();
+        info->m_name = json["name"].as_string();
+
+        if(json.has_key("components") && json["components"].is_array())
+        {
+            for (const configuru::Config& element : json["components"].as_array()) 
+            {
+                std::unique_ptr<ContentPrefabComponentInfo> cInfo = ContentPrefabComponentInfo(element);
+                info->m_components.push_back(cInfo);
+            }
+        }
+
+        return info;
+    }
+
+    return nullptr;
+}
+
+std::unique_ptr<ContentPrefabComponentInfo> ContentPrefabComponentInfo::FromJSON(const configuru::Config &json)
+{
+    if(json.has_key("type"))
+    {
+        assert (json.has_key("name"));
+        auto info = std::make_unique<ContentPrefabComponentInfo>();
+        info->m_type = json["type"].as_string();
+        info->m_name = json["name"].as_string();
+
+        if(json.has_key("properties") && json["properties"].is_array())
+        {
+            for (const configuru::Config& properties : json["properties"].as_array()) 
+            {
+
+            }
+        }
     }
 
     return nullptr;
@@ -124,6 +167,33 @@ std::unique_ptr<ContentMaterialInfo> ContentSerialiser::LoadMaterialInfo(const s
         }
     }
     
+    return nullptr;
+}
+
+std::unique_ptr<ContentPrefabInfo> ContentSerialiser::LoadEntityInfo(const std::string &filepath)
+{
+    if(SysUtils::FileExists(filepath))
+    {
+        bool good = false;
+        configuru::Config cfg;
+
+        try
+        {
+            cfg = configuru::parse_file(filepath, configuru::JSON);
+            good = true;
+        }
+        catch(configuru::ParseError  &err)
+        {
+            D_ERR("Failed to parse json prefab file !");
+            D_ERR(err.what());
+        }
+
+        if(good)
+        {
+
+        }
+    }
+
     return nullptr;
 }
 
