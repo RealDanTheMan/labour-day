@@ -102,13 +102,21 @@ bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
 {
-    auto prf = ContentSerialiser::LoadPrefab(filepath);
-    if(prf != nullptr)
+    auto prefabInfo = ContentSerialiser::LoadPrefabInfo(filepath);
+    if(prefabInfo != nullptr)
     {
-        Prefab * pdata = prf.get();
-        prf.release();
+        auto entity = std::make_unique<Entity>();
+        for(uint32_t i=0; i < prefabInfo->m_components.size(); i++)
+        {
+            
+        }
 
-        Consume<Prefab>(pdata, key);
+
+        auto prefab = std::make_unique<Prefab>(*entity);
+        Prefab *pData = prefab.get();
+        prefab.release();
+
+        Consume<Prefab>(pData, key);
         return true;
     }
 

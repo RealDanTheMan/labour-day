@@ -43,8 +43,13 @@ std::unique_ptr<ContentPrefabInfo> ContentPrefabInfo::FromJSON(const configuru::
         {
             for (const configuru::Config& element : json["components"].as_array()) 
             {
-                std::unique_ptr<ContentPrefabComponentInfo> cInfo = ContentPrefabComponentInfo(element);
-                info->m_components.push_back(cInfo);
+                std::unique_ptr<ContentPrefabComponentInfo> cInfo = ContentPrefabComponentInfo::FromJSON(element);
+                assert (cInfo != nullptr);
+
+                if(cInfo != nullptr)
+                {
+                    info->m_components.push_back(std::move(cInfo));
+                }
             }
         }
 
@@ -65,14 +70,38 @@ std::unique_ptr<ContentPrefabComponentInfo> ContentPrefabComponentInfo::FromJSON
 
         if(json.has_key("properties") && json["properties"].is_array())
         {
-            for (const configuru::Config& properties : json["properties"].as_array()) 
+            for (const configuru::Config& property : json["properties"].as_array()) 
             {
+                std::unique_ptr<ContentPropertyInfo> pInfo = ContentPropertyInfo::FromJSON(property);
+                assert(pInfo != nullptr);
 
+                if(pInfo != nullptr)
+                {
+                    info->m_properties.push_back(std::move(pInfo));
+                }
             }
         }
     }
 
     return nullptr;
+}
+
+std::unique_ptr<ContentPropertyInfo> ContentPropertyInfo::FromJSON(const configuru::Config &json)
+{
+    assert (json.has_key("name"));
+    assert (json.has_key("value"));
+    assert (json.has_key("type"));
+
+    auto info = std::make_unique<ContentPropertyInfo>();
+    info->m_name = json["name"].as_string();
+    info->m_value = json["name"].as_string();
+    info->m_type = json["name"].as_string();
+
+    assert (info->m_name.size() > 0);
+    assert (info->m_value.size() > 0);
+    assert (info->m_type.size() > 0);
+
+    return info;
 }
 
 
@@ -170,7 +199,7 @@ std::unique_ptr<ContentMaterialInfo> ContentSerialiser::LoadMaterialInfo(const s
     return nullptr;
 }
 
-std::unique_ptr<ContentPrefabInfo> ContentSerialiser::LoadEntityInfo(const std::string &filepath)
+std::unique_ptr<ContentPrefabInfo> ContentSerialiser::LoadPrefabInfo(const std::string &filepath)
 {
     if(SysUtils::FileExists(filepath))
     {
@@ -190,39 +219,8 @@ std::unique_ptr<ContentPrefabInfo> ContentSerialiser::LoadEntityInfo(const std::
 
         if(good)
         {
-
-        }
-    }
-
-    return nullptr;
-}
-
-std::unique_ptr<Prefab> ContentSerialiser::LoadPrefab(const std::string &filepath)
-{
-    if(SysUtils::FileExists(filepath))
-    {
-        bool good = false;
-        configuru::Config cfg;
-
-        try
-        {
-            cfg = configuru::parse_file(filepath, configuru::JSON);
-            good = true;
-        }
-        catch(configuru::ParseError  &err)
-        {
-            D_ERR("Failed to parse json prefab file !");
-            D_ERR(err.what());
-        }
-        
-        if(good)
-        {
-            auto ent = EntitySerialiser::Deserialise (cfg);
-            if(ent != nullptr)
-            {
-                auto prf = std::make_unique<Prefab>(*ent);
-                return prf;
-            }
+            std::unique_ptr<ContentPrefabInfo> info = ContentPrefabInfo::FromJSON(cfg);
+            return info;
         }
     }
 

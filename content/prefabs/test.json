@@ -10,7 +10,9 @@
             "properties":
             [
                 {
-                    "model" : "testmodel"
+                    "name" : "model",
+                    "value" : "testmodel",
+                    "type" : "name"
                 }
             ]
         }
