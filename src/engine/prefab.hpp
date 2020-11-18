@@ -2,8 +2,7 @@
 #define PREFAB_HPP_
 
 #include "iresource.hpp"
-#include "entityserialiser.hpp"
-
+#include "entity.hpp"
 #include <string>
 #include <memory>
 

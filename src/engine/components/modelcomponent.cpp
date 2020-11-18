@@ -10,32 +10,43 @@ ModelComponentSerialiser::~ModelComponentSerialiser()
 {
 }
 
-bool ModelComponentSerialiser::Deserialise(EntityComponent* pComponent, const configuru::Config &json) const
+bool ModelComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
 {
     assert (pComponent != nullptr);
 
     auto pCmp = reinterpret_cast<ModelComponent*>(pComponent);
     assert (pCmp != nullptr);
 
-    if(json.has_key("modelname") && json["modelname"].is_string())
+    bool isGood = false;
+
+    // Make sure model component contains actual reference to a model
+    // No the best to be honest but it will do for now
+    for (uint32_t i=0; i < pComponentInfo->m_properties.size(); i++)
     {
-        pCmp->m_modelName = (std::string)json["modelname"];
-    }
-    else 
-    {
-        return false;
+        const ContentPropertyInfo * property = pComponentInfo->m_properties[i].get();
+        if(property->m_name == "model")
+        {
+            pCmp->m_modelName = property->m_value;
+            isGood = true;
+        }
     }
 
-    return true;
+    if(isGood)
+    {
+        return true;
+    }
+
+    return false;
 }
 
-bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const
+bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
 {
     assert (pEntity != nullptr);
+    assert (pComponentInfo != nullptr);
     auto pCmp = pEntity->Components().Add<ModelComponent>();
     assert (pCmp != nullptr);
 
-    bool stat = Deserialise(pCmp, json);
+    bool stat = Deserialise(pCmp, pComponentInfo);
     if(stat)
     {
         return true;

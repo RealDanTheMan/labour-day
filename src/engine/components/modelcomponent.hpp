@@ -14,8 +14,8 @@ namespace Engine::Components
         public:
         ModelComponentSerialiser();
         virtual ~ModelComponentSerialiser();
-        virtual bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const override;
-        virtual bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const override;
+        virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const override;
+        virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
     };
 
     class ModelComponent: public EntityComponent

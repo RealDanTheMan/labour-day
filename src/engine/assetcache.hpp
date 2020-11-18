@@ -3,6 +3,7 @@
 
 #include "texture2d.hpp"
 #include "contentserialiser.hpp"
+#include "entityserialiser.hpp"
 #include "runtimeshaders.hpp"
 #include <vector>
 #include <memory>

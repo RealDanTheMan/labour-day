@@ -1,6 +1,6 @@
 #include "assetcache.hpp"
 #include "meshgen.hpp"
-
+#include "components/modelcomponent.hpp"
 #include <algorithm>
 
 using namespace Engine;
@@ -102,16 +102,22 @@ bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
 {
-    auto prefabInfo = ContentSerialiser::LoadPrefabInfo(filepath);
-    if(prefabInfo != nullptr)
+    auto entityInfo = ContentSerialiser::LoadEntityInfo(filepath);
+    if(entityInfo != nullptr)
     {
-        auto entity = std::make_unique<Entity>();
-        for(uint32_t i=0; i < prefabInfo->m_components.size(); i++)
+        // Entities are a bit more complex to deserialise so we invoke bespoke implementation
+        auto entity = EntitySerialiser::Deserialise(entityInfo.get());
+
+        // Check if entity references any model resources and link them
+        auto cmp = entity->Components().Get<Engine::Components::ModelComponent>();
+        if(cmp != nullptr)
         {
-            
+            Model * model = GetModel(cmp->m_modelName);
+            assert (model != nullptr);
+            cmp->SetModel(model);
         }
 
-
+        // Create prefab & consume it
         auto prefab = std::make_unique<Prefab>(*entity);
         Prefab *pData = prefab.get();
         prefab.release();

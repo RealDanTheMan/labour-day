@@ -1,7 +1,7 @@
 #ifndef ENTITY_SERIALISER_HPP_
 #define ENTITY_SERIALISER_HPP_
 
-#include "../external/configuru.hpp"
+#include "contentserialisation.hpp"
 #include "entity.hpp"
 #include <string>
 
@@ -14,8 +14,8 @@ namespace Engine
         virtual ~EntityComponentSerialiser();
         
         const std::string &ClassName() const;
-        virtual bool Deserialise(EntityComponent* pComponent, const configuru::Config &json) const =0;
-        virtual bool DeserialiseAdd(Entity* pEntity, const configuru::Config &json) const =0;
+        virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * sourceContent) const =0;
+        virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * sourceContent) const =0;
 
         private:
         std::string m_className;
@@ -27,10 +27,10 @@ namespace Engine
         template <typename T>
         static void RegisterComponentSerialiser();
         static const EntityComponentSerialiser * const GetComponentSerialiser(const std::string className);
-        static std::unique_ptr<Entity> Deserialise(const configuru::Config &json);
+        static std::unique_ptr<Entity> Deserialise(const ContentEntityInfo * sourceContent);
 
         private:
-        static void DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser, const configuru::Config &json);
+        static void DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser, const ContentEntityComponentInfo * pComponentInfo);
 
         private:
         static std::map<std::string, std::unique_ptr<EntityComponentSerialiser>> m_cmpSerialisers;
