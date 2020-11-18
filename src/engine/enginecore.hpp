@@ -7,7 +7,10 @@
 #include "commonrenderer.hpp"
 #include "runtimeshaders.hpp"
 #include "gfx.hpp"
+#include "ecssys.hpp"
 #include <memory>
+
+#include "components/modelcomponent.hpp"
 
 namespace Engine
 {
@@ -25,6 +28,7 @@ namespace Engine
         std::unique_ptr<Window> m_mainWin;
         std::unique_ptr<CommonRenderer> m_renderer;
         std::unique_ptr<RuntimeShaders> m_runtimeShaders;
+        std::unique_ptr<ECSSys> m_ecs;
 
         public:
         EngineCore();
@@ -33,9 +37,14 @@ namespace Engine
         void Terminate();
         void RedrawMainWindow();
         void ClearMainWindow();
+        void PresentMainWindow();
         const bool MainWindowActive() const;
         CommonRenderer* Renderer();
         RuntimeShaders* Shaders() const;
+        ECSSys* ECS() const;
+
+        private:
+        void RegisterStdComponents();
     };
 }
 

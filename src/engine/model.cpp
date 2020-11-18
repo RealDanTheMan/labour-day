@@ -1,29 +1,37 @@
 #include "model.hpp"
 
-
 using namespace Engine;
 
 
-Model::Model(Renderable& renderable):
-    m_renderable(renderable),
-    m_tr(Transform())
+Model::Model(const Mesh& mesh, Material * const mat):
+    m_renderable(nullptr),
+    m_tr(Transform()),
+    m_mat(mat)
 {
+    m_renderable = std::make_unique<Renderable>();
+    m_renderable->Init(mesh);
+    m_renderable->BindShader(mat->Shader());
 
+    assert (m_renderable->Ready());
 }
 
-Model::Model(const Model& rhs):
-    m_renderable(rhs.m_renderable),
-    m_tr(rhs.m_tr)
+Renderable *Model::GetRenderable()
 {
-
+    return m_renderable.get();
 }
 
-Renderable& Model::GetRenderable()
-{
-    return m_renderable;
-}
-
-Transform& Model::GetTransform()
+Transform &Model::GetTransform()
 {
     return m_tr;
+}
+
+Material * const Model::GetMaterial() const
+{
+    return m_mat;
+}
+
+void Model::Unload()
+{
+    m_renderable->Free();
+    m_renderable.reset(nullptr);
 }

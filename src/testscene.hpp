@@ -3,22 +3,23 @@
 
 #include "engine/enginecore.hpp"
 #include "engine/renderable.hpp"
+#include "engine/model.hpp"
 #include "engine/entity.hpp"
+#include "engine/gltex.hpp"
+#include "engine/assetcache.hpp"
 
 class TestScene
 {
     private:
-    std::unique_ptr<Engine::Renderable> m_triangle;
-    std::unique_ptr<Engine::Entity> m_asset;
+    std::unique_ptr<Engine::AssetCache> m_cache;
     std::unique_ptr<Engine::Camera> m_camera;
+    
     Engine::EngineCore* m_core;
 
     public:
     void Initialize(Engine::EngineCore *core);
-    void Update();
+    void Free();
 
-    Engine::Renderable* TestTriangle();
-    Engine::Entity* Asset();
     Engine::Camera* Cam();
 
 };

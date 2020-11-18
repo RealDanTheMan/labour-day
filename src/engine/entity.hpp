@@ -9,12 +9,13 @@ namespace Engine
     {
         public:
             Entity();
-            Entity(const Entity &rhs);
+            Entity(const Entity &rhs)=delete;
 
             EntityComponentCollection& Components();
+            std::unique_ptr<Entity> Duplicate() const;
         private:
             uint32_t m_uuid;
-            EntityComponentCollection m_components;
+            std::unique_ptr<EntityComponentCollection> m_components;
     };
 }
 

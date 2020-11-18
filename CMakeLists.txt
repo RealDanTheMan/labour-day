@@ -42,12 +42,27 @@ ${PROJECT_SOURCE_DIR}/engine/window.cpp
 ${PROJECT_SOURCE_DIR}/engine/transform.cpp
 ${PROJECT_SOURCE_DIR}/engine/inputmanager.cpp
 ${PROJECT_SOURCE_DIR}/engine/entity.cpp
+${PROJECT_SOURCE_DIR}/engine/entityserialiser.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
 ${PROJECT_SOURCE_DIR}/engine/model.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/modelcomponent.cpp
+${PROJECT_SOURCE_DIR}/engine/ecssys.cpp
+${PROJECT_SOURCE_DIR}/engine/entityprocess.cpp
+${PROJECT_SOURCE_DIR}/engine/texture2d.cpp
+${PROJECT_SOURCE_DIR}/engine/gltex.cpp
+${PROJECT_SOURCE_DIR}/engine/sysutils.cpp
+${PROJECT_SOURCE_DIR}/engine/material.cpp
+${PROJECT_SOURCE_DIR}/engine/shaderparam.cpp
+${PROJECT_SOURCE_DIR}/engine/shaderparamcollection.cpp
+${PROJECT_SOURCE_DIR}/engine/iresource.cpp
+${PROJECT_SOURCE_DIR}/engine/assetcache.cpp
+${PROJECT_SOURCE_DIR}/engine/prefab.cpp
+${PROJECT_SOURCE_DIR}/engine/contentserialisation.cpp
+${PROJECT_SOURCE_DIR}/engine/contentserialiser.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
-${PROJECT_SOURCE_DIR}/testentity.cpp )
+${PROJECT_SOURCE_DIR}/testentity.cpp 
+${PROJECT_SOURCE_DIR}/testproc.cpp)
 
 add_executable(labour-day ${SOURCES})
 

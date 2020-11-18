@@ -4,18 +4,21 @@ using namespace Engine;
 
 Entity::Entity():
     m_uuid(0),
-    m_components(EntityComponentCollection())
+    m_components(nullptr)
 {
-}
-
-Entity::Entity(const Entity &rhs):
-    m_uuid(rhs.m_uuid),
-    m_components(rhs.m_components)
-{
+    m_components = std::make_unique<EntityComponentCollection>();
 }
 
 EntityComponentCollection& Entity::Components()
 {
-    return m_components;
+    assert (m_components != nullptr);
+    return *m_components;
 }
 
+std::unique_ptr<Entity> Entity::Duplicate() const 
+{
+    auto dup = std::make_unique<Entity>();
+    dup->m_components = m_components->Duplicate();
+
+    return dup;
+}

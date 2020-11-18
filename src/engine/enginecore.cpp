@@ -38,7 +38,15 @@ bool EngineCore::Initialize()
         return false;
     }
 
-    m_renderer = std::make_unique<CommonRenderer>();
+    m_runtimeShaders = std::make_unique<RuntimeShaders>();
+    m_runtimeShaders->Init();
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+
+    m_ecs = std::make_unique<ECSSys>();
+    m_ecs->Init(128);
+    RegisterStdComponents();
+
+
     return true;
 }
 
@@ -70,9 +78,14 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     }
 
     InputManager::Instance().Initialize(*m_mainWin);
-    m_renderer = std::make_unique<CommonRenderer>();
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    
+
+    m_ecs = std::make_unique<ECSSys>();
+    m_ecs->Init(128);
+    RegisterStdComponents();
 
     return true;
 }
@@ -81,6 +94,9 @@ void EngineCore::Terminate()
 {
     assert (m_glfw != nullptr);
     assert (m_glfw->Initialized());
+    assert (m_ecs != nullptr);
+
+    m_ecs->Terminate();
 
     m_glfw->Terminate();
     m_glfw.release();
@@ -97,12 +113,23 @@ void EngineCore::RedrawMainWindow()
 
     glfwPollEvents();
     m_renderer->DrawRenderables();
-    glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
 void EngineCore::ClearMainWindow()
 {
+    glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void EngineCore::PresentMainWindow()
+{
+    assert (m_glfw != nullptr);
+    assert (m_glfw->Initialized());
+    assert (m_mainWin != nullptr);
+    assert (m_mainWin->Ready());
+    assert (m_renderer != nullptr);
+
+    glfwSwapBuffers(m_mainWin->GetHandle());
 }
 
 const bool EngineCore::MainWindowActive() const
@@ -122,4 +149,14 @@ CommonRenderer* EngineCore::Renderer()
 RuntimeShaders* EngineCore::Shaders() const
 {
     return m_runtimeShaders.get();
+}
+
+ECSSys* EngineCore::ECS() const
+{
+    return m_ecs.get();
+}
+
+void EngineCore::RegisterStdComponents()
+{
+    EntitySerialiser::RegisterComponentSerialiser<Components::ModelComponentSerialiser>();
 }

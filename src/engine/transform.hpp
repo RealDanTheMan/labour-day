@@ -23,6 +23,10 @@ namespace Engine
         void Translate(const Vec3 &translation);
         void Scale(const Vec3 &scale);
         void Scale(const float scale);
+        void Rotate(const Vec3 &degAngles);
+
+        Vec3 Translation() const;
+        Vec3 Scale() const;
 
         static Mat4 IdentityMatrix();
 

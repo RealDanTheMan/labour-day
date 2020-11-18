@@ -1,6 +1,7 @@
 #include "app.hpp"
 #include "engine/debugging.hpp"
 #include "engine/inputmanager.hpp"
+#include "engine/components/modelcomponent.hpp"
 
 bool App::Initialize()
 {
@@ -19,7 +20,6 @@ bool App::Initialize()
     m_testScene = std::make_unique<TestScene>();
     m_testScene->Initialize(m_core.get());
     m_core->Renderer()->SetCamera(m_testScene->Cam());
-    m_core->Renderer()->AddToQueue(m_testScene->TestTriangle());
 
     return true;
 }
@@ -34,12 +34,12 @@ void App::Run()
         UpdateGame();
         DrawGame();
     }
-    
 }
 
 void App::Exit()
 {
     assert (m_core != nullptr);
+    m_testScene->Free();
     
     m_core->Terminate();
     m_core.reset(nullptr);
@@ -54,12 +54,30 @@ Engine::EngineCore* App::Engine()
 void App::UpdateGame()
 {
     assert (m_testScene != nullptr);
-    m_testScene->Update();
+    m_core->ECS()->Update();
 }
 
 void App::DrawGame()
 {
     assert (m_core != nullptr);
     m_core->ClearMainWindow();
+
+    // Old common rendering
     m_core->RedrawMainWindow();
+
+    // Component Based Rendering
+    std::vector<Engine::Entity*> rEntities;
+    m_core->ECS()->AssetsByComponent<Engine::Components::ModelComponent>(rEntities);
+    for (auto &entity : rEntities)
+    {
+        auto cmodel = entity->Components().Get<Engine::Components::ModelComponent>();
+        assert (cmodel != nullptr);
+        
+        m_core->Renderer()->DrawModel(cmodel);
+        m_core->Renderer()->DrawModelWire(cmodel);
+        
+    }
+    
+    // Swap buffers
+    m_core->PresentMainWindow();
 }
