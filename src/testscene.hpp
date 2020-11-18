@@ -15,13 +15,11 @@ class TestScene
     std::unique_ptr<Engine::Camera> m_camera;
     
     Engine::EngineCore* m_core;
-    Engine::Entity* m_asset;
 
     public:
     void Initialize(Engine::EngineCore *core);
     void Free();
 
-    Engine::Entity* Asset();
     Engine::Camera* Cam();
 
 };

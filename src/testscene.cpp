@@ -47,22 +47,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
 
     // ECS setup
-    //m_model = std::make_unique<Engine::Model>(*pmsh, m_mat.get());
-    m_asset = m_core->ECS()->CreateEntity();
-    assert (m_asset != nullptr);
-    auto cmodel = m_asset->Components().Add<Engine::Components::ModelComponent>();
-    cmodel->SetModel(pModel);
-    assert (cmodel->ModelHandle() != nullptr);
+    m_core->ECS()->CreateEntity(prf);
     m_core->ECS()->CreateProcess<TestProc>();
 
     // Setup main scene camera
     m_camera = std::make_unique<Engine::Camera>(1280, 720, 30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
-}
-
-Engine::Entity* TestScene::Asset()
-{
-    return m_asset;
 }
 
 Engine::Camera* TestScene::Cam()
