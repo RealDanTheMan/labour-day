@@ -1,0 +1,71 @@
+{
+    "type": "AssetManifest",
+    "meshes":
+    [
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj",
+            "key": "Torus"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/monke.obj",
+            "key": "Monke"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/plane_10.obj",
+            "key": "Plane10"
+        }
+    ],
+    "textures":
+    [
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg",
+            "key": "TestTexture01"
+        }
+    ],
+    "materials":
+    [
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/flatmaterial.json",
+            "key": "FlatMaterial"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/diffmaterial.json",
+            "key": "DiffMaterial"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/diff1material.json",
+            "key": "Diff1Material"
+        }
+        
+    ],
+    "models":
+    [
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torusmodel.json",
+            "key": "TorusModel"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/monkemodel.json",
+            "key": "MonkeModel"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/terrainmodel.json",
+            "key": "TerrainModel"
+        }
+    ],
+    "prefabs":
+    [
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/torustest.json",
+            "key": "TorusTest"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/monketest.json",
+            "key": "MonkeTest"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/terraintest.json",
+            "key": "TerrainTest"
+        }
+    ]
+}

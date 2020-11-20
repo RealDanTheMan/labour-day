@@ -1,6 +1,6 @@
 {
     "type": "Model",
     "name": "testmodel",
-    "mesh": "torus",
+    "mesh": "monke",
     "material": "debugmat"
 }

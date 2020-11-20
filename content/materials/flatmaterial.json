@@ -1,0 +1,5 @@
+{
+    "type":"Material",
+    "name": "FlatMaterial",
+    "shader": "flatwhite"
+}

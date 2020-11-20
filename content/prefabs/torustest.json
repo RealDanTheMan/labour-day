@@ -1,0 +1,21 @@
+{
+    "type": "Entity",
+    "name": "TorusTest",    
+
+    "components": 
+    [
+        {
+            "type": "ModelComponentClass",
+            "name": "MainModelComponent",
+
+            "properties":
+            [
+                {
+                    "name" : "model",
+                    "value" : "TorusModel",
+                    "type" : "name"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "type": "Entity",
+    "name": "TerrainTest",
+    
+    "components": 
+    [
+        {
+            "type": "ModelComponentClass",
+            "name": "MainModelComponent",
+
+            "properties":
+            [
+                {
+                    "name" : "model",
+                    "value" : "TerrainModel",
+                    "type" : "name"
+                }
+            ]
+        }
+    ]
+}
