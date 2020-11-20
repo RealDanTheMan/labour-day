@@ -18,24 +18,23 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     // Load asset resources
     m_cache = std::make_unique<Engine::AssetCache>();
-    m_cache->AddTexture("/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg", "test-01");
-    m_cache->AddMesh("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/torus.obj", "torus");
-    m_cache->AddMaterial("/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/debugmat.json", "debugmat");
-    m_cache->AddModel("/home/dantheman/local/dev/games/labour-day/labour-day/content/models/testmodel.json", "testmodel");
-    m_cache->AddPrefab("/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/test.json", "test-prefab");
+    m_cache->AddFromManifest("/home/dantheman/local/dev/games/labour-day/labour-day/content/assetmanifest.json");
 
     D_MSG("Asset cache size");
     D_MSG(m_cache->Count());
 
-    Engine::Texture2D* ptex = m_cache->GetTexture("test-01");
-    Engine::Mesh* pmsh = m_cache->GetMesh("torus");
-    Engine::Model* pModel = m_cache->GetModel("testmodel");
-    Engine::Prefab* prf = m_cache->GetPrefab("test-prefab");
+    Engine::Texture2D* ptex = m_cache->GetTexture("TestTexture01");
+    Engine::Model* pModel = m_cache->GetModel("MonkeModel");
+    Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
+    Engine::Prefab* prf2 = m_cache->GetPrefab("MonkeTest");
+    Engine::Prefab* prf3 = m_cache->GetPrefab("TerrainTest");
+
 
     assert (ptex != nullptr);
-    assert (pmsh != nullptr);
     assert (pModel != nullptr);
-    assert (prf != nullptr);
+    assert (prf1 != nullptr);
+    assert (prf2 != nullptr);
+    assert (prf3 != nullptr);
 
 
     // Load texture to GPU
@@ -44,10 +43,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     assert (ptex->GLReady());
 
     // Setup material properties
-    pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
+    //pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
 
     // ECS setup
-    m_core->ECS()->CreateEntity(prf);
+    m_core->ECS()->CreateEntity(prf1);
+    m_core->ECS()->CreateEntity(prf2);
+    m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
 
     // Setup main scene camera
