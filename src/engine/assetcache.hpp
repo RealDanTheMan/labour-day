@@ -23,6 +23,7 @@ namespace Engine
         bool AddMaterial(const std::string &filepath, const std::string &key);
         bool AddModel(const std::string &filepath, const std::string &key);
         bool AddPrefab(const std::string &filepath, const std::string &key);
+        bool AddFromManifest(const std::string &filepath);
         void Free();
 
         Texture2D * const GetTexture(const std::string &key) const;

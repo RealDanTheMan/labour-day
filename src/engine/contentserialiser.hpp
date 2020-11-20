@@ -19,6 +19,7 @@ namespace Engine
         static std::unique_ptr<ContentMaterialInfo> LoadMaterialInfo(const std::string &filepath);
         static std::unique_ptr<ContentModelInfo> LoadModelInfo(const std::string &filepath);
         static std::unique_ptr<ContentEntityInfo> LoadEntityInfo(const std::string &filepath);
+        static std::unique_ptr<ContentManifestInfo> LoadManifestInfo(const std::string &filepath);
     };
 }
 

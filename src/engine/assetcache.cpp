@@ -28,7 +28,9 @@ void AssetCache::Free()
 
 bool AssetCache::AddTexture(const std::string &filepath, const std::string &key)
 {
+    D_MSG("Loading texture asset -> " + key);
     auto tex = Texture2D::Load(filepath);
+
     if(tex != nullptr)
     {
         Texture2D *pdata = tex.get();
@@ -43,7 +45,9 @@ bool AssetCache::AddTexture(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
 {
+    D_MSG("Loading mesh asset -> " + key);
     auto msh = ContentSerialiser::LoadMesh(filepath);
+
     if(msh != nullptr)
     {
         Mesh *pdata = msh.get();
@@ -58,6 +62,7 @@ bool AssetCache::AddMesh(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddMaterial(const std::string &filepath, const std::string &key)
 {
+    D_MSG("Loading material asset -> " + key);
     assert (m_rtShaders->Ready());
 
     std::unique_ptr<ContentMaterialInfo> matInfo = ContentSerialiser::LoadMaterialInfo(filepath);
@@ -80,7 +85,9 @@ bool AssetCache::AddMaterial(const std::string &filepath, const std::string &key
 
 bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
 {
+    D_MSG("Loading model asset -> " + key);
     auto modelInfo = ContentSerialiser::LoadModelInfo(filepath);
+
     if(modelInfo != nullptr)
     {
         assert (HasResourceKey(modelInfo->m_materialKey));
@@ -102,7 +109,9 @@ bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
 
 bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
 {
+    D_MSG("Loading prefab asset -> " + key);
     auto entityInfo = ContentSerialiser::LoadEntityInfo(filepath);
+
     if(entityInfo != nullptr)
     {
         // Entities are a bit more complex to deserialise so we invoke bespoke implementation
@@ -126,6 +135,54 @@ bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
         return true;
     }
 
+    return false;
+}
+
+bool AssetCache::AddFromManifest(const std::string &filepath)
+{
+    assert (filepath.size() > 0);
+    D_MSG ("Loading asset resouces from cache ...");
+
+    std::unique_ptr<ContentManifestInfo> manifestInfo = ContentSerialiser::LoadManifestInfo(filepath);
+    //manifestInfo->Printout();
+    
+    if(manifestInfo != nullptr)
+    {
+        for(auto it = manifestInfo->m_textures.begin(); it !=  manifestInfo->m_textures.end(); ++it) 
+        {
+            //D_MSG ("RES: " + it->second + " : " + it->first);
+            AddTexture(it->second, it->first);
+        }
+
+        for(auto it = manifestInfo->m_meshes.begin(); it !=  manifestInfo->m_meshes.end(); ++it) 
+        {
+            //D_MSG ("RES: " + it->second + " : " + it->first);
+            AddMesh(it->second, it->first);
+        }
+        
+        for(auto it = manifestInfo->m_materials.begin(); it !=  manifestInfo->m_materials.end(); ++it) 
+        {
+            //D_MSG ("RES: " + it->second + " : " + it->first);
+            AddMaterial(it->second, it->first);
+        }
+
+        for(auto it = manifestInfo->m_models.begin(); it !=  manifestInfo->m_models.end(); ++it) 
+        {
+            //D_MSG ("RES: " + it->second + " : " + it->first);
+            AddModel(it->second, it->first);
+        }
+
+        for(auto it = manifestInfo->m_prefabs.begin(); it !=  manifestInfo->m_prefabs.end(); ++it) 
+        {
+            //D_MSG ("RES: " + it->second + " : " + it->first);
+            AddPrefab(it->second, it->first);
+        }
+
+        D_MSG ("Cache loaded from manifest successfully !");
+        return true;
+    }
+
+    D_MSG ("Failed to load asset resources from manifest !");
     return false;
 }
 

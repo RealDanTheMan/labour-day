@@ -57,6 +57,20 @@ namespace Engine
 
         static std::unique_ptr<ContentEntityInfo> FromJSON(const configuru::Config &json);
     };
+
+    struct ContentManifestInfo
+    {
+        public:
+
+        std::map<std::string, std::string> m_meshes;
+        std::map<std::string, std::string> m_textures;
+        std::map<std::string, std::string> m_materials;
+        std::map<std::string, std::string> m_models;
+        std::map<std::string, std::string> m_prefabs;
+
+        static std::unique_ptr<ContentManifestInfo> FromJSON(const configuru::Config &json);
+        void Printout() const;
+    };
 }
 
 #endif

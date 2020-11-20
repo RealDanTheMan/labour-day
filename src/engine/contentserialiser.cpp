@@ -143,3 +143,31 @@ std::unique_ptr<ContentEntityInfo> ContentSerialiser::LoadEntityInfo(const std::
 
     return nullptr;
 }
+
+std::unique_ptr<ContentManifestInfo> ContentSerialiser::LoadManifestInfo(const std::string &filepath)
+{
+    if(SysUtils::FileExists(filepath))
+    {
+        bool good = false;
+        configuru::Config cfg;
+
+        try
+        {
+            cfg = configuru::parse_file(filepath, configuru::JSON);
+            good = true;
+        }
+        catch(configuru::ParseError  &err)
+        {
+            D_ERR("Failed to parse json prefab file !");
+            D_ERR(err.what());
+        }
+
+        if(good)
+        {
+            std::unique_ptr<ContentManifestInfo> info = ContentManifestInfo::FromJSON(cfg);
+            return info;
+        }
+    }
+
+    return nullptr;
+}
