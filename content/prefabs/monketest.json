@@ -16,6 +16,10 @@
                     "type" : "name"
                 }
             ]
+        },
+        {
+            "type": "WobbleComponentClass",
+            "name": "Wobble"
         }
     ]
 }

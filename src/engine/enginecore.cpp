@@ -159,4 +159,5 @@ ECSSys* EngineCore::ECS() const
 void EngineCore::RegisterStdComponents()
 {
     EntitySerialiser::RegisterComponentSerialiser<Components::ModelComponentSerialiser>();
+    EntitySerialiser::RegisterComponentSerialiser<Components::WobbleComponentSerialiser>();
 }

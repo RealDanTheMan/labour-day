@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "components/modelcomponent.hpp"
+#include "components/wobblecomponent.hpp"
 
 namespace Engine
 {
