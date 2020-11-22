@@ -13,6 +13,9 @@ namespace Engine
 
         void ProcessEntities(std::vector<Entity*>& entities);
         virtual void OnUpdate(Entity* const entity);
+        
+        private:
+        virtual bool IsValidEntity(Entity * const Entity);
     };
 }
 
