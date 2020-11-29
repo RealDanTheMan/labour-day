@@ -25,6 +25,10 @@ namespace Engine
         void Scale(const float scale);
         void Rotate(const Vec3 &degAngles);
 
+        void SetTranslation(const Vec3 &translation);
+        void SetScale(const Vec3 &scale);
+        void SetScale(const float scale);
+
         Vec3 Translation() const;
         Vec3 Scale() const;
 

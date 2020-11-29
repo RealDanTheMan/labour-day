@@ -54,6 +54,15 @@ void Transform::Translate(const Vec3 &translation)
     ComputeMatrix();
 }
 
+void Transform::SetTranslation(const Vec3 &translation)
+{
+    m_translation[3][0] = translation.x;
+    m_translation[3][1] = translation.y;
+    m_translation[3][2] = translation.z;
+
+    ComputeMatrix();
+}
+
 void Transform::Scale(const Vec3 &scale)
 {
     m_scale[0][0] *= scale.x;
@@ -68,6 +77,24 @@ void Transform::Scale(const float scale)
     m_scale[0][0] *= scale;
     m_scale[1][1] *= scale;
     m_scale[2][2] *= scale;
+
+    ComputeMatrix();
+}
+
+void Transform::SetScale(const Vec3 &scale)
+{
+    m_scale[0][0] = scale.x;
+    m_scale[1][1] = scale.y;
+    m_scale[2][2] = scale.z;
+
+    ComputeMatrix();
+}
+
+void Transform::SetScale(const float scale)
+{
+    m_scale[0][0] = scale;
+    m_scale[1][1] = scale;
+    m_scale[2][2] = scale;
 
     ComputeMatrix();
 }
