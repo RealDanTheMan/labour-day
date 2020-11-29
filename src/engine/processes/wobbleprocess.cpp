@@ -39,7 +39,6 @@ void WobbleProcess::OnUpdate(Entity * const entity)
 
             const float scale = ((1.0 - t) * min) + (t * max);
             cModel->ModelHandle()->GetTransform().SetScale(scale);
-            D_MSG(t);
         }
     }
 }
