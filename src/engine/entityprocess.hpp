@@ -13,9 +13,14 @@ namespace Engine
 
         void ProcessEntities(std::vector<Entity*>& entities);
         virtual void OnUpdate(Entity* const entity);
+
+        float CurrentTime() const;
+        float CurrentTimeDelta() const;
         
         private:
         virtual bool IsValidEntity(Entity * const Entity);
+        float m_currentTime;
+        float m_currentTimeDelta;
     };
 }
 

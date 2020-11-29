@@ -30,12 +30,18 @@ namespace Engine::Components
         float RotationSpeed() const;
         float ScaleSpeed() const;
 
+        void ToggleRotation(const bool toggle);
+        void ToggleScale(const bool toggle);
+        void SetRotationSpeed(const float speed);
+        void SetScaleSpeed(const float speed);
+
         private:
 
         bool m_doRotate;
         bool m_doScale;
         float m_rotationSpeed;
         float m_scaleSpeed;
+        float m_scaleT;
     };
 }
 

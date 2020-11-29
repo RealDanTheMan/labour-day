@@ -17,6 +17,45 @@ bool WobbleComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
     auto pCmp = reinterpret_cast<WobbleComponent*>(pComponent);
     assert (pCmp != nullptr);
 
+    for(uint32_t i=0; i<pComponentInfo->m_properties.size(); i++)
+    {
+        const ContentPropertyInfo* pPropertyInfo = pComponentInfo->m_properties[i].get();
+        if(pPropertyInfo->m_name == "DoRotate")
+        {
+            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
+            {
+                pCmp->ToggleScale(true);
+            }
+            else
+            {
+                pCmp->ToggleScale(false);
+            }
+        }
+
+        if(pPropertyInfo->m_name== "DoScale")
+        {
+            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
+            {
+                pCmp->ToggleScale(true);
+            }
+            else
+            {
+                pCmp->ToggleScale(false);
+            }
+        }
+
+        if(pPropertyInfo->m_name == "RotationSpeed")
+        {
+            float speed = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetRotationSpeed(speed);
+        }
+
+        if(pPropertyInfo->m_name == "ScaleSpeed")
+        {
+            float speed = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetScaleSpeed(speed);
+        }
+    }
 
     return true;
 }
@@ -90,4 +129,24 @@ float WobbleComponent::RotationSpeed() const
 float WobbleComponent::ScaleSpeed() const
 {
     return m_scaleSpeed;
+}
+
+void WobbleComponent::ToggleRotation(const bool toggle)
+{
+    m_doRotate = toggle;
+}
+
+void WobbleComponent::ToggleScale(const bool toggle)
+{
+    m_doScale = toggle;
+}
+
+void WobbleComponent::SetRotationSpeed(const float speed)
+{
+    m_rotationSpeed = speed;
+}
+
+void WobbleComponent::SetScaleSpeed(const float speed)
+{
+    m_scaleSpeed = speed;
 }
