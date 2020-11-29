@@ -19,7 +19,26 @@
         },
         {
             "type": "WobbleComponentClass",
-            "name": "Wobble"
+            "name": "Wobble",
+
+            "properties":
+            [
+                {
+                    "name" : "DoRotation",
+                    "value" : "true",
+                    "type" : "bool"
+                },
+                {
+                    "name" : "RotationSpeed",
+                    "value" : "1.5",
+                    "type" : "float"
+                },
+                {
+                    "name": "DoScale",
+                    "value": "false",
+                    "type": "bool"
+                }
+            ]
         }
     ]
 }
