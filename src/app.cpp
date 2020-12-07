@@ -33,6 +33,7 @@ void App::Run()
         m_core->IncrementTime();
         Engine::InputManager::Instance().Poll();
         UpdateGame(m_core->GetDeltaTime());
+        UpdateUI();
         DrawGame();
     }
 }
@@ -58,6 +59,14 @@ void App::UpdateGame(const double deltaTime)
     m_core->ECS()->Update(deltaTime);
 }
 
+void App::UpdateUI()
+{
+    assert (Engine() != nullptr);
+    assert (Engine()->IMGui() != nullptr);
+
+    Engine()->IMGui()->Update();
+}
+
 void App::DrawGame()
 {
     assert (m_core != nullptr);
@@ -78,7 +87,18 @@ void App::DrawGame()
         m_core->Renderer()->DrawModelWire(cmodel);
         
     }
+
+    // Draw UI layer to the screen
+    DrawUI();
     
     // Swap buffers
     m_core->PresentMainWindow();
+}
+
+void App::DrawUI()
+{
+    assert (Engine() != nullptr);
+    assert (Engine()->IMGui() != nullptr);
+
+    Engine()->IMGui()->Render();
 }

@@ -15,6 +15,8 @@ class App
     private:
     void UpdateGame(const double deltaTime);
     void DrawGame();
+    void UpdateUI();
+    void DrawUI();
 
     private:
     std::unique_ptr<Engine::EngineCore> m_core;

@@ -9,6 +9,7 @@
 #include "gfx.hpp"
 #include "ecssys.hpp"
 #include "gametime.hpp"
+#include "imguiinterface.hpp"
 #include <memory>
 
 #include "components/modelcomponent.hpp"
@@ -32,6 +33,7 @@ namespace Engine
         std::unique_ptr<RuntimeShaders> m_runtimeShaders;
         std::unique_ptr<ECSSys> m_ecs;
         std::unique_ptr<GameTime> m_time;
+        std::unique_ptr<IMGuiInterface> m_imgui;
 
         public:
         EngineCore();
@@ -49,6 +51,7 @@ namespace Engine
         RuntimeShaders* Shaders() const;
         ECSSys* ECS() const;
         const GameTime * const Time() const;
+        IMGuiInterface * IMGui() const;
 
         private:
         void RegisterStdComponents();

@@ -42,6 +42,8 @@ bool EngineCore::Initialize()
     m_runtimeShaders->Init();
     m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
     m_time = std::make_unique<GameTime>();
+    m_imgui = std::make_unique<IMGuiInterface>();
+    m_imgui->Init(m_mainWin.get());
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
@@ -83,6 +85,8 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_runtimeShaders->Init();
     m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
     m_time = std::make_unique<GameTime>();
+    m_imgui = std::make_unique<IMGuiInterface>();
+    m_imgui->Init(m_mainWin.get());
     
 
     m_ecs = std::make_unique<ECSSys>();
@@ -99,6 +103,9 @@ void EngineCore::Terminate()
     assert (m_ecs != nullptr);
 
     m_ecs->Terminate();
+
+    m_imgui->Free();
+    m_imgui.reset(nullptr);
 
     m_glfw->Terminate();
     m_glfw.release();
@@ -180,4 +187,9 @@ double EngineCore::GetGameTime() const
 {
     assert (m_time != nullptr);
     return m_time->CurrentTime();
+}
+
+IMGuiInterface * EngineCore::IMGui() const
+{
+    return m_imgui.get();
 }

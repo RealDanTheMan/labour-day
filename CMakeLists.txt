@@ -63,6 +63,14 @@ ${PROJECT_SOURCE_DIR}/engine/prefab.cpp
 ${PROJECT_SOURCE_DIR}/engine/contentserialisation.cpp
 ${PROJECT_SOURCE_DIR}/engine/contentserialiser.cpp
 ${PROJECT_SOURCE_DIR}/engine/gametime.cpp
+${PROJECT_SOURCE_DIR}/engine/imguiinterface.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/imgui.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/imgui_tables.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/imgui_demo.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/backends/imgui_impl_glfw.cpp
+${PROJECT_SOURCE_DIR}/external/imgui/backends/imgui_impl_opengl3.cpp
 ${PROJECT_SOURCE_DIR}/testscene.cpp
 ${PROJECT_SOURCE_DIR}/testentity.cpp 
 ${PROJECT_SOURCE_DIR}/testproc.cpp)
