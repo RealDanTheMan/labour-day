@@ -8,6 +8,7 @@
 #include "runtimeshaders.hpp"
 #include "gfx.hpp"
 #include "ecssys.hpp"
+#include "gametime.hpp"
 #include <memory>
 
 #include "components/modelcomponent.hpp"
@@ -30,6 +31,7 @@ namespace Engine
         std::unique_ptr<CommonRenderer> m_renderer;
         std::unique_ptr<RuntimeShaders> m_runtimeShaders;
         std::unique_ptr<ECSSys> m_ecs;
+        std::unique_ptr<GameTime> m_time;
 
         public:
         EngineCore();
@@ -39,10 +41,14 @@ namespace Engine
         void RedrawMainWindow();
         void ClearMainWindow();
         void PresentMainWindow();
+        void IncrementTime();
+        double GetDeltaTime() const;
+        double GetGameTime() const;
         const bool MainWindowActive() const;
         CommonRenderer* Renderer();
         RuntimeShaders* Shaders() const;
         ECSSys* ECS() const;
+        const GameTime * const Time() const;
 
         private:
         void RegisterStdComponents();

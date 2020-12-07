@@ -15,13 +15,13 @@ void ECSSys::Init(const uint32_t poolSize)
     }
 }
 
-void ECSSys::Update()
+void ECSSys::Update(const double deltaTime)
 {
     for(uint32_t i=0; i < m_procs.size(); i++)
     {
         std::vector<Entity*> entities;
         AllAssets(entities);
-        m_procs[i]->ProcessEntities(entities);
+        m_procs[i]->ProcessEntities(entities, deltaTime);
     }
 }
 

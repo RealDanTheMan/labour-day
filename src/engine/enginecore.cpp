@@ -41,6 +41,7 @@ bool EngineCore::Initialize()
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
     m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    m_time = std::make_unique<GameTime>();
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
@@ -81,6 +82,7 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
     m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    m_time = std::make_unique<GameTime>();
     
 
     m_ecs = std::make_unique<ECSSys>();
@@ -160,4 +162,22 @@ void EngineCore::RegisterStdComponents()
 {
     EntitySerialiser::RegisterComponentSerialiser<Components::ModelComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::WobbleComponentSerialiser>();
+}
+
+void EngineCore::IncrementTime()
+{
+    assert (m_time != nullptr);
+    m_time->Tick();
+}
+
+double EngineCore::GetDeltaTime() const
+{
+    assert (m_time != nullptr);
+    return m_time->DeltaTime();
+}
+
+double EngineCore::GetGameTime() const
+{
+    assert (m_time != nullptr);
+    return m_time->CurrentTime();
 }

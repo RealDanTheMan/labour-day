@@ -11,7 +11,7 @@ namespace Engine
         public:
         EntityProcess();
 
-        void ProcessEntities(std::vector<Entity*>& entities);
+        void ProcessEntities(std::vector<Entity*>& entities, const double deltaTime);
         virtual void OnUpdate(Entity* const entity);
 
         float CurrentTime() const;

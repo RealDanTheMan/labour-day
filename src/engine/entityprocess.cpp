@@ -4,15 +4,17 @@ using namespace Engine;
 
 
 EntityProcess::EntityProcess():
-m_currentTime(0.1f),
-m_currentTimeDelta(1.0f)
+m_currentTime(0.0f),
+m_currentTimeDelta(0.0f)
 {
 
 }
 
-void EntityProcess::ProcessEntities(std::vector<Entity*>& entities)
+void EntityProcess::ProcessEntities(std::vector<Entity*>& entities, const double deltaTime)
 {
-    m_currentTime += m_currentTimeDelta;
+    m_currentTimeDelta = deltaTime;
+    m_currentTime += deltaTime;
+
     for(auto &entity : entities)
     {
         if(IsValidEntity(entity))

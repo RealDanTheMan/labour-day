@@ -13,7 +13,7 @@ class App
     Engine::EngineCore* Engine();
 
     private:
-    void UpdateGame();
+    void UpdateGame(const double deltaTime);
     void DrawGame();
 
     private:

@@ -18,7 +18,7 @@ namespace Engine
         ECSSys();
 
         void Init(const uint32_t poolSize);
-        void Update();
+        void Update(const double deltaTime);
         void Terminate();
 
         Entity* CreateEntity();

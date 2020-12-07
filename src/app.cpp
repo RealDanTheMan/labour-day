@@ -30,8 +30,9 @@ void App::Run()
     
     while(m_core->MainWindowActive() && !Engine::InputManager::Instance().CheckKey(KEY_ESCAPE))
     {
+        m_core->IncrementTime();
         Engine::InputManager::Instance().Poll();
-        UpdateGame();
+        UpdateGame(m_core->GetDeltaTime());
         DrawGame();
     }
 }
@@ -51,10 +52,10 @@ Engine::EngineCore* App::Engine()
     return m_core.get();
 }
 
-void App::UpdateGame()
+void App::UpdateGame(const double deltaTime)
 {
     assert (m_testScene != nullptr);
-    m_core->ECS()->Update();
+    m_core->ECS()->Update(deltaTime);
 }
 
 void App::DrawGame()
