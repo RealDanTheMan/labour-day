@@ -31,6 +31,7 @@ void App::Run()
     while(m_core->MainWindowActive() && !Engine::InputManager::Instance().CheckKey(KEY_ESCAPE))
     {
         m_core->IncrementTime();
+        m_core->FPS()->Sample();
         Engine::InputManager::Instance().Poll();
         UpdateGame(m_core->GetDeltaTime());
         UpdateUI();
