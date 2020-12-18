@@ -10,6 +10,7 @@
 #include "ecssys.hpp"
 #include "gametime.hpp"
 #include "imguiinterface.hpp"
+#include "fpscounter.hpp"
 #include <memory>
 
 #include "components/modelcomponent.hpp"
@@ -34,6 +35,7 @@ namespace Engine
         std::unique_ptr<ECSSys> m_ecs;
         std::unique_ptr<GameTime> m_time;
         std::unique_ptr<IMGuiInterface> m_imgui;
+        std::unique_ptr<FpsCounter> m_fpsCounter;
 
         public:
         EngineCore();
@@ -52,6 +54,7 @@ namespace Engine
         ECSSys* ECS() const;
         const GameTime * const Time() const;
         IMGuiInterface * IMGui() const;
+        FpsCounter * const FPS() const;
 
         private:
         void RegisterStdComponents();

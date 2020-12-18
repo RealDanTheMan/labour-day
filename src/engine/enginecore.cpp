@@ -44,6 +44,7 @@ bool EngineCore::Initialize()
     m_time = std::make_unique<GameTime>();
     m_imgui = std::make_unique<IMGuiInterface>();
     m_imgui->Init(m_mainWin.get());
+    m_fpsCounter = std::make_unique<FpsCounter>();
 
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
@@ -87,6 +88,7 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_time = std::make_unique<GameTime>();
     m_imgui = std::make_unique<IMGuiInterface>();
     m_imgui->Init(m_mainWin.get());
+    m_fpsCounter = std::make_unique<FpsCounter>();
     
 
     m_ecs = std::make_unique<ECSSys>();
@@ -192,4 +194,9 @@ double EngineCore::GetGameTime() const
 IMGuiInterface * EngineCore::IMGui() const
 {
     return m_imgui.get();
+}
+
+FpsCounter * const EngineCore::FPS() const
+{
+    return m_fpsCounter.get();
 }
