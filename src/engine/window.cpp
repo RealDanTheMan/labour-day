@@ -14,7 +14,7 @@ m_winHandle(nullptr)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 16);
-    glfwSwapInterval(2);
+    glfwSwapInterval(0);
 
     GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "Labour-Day", nullptr, nullptr);
     if(raw != nullptr)
@@ -38,7 +38,7 @@ m_winHandle(nullptr)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 16);
-    glfwSwapInterval(2);
+    glfwSwapInterval(0);
 
     GLFWwindow* raw = glfwCreateWindow(m_width, m_height, "Labour-Day", nullptr, nullptr);
     if(raw != nullptr)
