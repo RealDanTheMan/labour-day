@@ -17,6 +17,11 @@ bool App::Initialize()
         return false;
     }
 
+    // Initialise main debug overlay
+    m_overlay = std::make_unique<Engine::DebugOverlay>(m_core.get());
+    m_core->IMGui()->AddPanel(m_overlay.get());
+
+    // Initialise test (debug) scene
     m_testScene = std::make_unique<TestScene>();
     m_testScene->Initialize(m_core.get());
     m_core->Renderer()->SetCamera(m_testScene->Cam());
