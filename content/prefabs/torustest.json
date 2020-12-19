@@ -30,7 +30,7 @@
                 },
                 {
                     "name" : "RotationSpeed",
-                    "value" : "100",
+                    "value" : "250",
                     "type" : "float"
                 },
                 {
