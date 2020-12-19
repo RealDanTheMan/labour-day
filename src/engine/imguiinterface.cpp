@@ -28,11 +28,23 @@ void IMGuiInterface::Update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow(&yes);
+    //ImGui::ShowDemoWindow(&yes);
+
+    // Draw panels
+    for(IMGuiPanel * const panel : m_panels)
+    {
+        panel->OnUpdate();
+    }
+
     ImGui::Render();
 }
 
 void IMGuiInterface::Render()
 {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void IMGuiInterface::AddPanel(IMGuiPanel * const panel)
+{
+    m_panels.push_back(panel);
 }

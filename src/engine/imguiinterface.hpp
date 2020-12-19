@@ -6,9 +6,16 @@
 #include "../external/imgui/backends/imgui_impl_glfw.h"
 
 #include "window.hpp"
+#include <vector>
 
 namespace Engine
 {
+    class IMGuiPanel
+    {
+        public:
+        virtual void OnUpdate()=0;
+    };
+
     class IMGuiInterface
     {
         public:
@@ -17,9 +24,11 @@ namespace Engine
         void Free();
         void Update();
         void Render();
+        void AddPanel(IMGuiPanel * const panel);
 
         private:
         ImGuiContext *m_ctx;
+        std::vector<IMGuiPanel*> m_panels;
     };
 }
 
