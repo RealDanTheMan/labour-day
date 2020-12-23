@@ -3,6 +3,7 @@
 #include "testproc.hpp"
 #include "engine/meshgen.hpp"
 #include "engine/components/modelcomponent.hpp"
+#include "engine/components/cameracomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/material.hpp"
 #include "engine/types.hpp"
@@ -48,14 +49,19 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     // ECS setup
     m_core->ECS()->CreateEntity(prf1);
-    m_core->ECS()->CreateEntity(prf2);
+    auto player = m_core->ECS()->CreateEntity(prf2);
     m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
 
     // Setup main scene camera
-    m_camera = std::make_unique<Engine::Camera>(1280, 720, 30, 1.7777);
+    m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
+
+    player->Components().Add<Engine::Components::CameraComponent>();
+    player->Components().Get<Engine::Components::CameraComponent>()->GetTransform().Translate(Vec3(0, 0, -10));
+    player->Components().Get<Engine::Components::CameraComponent>()->SetFOV(m_camera->GetFOV());
+    player->Components().Get<Engine::Components::CameraComponent>()->SetAspect(m_camera->GetAspect());
 }
 
 Engine::Camera* TestScene::Cam()

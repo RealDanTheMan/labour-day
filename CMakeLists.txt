@@ -48,6 +48,7 @@ ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
 ${PROJECT_SOURCE_DIR}/engine/model.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/modelcomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/wobblecomponent.cpp
+${PROJECT_SOURCE_DIR}/engine/components/cameracomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/wobbleprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/ecssys.cpp
 ${PROJECT_SOURCE_DIR}/engine/entityprocess.cpp

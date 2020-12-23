@@ -2,6 +2,7 @@
 #include "engine/debugging.hpp"
 #include "engine/inputmanager.hpp"
 #include "engine/components/modelcomponent.hpp"
+#include "engine/components/cameracomponent.hpp"
 
 bool App::Initialize()
 {
@@ -77,6 +78,15 @@ void App::DrawGame()
 {
     assert (m_core != nullptr);
     m_core->ClearMainWindow();
+
+    // Use component camera if one exists
+    std::vector<Engine::Entity*> cams;
+    m_core->ECS()->AssetsByComponent<Engine::Components::CameraComponent>(cams);
+    if(cams.size() > 0)
+    {
+        Engine::Components::CameraComponent* cCam = cams[0]->Components().Get<Engine::Components::CameraComponent>();
+        m_core->Renderer()->SetCamera(cCam->CameraHandle());
+    }
 
     // Old common rendering
     m_core->RedrawMainWindow();
