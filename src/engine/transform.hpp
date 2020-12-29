@@ -2,9 +2,12 @@
 #define TRANSFORM_HPP_
 
 #include "types.hpp"
+#include "event.hpp"
 
 namespace Engine
 {
+    using ChangedDelegate = EventDelegate<void, int>;
+
     class Transform
     {
         private:
@@ -14,6 +17,8 @@ namespace Engine
         Mat4 m_rotX;
         Mat4 m_rotY;
         Mat4 m_rotZ;
+
+        Event<ChangedDelegate> m_changed;
 
         public:
         Transform();
@@ -31,6 +36,8 @@ namespace Engine
 
         Vec3 Translation() const;
         Vec3 Scale() const;
+
+        Event<ChangedDelegate>& ChangedEvent();
 
         static Mat4 IdentityMatrix();
 

@@ -22,7 +22,8 @@ m_scale(rhs.m_scale),
 m_rotX(rhs.m_rotX),
 m_rotY(rhs.m_rotY),
 m_rotZ(rhs.m_rotZ),
-m_composite(rhs.m_composite)
+m_composite(rhs.m_composite),
+m_changed(rhs.m_changed)
 {
 
 }
@@ -43,6 +44,8 @@ void Transform::ComputeMatrix()
 {
     Mat4 rot = m_rotZ * m_rotY * m_rotX;
     m_composite = m_scale * rot * m_translation;
+
+    ChangedEvent().Invoke(666);
 }
 
 void Transform::Translate(const Vec3 &translation)
@@ -127,4 +130,9 @@ Vec3 Transform::Translation() const
 Vec3 Transform::Scale() const 
 {
     return Vec3(m_scale[0][0], m_scale[1][1], m_scale[2][2]);
+}
+
+Event<ChangedDelegate>& Transform::ChangedEvent()
+{
+    return m_changed;
 }

@@ -33,6 +33,10 @@ namespace Engine
             const float GetAspect() const;
             const Camera * const CameraHandle() const;
 
+            void OnTransformChanged(int);
+            ChangedDelegate OnTransformChangedDelegate;
+
+
             private:
             void UpdateTransform();
 

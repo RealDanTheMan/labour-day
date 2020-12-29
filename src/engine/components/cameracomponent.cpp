@@ -4,18 +4,29 @@ using namespace Engine::Components;
 
 CameraComponent::CameraComponent():
 m_isActive(false),
+m_tr(Engine::Transform()),
+OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1))),
 m_cam(std::make_unique<Engine::Camera>())
 {
     // Some default camera values that work
     SetFOV(30.0f);
     SetAspect(1.77777);
+    GetTransform().ChangedEvent().AddHandler(&OnTransformChangedDelegate);
 }
 
 CameraComponent::CameraComponent(const CameraComponent &rhs):
 m_isActive(rhs.m_isActive),
-m_tr(Engine::Transform()),
-m_cam(std::make_unique<Engine::Camera>(*rhs.m_cam))
+m_tr(Engine::Transform(rhs.m_tr)),
+m_cam(std::make_unique<Engine::Camera>()),
+OnTransformChangedDelegate(rhs.OnTransformChangedDelegate)
 {
+    if(rhs.m_cam != nullptr)
+    {
+        m_cam = std::make_unique<Camera>(*rhs.m_cam);
+    }
+
+    GetTransform().ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
+
     SetNearClip(rhs.GetNearClip());
     SetFarClip(rhs.GetFarClip());
     SetFOV(rhs.GetFOV());
@@ -24,7 +35,7 @@ m_cam(std::make_unique<Engine::Camera>(*rhs.m_cam))
 
 CameraComponent::~CameraComponent()
 {
-    
+    GetTransform().ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
 }
 
 void CameraComponent::SetActive(const bool active)
@@ -111,6 +122,15 @@ std::unique_ptr<Engine::EntityComponent> CameraComponent::Duplicate() const
 
 void CameraComponent::UpdateTransform()
 {
+    assert (m_cam != nullptr);
+    m_cam->SetTransform(m_tr);
+}
+
+void CameraComponent::OnTransformChanged(int param)
+{
+    D_MSG ("yay !");
+    D_MSG (param);
+
     assert (m_cam != nullptr);
     m_cam->SetTransform(m_tr);
 }
