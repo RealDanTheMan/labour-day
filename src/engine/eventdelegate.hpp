@@ -47,7 +47,6 @@ namespace Engine
     {
         if(CanExecute())
         {
-            D_MSG("Calling event delegate std::function");
             m_foo(m_args);
         }
     }

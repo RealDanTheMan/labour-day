@@ -128,9 +128,6 @@ void CameraComponent::UpdateTransform()
 
 void CameraComponent::OnTransformChanged(int param)
 {
-    D_MSG ("yay !");
-    D_MSG (param);
-
     assert (m_cam != nullptr);
     m_cam->SetTransform(m_tr);
 }
