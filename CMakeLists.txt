@@ -67,6 +67,7 @@ ${PROJECT_SOURCE_DIR}/engine/gametime.cpp
 ${PROJECT_SOURCE_DIR}/engine/imguiinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/fpscounter.cpp
 ${PROJECT_SOURCE_DIR}/engine/debugoverlay.cpp
+${PROJECT_SOURCE_DIR}/engine/event.cpp
 ${PROJECT_SOURCE_DIR}/external/imgui/imgui.cpp
 ${PROJECT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
 ${PROJECT_SOURCE_DIR}/external/imgui/imgui_tables.cpp
