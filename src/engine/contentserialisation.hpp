@@ -71,6 +71,18 @@ namespace Engine
         static std::unique_ptr<ContentManifestInfo> FromJSON(const configuru::Config &json);
         void Printout() const;
     };
+
+    class SerialisationUtils 
+    {
+        public:
+        static bool BoolFromString (const std::string &str);
+        static Vec2 Vec2FromString(const std::string &str);
+        static Vec3 Vec3FromString(const std::string &str);
+        static Vec4 Vec4FromString(const std::string &str);
+
+        static std::vector<std::string> SplitString(const std::string &str, const char delimiter);
+        static float FloatFromString(const std::string &str);
+    };
 }
 
 #endif

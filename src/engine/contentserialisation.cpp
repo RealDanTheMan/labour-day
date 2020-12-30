@@ -1,5 +1,6 @@
 #include "contentserialisation.hpp"
 #include <iostream>
+#include <sstream>
 
 using namespace Engine;
 
@@ -206,4 +207,99 @@ void ContentManifestInfo::Printout() const
     }
 
     std::cout << "--- -------------- ---" << std::endl << std::endl;
+}
+
+bool SerialisationUtils::BoolFromString(const std::string &str)
+{
+    if(str == "true" || str == "1")
+    {
+        return true; 
+    }
+
+    if(str == "false" || str == "0")
+    {
+        return false;
+    }
+
+    throw std::invalid_argument("String value does not contain valid boolean value!");
+}
+
+Vec2 SerialisationUtils::Vec2FromString(const std::string &str)
+{
+    std::vector<std::string> tokens = SerialisationUtils::SplitString(str, ',');
+    if(tokens.size() == 2)
+    {
+        float x = SerialisationUtils::FloatFromString(tokens[0]);
+        float y = SerialisationUtils::FloatFromString(tokens[1]);
+
+        return Vec2(x, y);
+    }
+    else
+    {
+        throw std::invalid_argument("String does not contain 2 items delimited by comma");
+    }
+}
+
+Vec3 SerialisationUtils::Vec3FromString(const std::string &str)
+{
+    std::vector<std::string> tokens = SerialisationUtils::SplitString(str, ',');
+    if(tokens.size() == 3)
+    {
+        float x = SerialisationUtils::FloatFromString(tokens[0]);
+        float y = SerialisationUtils::FloatFromString(tokens[1]);
+        float z = SerialisationUtils::FloatFromString(tokens[2]);
+
+        return Vec3(x, y, z);
+    }
+    else
+    {
+        throw std::invalid_argument("String does not contain 3 items delimited by comma");
+    }
+}
+
+Vec4 SerialisationUtils::Vec4FromString(const std::string &str)
+{
+    std::vector<std::string> tokens = SerialisationUtils::SplitString(str, ',');
+    if(tokens.size() == 4)
+    {
+        float x = SerialisationUtils::FloatFromString(tokens[0]);
+        float y = SerialisationUtils::FloatFromString(tokens[1]);
+        float z = SerialisationUtils::FloatFromString(tokens[2]);
+        float w = SerialisationUtils::FloatFromString(tokens[3]);
+
+        return Vec4(x, y, z, w);
+    }
+    else
+    {
+        throw std::invalid_argument("String does not contain 4 items delimited by comma");
+    }
+}
+
+std::vector<std::string> SerialisationUtils::SplitString(const std::string &str, const char delimiter)
+{
+    std::vector<std::string> splits;
+    std::istringstream ss(str);
+    std::string token;
+
+    while(std::getline(ss,token, delimiter ))
+    {
+        splits.push_back(token);
+    }
+
+    return splits;
+}
+
+float SerialisationUtils::FloatFromString(const std::string &str)
+{
+    float val;
+    try
+    {
+        val = stof(str);
+    }
+    catch(const std::exception& e)
+    {
+        throw std::invalid_argument("String value does not contain a number !");
+    }
+    
+    return val;
 }
