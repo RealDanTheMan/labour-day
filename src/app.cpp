@@ -85,7 +85,10 @@ void App::DrawGame()
     if(cams.size() > 0)
     {
         Engine::Components::CameraComponent* cCam = cams[0]->Components().Get<Engine::Components::CameraComponent>();
-        m_core->Renderer()->SetCamera(cCam->CameraHandle());
+        if(cCam->IsActive())
+        {
+            m_core->Renderer()->SetCamera(cCam->CameraHandle());
+        }
     }
 
     // Old common rendering
