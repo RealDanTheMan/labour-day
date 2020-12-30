@@ -2,11 +2,84 @@
 
 using namespace Engine::Components;
 
+CameraComponentSerialiser::CameraComponentSerialiser() : EntityComponentSerialiser("CameraComponentClass")
+{
+}
+
+CameraComponentSerialiser::~CameraComponentSerialiser()
+{
+}
+
+bool CameraComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+{
+    assert (pComponent != nullptr);
+
+    auto pCmp = reinterpret_cast<CameraComponent*>(pComponent);
+    assert (pCmp != nullptr);
+
+    for(uint32_t i=0; i<pComponentInfo->m_properties.size(); i++)
+    {
+        const ContentPropertyInfo* pPropertyInfo = pComponentInfo->m_properties[i].get();
+        if(pPropertyInfo->m_name == "IsActive")
+        {
+            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
+            {
+                pCmp->SetActive(true);
+            }
+            else
+            {
+                pCmp->SetActive(false);
+            }
+        }
+
+        if(pPropertyInfo->m_name == "NearClip")
+        {
+            float nearClip = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetNearClip(nearClip);
+        }
+
+        if(pPropertyInfo->m_name == "FarClip")
+        {
+            float farClip = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetFarClip(farClip);
+        }
+
+        if(pPropertyInfo->m_name == "FOV")
+        {
+            float fov = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetFOV(fov);
+        }
+
+        if(pPropertyInfo->m_name == "Aspect")
+        {
+            float aspect = stof(pPropertyInfo->m_value, nullptr);
+            pCmp->SetAspect(aspect);
+        }
+    }
+
+    return true;
+}
+
+bool CameraComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+{
+    assert (pEntity != nullptr);
+    assert (pComponentInfo != nullptr);
+    auto pCmp = pEntity->Components().Add<CameraComponent>();
+    assert (pCmp != nullptr);
+
+    bool stat = Deserialise(pCmp, pComponentInfo);
+    if(stat)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 CameraComponent::CameraComponent():
 m_isActive(false),
 m_tr(Engine::Transform()),
-OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1))),
-m_cam(std::make_unique<Engine::Camera>())
+OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1)))
 {
     // Some default camera values that work
     SetFOV(30.0f);
@@ -17,20 +90,10 @@ m_cam(std::make_unique<Engine::Camera>())
 CameraComponent::CameraComponent(const CameraComponent &rhs):
 m_isActive(rhs.m_isActive),
 m_tr(Engine::Transform(rhs.m_tr)),
-m_cam(std::make_unique<Engine::Camera>()),
+m_cam(rhs.m_cam),
 OnTransformChangedDelegate(rhs.OnTransformChangedDelegate)
 {
-    if(rhs.m_cam != nullptr)
-    {
-        m_cam = std::make_unique<Camera>(*rhs.m_cam);
-    }
-
-    GetTransform().ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
-
-    SetNearClip(rhs.GetNearClip());
-    SetFarClip(rhs.GetFarClip());
-    SetFOV(rhs.GetFOV());
-    SetAspect(rhs.GetAspect());
+    GetTransform().ChangedEvent().AddHandler(&OnTransformChangedDelegate);
 }
 
 CameraComponent::~CameraComponent()
@@ -45,26 +108,22 @@ void CameraComponent::SetActive(const bool active)
 
 void CameraComponent::SetNearClip(const float val)
 {
-    assert (m_cam != nullptr);
-    m_cam->SetNearClip(val);
+    m_cam.SetNearClip(val);
 }
 
 void CameraComponent::SetFarClip(const float val)
 {
-    assert (m_cam != nullptr);
-    m_cam->SetFarClip(val);
+    m_cam.SetFarClip(val);
 }
 
 void CameraComponent::SetFOV(const float val)
 {
-    assert (m_cam != nullptr);
-    m_cam->SetFOV(val);
+    m_cam.SetFOV(val);
 }
 
 void CameraComponent::SetAspect(const float val)
 {
-    assert (m_cam != nullptr);
-    m_cam->SetAspect(val);
+    m_cam.SetAspect(val);
 }
 
 bool CameraComponent::IsActive() const
@@ -74,26 +133,22 @@ bool CameraComponent::IsActive() const
 
 const float CameraComponent::GetNearClip() const
 {
-    assert (m_cam != nullptr);
-    return m_cam->GetNearClip();
+    return m_cam.GetNearClip();
 }
 
 const float CameraComponent::GetFarClip() const
 {
-    assert (m_cam != nullptr);
-    return m_cam->GetFarClip();
+    return m_cam.GetFarClip();
 }
 
 const float CameraComponent::GetFOV() const
 {
-    assert (m_cam != nullptr);
-    return m_cam->GetFOV();
+    return m_cam.GetFOV();
 }
 
 const float CameraComponent::GetAspect() const
 {
-    assert (m_cam != nullptr);
-    return m_cam->GetAspect();
+    return m_cam.GetAspect();
 }
 
 Engine::Transform & CameraComponent::GetTransform()
@@ -103,7 +158,7 @@ Engine::Transform & CameraComponent::GetTransform()
 
 const Engine::Camera * const CameraComponent::CameraHandle() const
 {
-    return m_cam.get();
+    return &m_cam;
 }
 
 void CameraComponent::Init()
@@ -113,21 +168,16 @@ void CameraComponent::Init()
 
 std::unique_ptr<Engine::EntityComponent> CameraComponent::Duplicate() const
 {
-    auto dup = std::make_unique<CameraComponent>();
-    dup->m_tr = m_tr;
-    dup->m_isActive = m_isActive;
-
+    auto dup = std::make_unique<CameraComponent>(*this);
     return dup;
 }
 
 void CameraComponent::UpdateTransform()
 {
-    assert (m_cam != nullptr);
-    m_cam->SetTransform(m_tr);
+    m_cam.SetTransform(m_tr);
 }
 
 void CameraComponent::OnTransformChanged(int param)
 {
-    assert (m_cam != nullptr);
-    m_cam->SetTransform(m_tr);
+    UpdateTransform();
 }

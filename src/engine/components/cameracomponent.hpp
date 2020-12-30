@@ -2,6 +2,7 @@
 #define CAMERA_COMPONENT_HPP_
 
 #include "../entitycomponent.hpp"
+#include "../entityserialiser.hpp"
 #include "../transform.hpp"
 #include "../camera.hpp"
 
@@ -9,6 +10,15 @@ namespace Engine
 {
     namespace Components
     {
+        class CameraComponentSerialiser : public EntityComponentSerialiser
+        {
+            public:
+            CameraComponentSerialiser();
+            virtual ~CameraComponentSerialiser() override ; 
+            virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const override;
+            virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
+        };
+
         class CameraComponent: public EntityComponent
         {
             public:
@@ -40,7 +50,7 @@ namespace Engine
             private:
             void UpdateTransform();
 
-            std::unique_ptr<Camera> m_cam;
+            Camera m_cam;
             Transform m_tr;
             bool m_isActive;
         };
