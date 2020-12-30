@@ -127,6 +127,11 @@ void CommonRenderer::SetCamera(const Camera *cam)
     m_activeCam = cam;
 }
 
+const Camera * const CommonRenderer::GetCamera() const
+{
+    return m_activeCam;
+}
+
 void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Transform *tr) const
 {
     assert (shader != nullptr);

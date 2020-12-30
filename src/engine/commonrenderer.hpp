@@ -29,6 +29,8 @@ namespace Engine
         void AddToQueue(const Renderable *renderable);
         void SetCamera(const Camera *cam);
 
+        const Camera * const GetCamera() const;
+
         private:
 
         void PushUniformShaderParams(const ShaderProg *shader, const Transform *transform) const;

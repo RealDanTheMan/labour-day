@@ -15,6 +15,7 @@ namespace Engine
         EngineCore * const m_core;
 
         void DrawPerfStats() const;
+        void DrawCameraInfo() const;
     };
 }
 
