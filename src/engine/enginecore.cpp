@@ -171,6 +171,7 @@ void EngineCore::RegisterStdComponents()
 {
     EntitySerialiser::RegisterComponentSerialiser<Components::ModelComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::WobbleComponentSerialiser>();
+    EntitySerialiser::RegisterComponentSerialiser<Components::CameraComponentSerialiser>();
 }
 
 void EngineCore::IncrementTime()
