@@ -18,25 +18,35 @@
             ]
         },
         {
-            "type": "WobbleComponentClass",
-            "name": "Wobble",
+            "type": "CameraComponentClass",
+            "name": "MainCam",
 
             "properties":
             [
                 {
-                    "name" : "DoRotation",
+                    "name" : "IsActive",
                     "value" : "true",
                     "type" : "bool"
                 },
                 {
-                    "name" : "RotationSpeed",
-                    "value" : "60.0",
+                    "name" : "NearClip",
+                    "value" : "0.001",
                     "type" : "float"
                 },
                 {
-                    "name": "DoScale",
-                    "value": "false",
-                    "type": "bool"
+                    "name" : "FarClip",
+                    "value" : "1000000.0",
+                    "type" : "float"
+                },
+                {
+                    "name" : "FOV",
+                    "value" : "45.0",
+                    "type" : "float"
+                },
+                {
+                    "name" : "Aspect",
+                    "value" : "1.777777",
+                    "type" : "float"
                 }
             ]
         }
