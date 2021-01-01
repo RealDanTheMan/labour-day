@@ -33,6 +33,7 @@ namespace Engine
         void SetTranslation(const Vec3 &translation);
         void SetScale(const Vec3 &scale);
         void SetScale(const float scale);
+        void Set(const Transform &tr);
 
         Vec3 Translation() const;
         Vec3 Scale() const;

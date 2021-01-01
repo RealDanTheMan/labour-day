@@ -23,7 +23,7 @@ m_rotX(rhs.m_rotX),
 m_rotY(rhs.m_rotY),
 m_rotZ(rhs.m_rotZ),
 m_composite(rhs.m_composite),
-m_changed(rhs.m_changed)
+m_changed()
 {
 
 }
@@ -98,6 +98,17 @@ void Transform::SetScale(const float scale)
     m_scale[0][0] = scale;
     m_scale[1][1] = scale;
     m_scale[2][2] = scale;
+
+    ComputeMatrix();
+}
+
+void Transform::Set(const Transform &tr)
+{
+    m_translation = tr.m_translation;
+    m_rotX = tr.m_rotX;
+    m_rotY = tr.m_rotY;
+    m_rotZ = tr.m_rotZ;
+    m_scale = tr.m_scale;
 
     ComputeMatrix();
 }
