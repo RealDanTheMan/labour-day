@@ -118,12 +118,12 @@ bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
         auto entity = EntitySerialiser::Deserialise(entityInfo.get());
 
         // Check if entity references any model resources and link them
-        auto cmp = entity->Components().Get<Engine::Components::ModelComponent>();
-        if(cmp != nullptr)
+        auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
+        for(auto &cModel : cModels)
         {
-            Model * model = GetModel(cmp->m_modelName);
+            Model * model = GetModel(cModel->m_modelName);
             assert (model != nullptr);
-            cmp->SetModel(model);
+            cModel->SetModel(model);
         }
 
         // Create prefab & consume it

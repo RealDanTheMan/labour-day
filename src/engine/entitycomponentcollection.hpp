@@ -24,6 +24,9 @@ namespace Engine
             template<typename T>
             T* const Get();
 
+            template <typename T>
+            std::vector<T*> GetAll();
+
         private:
             uint32_t m_count;
             std::vector<std::unique_ptr<EntityComponent>> m_components;
@@ -54,6 +57,24 @@ namespace Engine
         }
 
         return nullptr;
+    }
+
+    template <typename T>
+    std::vector<T*> EntityComponentCollection::GetAll()
+    {
+        static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
+        
+        std::vector<T*> components;
+        for(auto& com : m_components)
+        {
+            auto match = dynamic_cast<T*>(com.get());
+            if(match)
+            {
+                components.push_back(match);
+            }
+        }
+
+        return components;
     }
 }
 
