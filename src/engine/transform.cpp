@@ -113,6 +113,17 @@ void Transform::Set(const Transform &tr)
     ComputeMatrix();
 }
 
+void Transform::TransformBy(const Transform &tr)
+{
+    m_translation *= tr.m_translation;
+    m_rotX *= tr.m_rotX;
+    m_rotY *= tr.m_rotY;
+    m_rotZ *= tr.m_rotZ;
+    m_scale *= tr.m_scale;
+
+    ComputeMatrix();
+}
+
 void Transform::Rotate(const Vec3 &degAngles)
 {
     Vec3 rads = degAngles * 0.0174533f;
@@ -124,6 +135,21 @@ void Transform::Rotate(const Vec3 &degAngles)
     m_rotX *= x;
     m_rotY *= y;
     m_rotZ *= z;
+
+    ComputeMatrix();
+}
+
+void Transform::SetRotation(const Vec3 &degAngles)
+{
+    Vec3 rads = degAngles * 0.0174533f;
+
+    const Mat4 x = glm::rotate(rads.x, Vec3(1.0, 0.0, 0.0));
+    const Mat4 y = glm::rotate(rads.y, Vec3(0.0, 1.0, 0.0));
+    const Mat4 z = glm::rotate(rads.z, Vec3(0.0, 0.0, 1.0));
+
+    m_rotX = x;
+    m_rotY = y;
+    m_rotZ = z;
 
     ComputeMatrix();
 }
