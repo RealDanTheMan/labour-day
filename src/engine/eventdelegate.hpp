@@ -38,7 +38,7 @@ namespace Engine
     template <typename ret, typename args>
     EventDelegate<ret, args>::EventDelegate(const EventDelegate<ret, args>& rhs):
     m_foo(rhs.m_foo),
-    m_args(m_args)
+    m_args(rhs.m_args)
     {
     }
 
