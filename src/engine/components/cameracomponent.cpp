@@ -22,14 +22,8 @@ bool CameraComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
         const ContentPropertyInfo* pPropertyInfo = pComponentInfo->m_properties[i].get();
         if(pPropertyInfo->m_name == "IsActive")
         {
-            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
-            {
-                pCmp->SetActive(true);
-            }
-            else
-            {
-                pCmp->SetActive(false);
-            }
+            bool isActive = SerialisationUtils::BoolFromString(pPropertyInfo->m_value);
+            pCmp->SetActive(isActive);
         }
 
         if(pPropertyInfo->m_name == "NearClip")
@@ -55,6 +49,18 @@ bool CameraComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
             float aspect = stof(pPropertyInfo->m_value, nullptr);
             pCmp->SetAspect(aspect);
         }
+
+        if(pPropertyInfo->m_name == "OffsetTranslation")
+        {
+            Vec3 offset = SerialisationUtils::Vec3FromString(pPropertyInfo->m_value);
+            pCmp->SetOffsetTranslation(offset);
+        }
+
+        if(pPropertyInfo->m_name == "OffsetRotation")
+        {
+            Vec3 offset = SerialisationUtils::Vec3FromString(pPropertyInfo->m_value);
+            pCmp->SetOffsetRotation(offset);
+        }
     }
 
     return true;
@@ -79,26 +85,32 @@ bool CameraComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEnt
 CameraComponent::CameraComponent():
 m_isActive(false),
 m_tr(Engine::Transform()),
+m_offset(Engine::Transform()),
 OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1)))
 {
     // Some default camera values that work
     SetFOV(30.0f);
     SetAspect(1.77777);
-    GetTransform().ChangedEvent().AddHandler(&OnTransformChangedDelegate);
+
+    m_tr.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
+    m_offset.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
 }
 
 CameraComponent::CameraComponent(const CameraComponent &rhs):
 m_isActive(rhs.m_isActive),
 m_tr(Engine::Transform(rhs.m_tr)),
+m_offset(Engine::Transform(rhs.m_offset)),
 m_cam(rhs.m_cam),
-OnTransformChangedDelegate(rhs.OnTransformChangedDelegate)
+OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1)))
 {
-    GetTransform().ChangedEvent().AddHandler(&OnTransformChangedDelegate);
+    m_tr.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
+    m_offset.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
 }
 
 CameraComponent::~CameraComponent()
 {
-    GetTransform().ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
+    m_tr.ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
+    m_offset.ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
 }
 
 void CameraComponent::SetActive(const bool active)
@@ -126,6 +138,16 @@ void CameraComponent::SetAspect(const float val)
     m_cam.SetAspect(val);
 }
 
+void CameraComponent::SetOffsetTranslation(const Vec3 &offset)
+{
+    m_offset.SetTranslation(offset);
+}
+
+void CameraComponent::SetOffsetRotation(const Vec3 &offset)
+{
+    m_offset.SetRotation(offset);
+}
+
 bool CameraComponent::IsActive() const
 {
     return m_isActive;
@@ -151,6 +173,17 @@ const float CameraComponent::GetAspect() const
     return m_cam.GetAspect();
 }
 
+Vec3 CameraComponent::GetOffsetTranslation() const
+{
+    return m_offset.Translation();
+}
+
+Vec3 CameraComponent::GetOffsetRotation() const
+{
+    // TODO: Not yet implemented 
+    return Vec3();
+}
+
 Engine::Transform & CameraComponent::GetTransform()
 {
     return m_tr;
@@ -174,7 +207,10 @@ std::unique_ptr<Engine::EntityComponent> CameraComponent::Duplicate() const
 
 void CameraComponent::UpdateTransform()
 {
-    m_cam.SetTransform(m_tr);
+    Transform tr(m_tr);
+    tr.TransformBy(m_offset);
+    
+    m_cam.SetTransform(tr);
 }
 
 void CameraComponent::OnTransformChanged(int param)

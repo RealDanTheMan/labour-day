@@ -36,11 +36,15 @@ namespace Engine
             void SetFarClip(const float val);
             void SetFOV(const float val);
             void SetAspect(const float val);
+            void SetOffsetTranslation(const Vec3 &offset);
+            void SetOffsetRotation(const Vec3 &offset);
 
             const float GetNearClip() const;
             const float GetFarClip() const;
             const float GetFOV() const;
             const float GetAspect() const;
+            Vec3 GetOffsetTranslation() const;
+            Vec3 GetOffsetRotation() const;
             const Camera * const CameraHandle() const;
 
             void OnTransformChanged(int);
@@ -52,6 +56,7 @@ namespace Engine
 
             Camera m_cam;
             Transform m_tr;
+            Transform m_offset;
             bool m_isActive;
         };
     }
