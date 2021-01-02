@@ -47,6 +47,16 @@
                     "name" : "Aspect",
                     "value" : "1.777777",
                     "type" : "float"
+                },
+                {
+                    "name" : "OffsetTranslation",
+                    "value": "0,12,-4",
+                    "type" : "Vec3"
+                },
+                {
+                    "name" : "OffsetRotation",
+                    "value": "60,0,0",
+                    "type" : "Vec3"
                 }
             ]
         }

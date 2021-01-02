@@ -54,11 +54,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
 
-    // Setup main scene camera
+    // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
-
-    player->Components().Get<Engine::Components::CameraComponent>()->GetTransform().Translate(Vec3(0, 0, -5));
 }
 
 Engine::Camera* TestScene::Cam()
