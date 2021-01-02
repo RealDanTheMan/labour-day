@@ -50,7 +50,16 @@ m_aspect(rhs.m_aspect)
 
 const Mat4 Camera::View() const
 {
-    return glm::lookAt(Vec3(m_transform.Translation()), Vec3(0.0, 0.0, 0.0), Vec3(0.0, 1.0, 0.0));
+    // World up axis is alwas Y
+    const Vec3 up = Vec3(0,1,0);
+
+    // Forward / lookat axis is Z
+    const Vec3 forward = m_transform.Matrix()[2];
+
+    // Compute view / lookat matrix
+    const Vec3 eye = m_transform.Translation();
+    const Vec3 target = eye + (10.0f * forward);
+    return glm::lookAt(eye, target, up);
 }
 
 const Mat4& Camera::Projection() const
@@ -70,7 +79,7 @@ void Camera::RecomputePerspective()
 
 void Camera::SetTransform(const Transform &tr)
 {
-    m_transform = tr;
+    m_transform.Set(tr);
 }
 
 void Camera::SetNearClip(const float val)
