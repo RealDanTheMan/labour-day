@@ -61,6 +61,18 @@ std::unique_ptr<Mesh> MeshGen::Cube(const float scale)
         Vec3(0.0f, 1.0f, 0.0f),
         Vec3(0.0f, 1.0f, 0.0f)
     };
+
+    const Vec2 texcoords[8] = 
+    {
+        Vec2(0.0f, 0.0f), 
+        Vec2(1.0f, 0.0f),
+        Vec2(0.0f, 1.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(0.0f, 1.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(0.0f, 0.0f),
+        Vec2(1.0f, 0.0f)
+    };
     
     const unsigned int indices[36] = 
     {
@@ -86,6 +98,7 @@ std::unique_ptr<Mesh> MeshGen::Cube(const float scale)
     std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
     mesh->SetMeshData(vertices, indices, 8, 36);
     mesh->SetNormals(normals, 8);
+    mesh->SetTexcoords(texcoords, 8, 0);
 
     return mesh;
 }
