@@ -46,6 +46,7 @@ ${PROJECT_SOURCE_DIR}/engine/entityserialiser.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
 ${PROJECT_SOURCE_DIR}/engine/model.cpp
+${PROJECT_SOURCE_DIR}/engine/modelinstance.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/modelcomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/wobblecomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/cameracomponent.cpp
