@@ -13,8 +13,9 @@ namespace Engine
         Model(const Mesh& mesh, Material * const mat);
         Model(const Model& rhs)=delete;
 
-        Renderable* GetRenderable();
+        const Renderable* GetRenderable() const;
         Transform& GetTransform();
+        const Transform & GetTransform() const;
         Material* const GetMaterial() const;
         virtual void Unload() override;
 

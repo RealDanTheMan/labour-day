@@ -56,12 +56,13 @@ bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEnti
 }
 
 ModelComponent::ModelComponent():
-    m_model(nullptr)
+    m_modelInstance(nullptr)
 {
 }
 
 ModelComponent::ModelComponent(const ModelComponent &rhs):
-    m_model(rhs.m_model)
+    m_modelInstance(std::make_unique<ModelInstance>(*rhs.m_modelInstance)),
+    m_modelName(rhs.m_modelName)
 {
 }
 
@@ -69,44 +70,33 @@ ModelComponent::~ModelComponent()
 {
 }
 
-void ModelComponent::SetModel(Model * const model)
+void ModelComponent::SetModel(Model * model)
 {
-    m_model = model;
+    m_modelInstance = std::make_unique<ModelInstance>(model);
 }
 
-Engine::Model* const ModelComponent::ModelHandle() const
+const Engine::ModelInstance * ModelComponent::GetModelInstance() const
 {
-    return m_model;
+    return m_modelInstance.get();
 }
 
-Engine::Renderable * const ModelComponent::GetRenderable() const 
+Engine::ModelInstance * ModelComponent::GetModelInstance()
 {
-    if(m_model == nullptr)
-    {
-        return nullptr;
-    }
+    return m_modelInstance.get();
+}
 
-    assert (m_model->GetRenderable()->Ready());
-    return m_model->GetRenderable();
+const Engine::Model * ModelComponent::GetModel() const
+{
+    assert (m_modelInstance != nullptr);
+    return m_modelInstance->GetModel();
 }
 
 void ModelComponent::Init()
 {
-    if(!m_modelName.empty())
-    {
-        
-    }
+
 }
 
 std::unique_ptr<Engine::EntityComponent> ModelComponent::Duplicate() const
 {
-    auto dup = std::make_unique<ModelComponent>();
-    dup->m_modelName = m_modelName;
-
-    if(m_model != nullptr)
-    {
-        dup->SetModel(m_model);
-    }
-
-    return dup;
+    return std::make_unique<ModelComponent>(*this);
 }

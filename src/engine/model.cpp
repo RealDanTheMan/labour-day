@@ -15,12 +15,17 @@ Model::Model(const Mesh& mesh, Material * const mat):
     assert (m_renderable->Ready());
 }
 
-Renderable *Model::GetRenderable()
+const Renderable *Model::GetRenderable() const
 {
     return m_renderable.get();
 }
 
 Transform &Model::GetTransform()
+{
+    return m_tr;
+}
+
+const Transform & Model::GetTransform() const
 {
     return m_tr;
 }

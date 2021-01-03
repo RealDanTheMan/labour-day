@@ -89,27 +89,38 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
 void CommonRenderer::DrawModel(const Components::ModelComponent *model) const
 {
     assert (model != nullptr);
-    assert (model->ModelHandle() != nullptr);
-    assert (model->ModelHandle()->GetRenderable() != nullptr);
-    assert (model->ModelHandle()->GetRenderable()->Ready());
+    assert (model->GetModelInstance() != nullptr);
+    assert (model->GetModel() != nullptr);
+    assert (model->GetModel()->GetRenderable() != nullptr);
+    assert (model->GetModel()->GetRenderable()->Ready());
 
-    Renderable &h = *model->ModelHandle()->GetRenderable();
-    Transform *tr = &model->ModelHandle()->GetTransform();
-    const Material * const mat = model->ModelHandle()->GetMaterial();
-    DrawRenderable(&h, tr, DrawMode::Fill, mat);
+    const Material *mat = model->GetModel()->GetMaterial();
+    const Renderable *h = model->GetModel()->GetRenderable();
+
+    // Apply model instance transform
+    Transform tr = Transform(model->GetModelInstance()->GetModel()->GetTransform());
+    tr.TransformBy(model->GetModelInstance()->GetTransform());    
+    
+    // Draw call
+    DrawRenderable(h, &tr, DrawMode::Fill, mat);
 }
 
 void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) const
 {
     assert (model != nullptr);
-    assert (model->ModelHandle() != nullptr);
-    assert (model->ModelHandle()->GetRenderable() != nullptr);
-    assert (model->ModelHandle()->GetRenderable()->Ready());
+    assert (model->GetModelInstance() != nullptr);
+    assert (model->GetModel() != nullptr);
+    assert (model->GetModel()->GetRenderable() != nullptr);
+    assert (model->GetModel()->GetRenderable()->Ready());
 
-    Renderable &h = *model->ModelHandle()->GetRenderable();
-    Transform *tr = &model->ModelHandle()->GetTransform();
+    const Renderable *h = model->GetModel()->GetRenderable();
 
-    DrawRenderable(&h, tr, DrawMode::Wireframe, nullptr);
+    // Apply model instance transform
+    Transform tr = Transform(model->GetModelInstance()->GetModel()->GetTransform());
+    tr.TransformBy(model->GetModelInstance()->GetTransform());   
+
+    // Draw call
+    DrawRenderable(h, &tr, DrawMode::Wireframe, nullptr);
 }
 
 void CommonRenderer::ClearQueue()

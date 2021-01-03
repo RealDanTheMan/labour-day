@@ -1,6 +1,7 @@
 #include "wobbleprocess.hpp"
 #include "../components/wobblecomponent.hpp"
 #include "../components/modelcomponent.hpp"
+#include "../modelinstance.hpp"
 
 using namespace Engine::Processes;
 
@@ -12,12 +13,13 @@ void WobbleProcess::OnUpdate(Entity * const entity)
     assert (cWobble != nullptr);
     if(cModel != nullptr)
     {
-        assert (cModel->ModelHandle() != nullptr);
+        assert (cModel->GetModel() != nullptr);
+        assert (cModel->GetModelInstance() != nullptr);
 
         if(cWobble->DoRotate())
         {
             const Vec3 rot = Vec3(1.0f, 1.0f, 1.0f) * cWobble->RotationSpeed() * CurrentTimeDelta();
-            cModel->ModelHandle()->GetTransform().Rotate(rot);
+            cModel->GetModelInstance()->GetTransform().Rotate(rot);
         }
 
         if(cWobble->DoScale())
@@ -38,7 +40,7 @@ void WobbleProcess::OnUpdate(Entity * const entity)
             }
 
             const float scale = ((1.0 - t) * min) + (t * max);
-            cModel->ModelHandle()->GetTransform().SetScale(scale);
+            cModel->GetModelInstance()->GetTransform().SetScale(scale);
         }
     }
 }
