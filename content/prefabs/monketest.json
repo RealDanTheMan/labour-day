@@ -5,6 +5,19 @@
     "components": 
     [
         {
+            "type": "TransformComponentClass",
+            "name": "RootTransform",
+
+            "properties":
+            [
+                {
+                    "name" : "Translation",
+                    "value" : "-5,0,0",
+                    "type" : "Vec3"
+                }
+            ]
+        },
+        {
             "type": "ModelComponentClass",
             "name": "MainModelComponent",
 
@@ -13,6 +26,19 @@
                 {
                     "name" : "model",
                     "value" : "MonkeModel",
+                    "type" : "name"
+                }
+            ]
+        },
+        {
+            "type": "ModelComponentClass",
+            "name": "SecondModelComponent",
+
+            "properties":
+            [
+                {
+                    "name" : "model",
+                    "value" : "TorusModel",
                     "type" : "name"
                 }
             ]

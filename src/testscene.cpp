@@ -4,6 +4,7 @@
 #include "engine/meshgen.hpp"
 #include "engine/components/modelcomponent.hpp"
 #include "engine/components/cameracomponent.hpp"
+#include "engine/components/transformcomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/material.hpp"
 #include "engine/types.hpp"
@@ -26,14 +27,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     D_MSG(m_cache->Count());
 
     Engine::Texture2D* ptex = m_cache->GetTexture("TestTexture01");
-    Engine::Model* pModel = m_cache->GetModel("MonkeModel");
     Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
     Engine::Prefab* prf2 = m_cache->GetPrefab("MonkeTest");
     Engine::Prefab* prf3 = m_cache->GetPrefab("TerrainTest");
 
 
     assert (ptex != nullptr);
-    assert (pModel != nullptr);
     assert (prf1 != nullptr);
     assert (prf2 != nullptr);
     assert (prf3 != nullptr);
@@ -50,13 +49,16 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // ECS setup
     m_core->ECS()->CreateEntity(prf1);
     auto player = m_core->ECS()->CreateEntity(prf2);
-    m_core->ECS()->CreateEntity(prf3);
+    auto terr = m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
 
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
+
+    // Tmp - Lower ground plane test
+    terr->Components().Get<Engine::Components::ModelComponent>()->GetModelInstance()->GetTransform().Translate(Vec3(0,-5,0));
 }
 
 Engine::Camera* TestScene::Cam()
