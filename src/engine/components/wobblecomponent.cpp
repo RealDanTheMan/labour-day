@@ -22,26 +22,14 @@ bool WobbleComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
         const ContentPropertyInfo* pPropertyInfo = pComponentInfo->m_properties[i].get();
         if(pPropertyInfo->m_name == "DoRotate")
         {
-            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
-            {
-                pCmp->ToggleScale(true);
-            }
-            else
-            {
-                pCmp->ToggleScale(false);
-            }
+            bool doRotate = SerialisationUtils::BoolFromString(pPropertyInfo->m_value);
+            pCmp->ToggleRotation(doRotate);
         }
 
         if(pPropertyInfo->m_name== "DoScale")
         {
-            if(pPropertyInfo->m_value == "true" || pPropertyInfo->m_value == "1")
-            {
-                pCmp->ToggleScale(true);
-            }
-            else
-            {
-                pCmp->ToggleScale(false);
-            }
+            bool doScale = SerialisationUtils::BoolFromString(pPropertyInfo->m_value);
+            pCmp->ToggleScale(doScale);
         }
 
         if(pPropertyInfo->m_name == "RotationSpeed")
