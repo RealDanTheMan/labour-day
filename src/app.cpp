@@ -94,20 +94,9 @@ void App::DrawGame()
     // Old common rendering
     m_core->RedrawMainWindow();
 
-    // Fetch all entities that contain model components
-    std::vector<Engine::Entity*> rEntities;
-    m_core->ECS()->AssetsByComponent<Engine::Components::ModelComponent>(rEntities);
-
-    // Draw each model component
-    for (auto &entity : rEntities)
-    {
-        auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
-        for(auto &cModel : cModels)
-        {
-            m_core->Renderer()->DrawModel(cModel);
-            m_core->Renderer()->DrawModelWire(cModel);
-        }
-    }
+    // Ecs based drawing
+    m_core->Renderer()->DrawModelComponents(m_core->ECS());
+    m_core->Renderer()->DrawTransformComponents(m_core->ECS());
 
     // Draw UI layer to the screen
     DrawUI();

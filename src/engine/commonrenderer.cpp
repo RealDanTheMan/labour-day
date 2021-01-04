@@ -1,4 +1,5 @@
 #include "commonrenderer.hpp"
+#include "meshgen.hpp"
 
 using namespace Engine;
 
@@ -13,6 +14,11 @@ m_runtimeShaders(rtShaders)
     glEnable(GL_BLEND);
     glEnable(GL_MULTISAMPLE);
     glDisable(GL_DITHER);
+
+    std::unique_ptr<Mesh> msh = MeshGen::Cube(0.1f);
+    m_locator = std::make_unique<Renderable>();
+    m_locator->Init(*msh);
+    m_locator->BindShader(rtShaders->FlatWhite());
 }
 
 
@@ -121,6 +127,49 @@ void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) cons
 
     // Draw call
     DrawRenderable(h, &tr, DrawMode::Wireframe, nullptr);
+}
+
+void CommonRenderer::DrawLocator(const Transform * tr) const
+{
+    assert (tr != nullptr);
+    assert (m_locator != nullptr);
+
+    DrawRenderable(m_locator.get(), tr, DrawMode::Wireframe, nullptr);
+}
+
+void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
+{
+    // Fetch all entities that contain model components
+    std::vector<Engine::Entity*> entities;
+    ecs->AssetsByComponent<Engine::Components::ModelComponent>(entities);
+
+    // Draw each model component
+    for (auto &entity : entities)
+    {
+        auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
+        for(auto &cModel : cModels)
+        {
+            DrawModel(cModel);
+            DrawModelWire(cModel);
+        }
+    }
+}
+
+void CommonRenderer::DrawTransformComponents(ECSSys *ecs) const
+{
+    // Fetch all entities that contain transform components
+    std::vector<Engine::Entity*> entities;
+    ecs->AssetsByComponent<Engine::Components::TransformComponent>(entities);
+
+    // Draw locator for each transform component
+    for (auto &entity : entities)
+    {
+        auto cTransforms = entity->Components().GetAll<Engine::Components::TransformComponent>();
+        for(auto &cTransform : cTransforms)
+        {
+            DrawLocator(&cTransform->GetTransform());
+        }
+    }
 }
 
 void CommonRenderer::ClearQueue()
