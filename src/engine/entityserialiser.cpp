@@ -23,8 +23,10 @@ const std::string& EntityComponentSerialiser::ClassName() const
 
 std::map<std::string, std::unique_ptr<EntityComponentSerialiser>> EntitySerialiser::m_cmpSerialisers = {};
 
-std::unique_ptr<Entity> EntitySerialiser::Deserialise (const ContentEntityInfo * sourceContent)
+std::vector<std::unique_ptr<Entity>> EntitySerialiser::Deserialise (const ContentEntityInfo * sourceContent)
 {
+    std::vector<std::unique_ptr<Entity>> all;
+
     auto pEntity = std::make_unique<Entity>();
     for (uint32_t i=0; i < sourceContent->m_components.size(); i++)
     {
@@ -34,7 +36,18 @@ std::unique_ptr<Entity> EntitySerialiser::Deserialise (const ContentEntityInfo *
         EntitySerialiser::DeserialiserEntityComponent(pEntity.get(), cmpSerialiser, sourceContent->m_components[i].get());
     }
 
-    return pEntity;
+    for(auto& childInfo : sourceContent->m_children)
+    {
+        std::vector<std::unique_ptr<Entity>> children = Deserialise(childInfo.get());
+        for(auto &child : children)
+        {
+            child->SetParent(pEntity.get());
+            all.push_back(std::move(child));
+        }
+    }
+
+    all.push_back(std::move(pEntity));
+    return all;
 }
 
 const EntityComponentSerialiser * const EntitySerialiser::GetComponentSerialiser(const std::string className)

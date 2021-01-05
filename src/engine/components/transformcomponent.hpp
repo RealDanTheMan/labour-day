@@ -22,8 +22,8 @@ namespace Engine
         class TransformComponent : public EntityComponent
         {
             public:
-            TransformComponent() = default;
-            TransformComponent(const TransformComponent &rhs) = default;
+            TransformComponent();
+            TransformComponent(const TransformComponent &rhs);
             virtual ~TransformComponent() override;
 
             void Init() override;
@@ -31,9 +31,23 @@ namespace Engine
 
             Transform & GetTransform();
             const Transform & GetTransform() const;
+            const Transform & GetTransformLocal() const;
+            void HandleTransformChanged(int);
+            virtual void OnTransformChanged(const Transform &tr);
+
+            void SetLocalTranslation(const Vec3 &translation);
+            void SetLocalRotation(const Vec3 &rotation);
+            void SetLocalScale(const Vec3 &scale);
+
+            Vec3 GetLocalTranslation() const;
+            Vec3 GetLocalRotation() const;
+            Vec3 GetLocalScale() const;
 
             private:
             Transform m_tr;
+            Transform m_local;
+            ChangedDelegate OnTransformChangedDelegate;
+            void PushLocalTransform();
         } ;
     }
 }

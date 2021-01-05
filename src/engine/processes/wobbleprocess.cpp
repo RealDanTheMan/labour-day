@@ -1,25 +1,23 @@
 #include "wobbleprocess.hpp"
 #include "../components/wobblecomponent.hpp"
-#include "../components/modelcomponent.hpp"
-#include "../modelinstance.hpp"
+#include "../components/transformcomponent.hpp"
 
 using namespace Engine::Processes;
 
 void WobbleProcess::OnUpdate(Entity * const entity)
 {
     auto cWobble = entity->Components().Get<Engine::Components::WobbleComponent>();
-    auto cModel = entity->Components().Get<Engine::Components::ModelComponent>();
+    auto cTr = entity->Components().Get<Engine::Components::TransformComponent>();
     
     assert (cWobble != nullptr);
-    if(cModel != nullptr)
+    assert (cTr != nullptr);
+    
+    if(cTr != nullptr)
     {
-        assert (cModel->GetModel() != nullptr);
-        assert (cModel->GetModelInstance() != nullptr);
-
         if(cWobble->DoRotate())
         {
             const Vec3 rot = Vec3(1.0f, 1.0f, 1.0f) * cWobble->RotationSpeed() * CurrentTimeDelta();
-            cModel->GetModelInstance()->GetTransform().Rotate(rot);
+            cTr->GetTransform().Rotate(rot);
         }
 
         if(cWobble->DoScale())
@@ -40,7 +38,7 @@ void WobbleProcess::OnUpdate(Entity * const entity)
             }
 
             const float scale = ((1.0 - t) * min) + (t * max);
-            cModel->GetModelInstance()->GetTransform().SetScale(scale);
+            cTr->GetTransform().SetScale(scale);
         }
     }
 }
@@ -48,7 +46,7 @@ void WobbleProcess::OnUpdate(Entity * const entity)
 bool WobbleProcess::IsValidEntity (Entity * const entity)
 {
     if (entity->Components().Get<Components::WobbleComponent>() != nullptr && 
-        entity->Components().Get<Components::ModelComponent>() != nullptr)
+        entity->Components().Get<Components::TransformComponent>() != nullptr)
     {
         return true;
     }

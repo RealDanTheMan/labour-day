@@ -103,7 +103,7 @@ bool AssetCache::AddModel(const std::string &filepath, const std::string &key)
         Consume<Model>(pData, key);
         return true;
     }
-
+    
     return false;
 }
 
@@ -115,19 +115,22 @@ bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
     if(entityInfo != nullptr)
     {
         // Entities are a bit more complex to deserialise so we invoke bespoke implementation
-        auto entity = EntitySerialiser::Deserialise(entityInfo.get());
+        std::vector<std::unique_ptr<Entity>> entities = EntitySerialiser::Deserialise(entityInfo.get());
 
         // Check if entity references any model resources and link them
-        auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
-        for(auto &cModel : cModels)
+        for (auto &entity : entities)
         {
-            Model * model = GetModel(cModel->m_modelName);
-            assert (model != nullptr);
-            cModel->SetModel(model);
+            auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
+            for(auto &cModel : cModels)
+            {
+                Model * model = GetModel(cModel->m_modelName);
+                assert (model != nullptr);
+                cModel->SetModel(model);
+            }
         }
 
         // Create prefab & consume it
-        auto prefab = std::make_unique<Prefab>(*entity);
+        auto prefab = std::make_unique<Prefab>(entities);
         Prefab *pData = prefab.get();
         prefab.release();
 

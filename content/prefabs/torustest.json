@@ -5,15 +5,15 @@
     "components": 
     [
         {
-            "type": "ModelComponentClass",
-            "name": "MainModelComponent",
+            "type": "TransformComponentClass",
+            "name": "RootTransform",
 
             "properties":
             [
                 {
-                    "name" : "model",
-                    "value" : "TorusModel",
-                    "type" : "name"
+                    "name": "Translation",
+                    "value": "0,0,0",
+                    "type": "Vec3"
                 }
             ]
         },
@@ -42,6 +42,31 @@
                     "name": "ScaleSpeed",
                     "value": "3.0",
                     "type": "float"
+                }
+            ]
+        }
+    ],
+
+    "children":
+    [
+        {
+            "type": "Entity",
+            "name": "TorusTest",
+
+            "components":
+            [
+                {
+                    "type": "ModelComponentClass",
+                    "name": "MainModelComponent",
+        
+                    "properties":
+                    [
+                        {
+                            "name" : "model",
+                            "value" : "TorusModel",
+                            "type" : "name"
+                        }
+                    ]
                 }
             ]
         }

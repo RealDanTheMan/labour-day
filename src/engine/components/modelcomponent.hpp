@@ -6,6 +6,7 @@
 #include "../entityserialiser.hpp"
 #include "../modelinstance.hpp"
 #include "../renderable.hpp"
+#include "transformcomponent.hpp"
 
 namespace Engine
 {
@@ -20,7 +21,7 @@ namespace Engine
             virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
         };
 
-        class ModelComponent: public EntityComponent
+        class ModelComponent: public TransformComponent
         {
             public:
             ModelComponent();
@@ -34,6 +35,7 @@ namespace Engine
             ModelInstance * GetModelInstance();
             const ModelInstance * GetModelInstance() const;
             const Model * GetModel() const;
+            void OnTransformChanged(const Transform &tr) override;
 
             public:
             std::string m_modelName;

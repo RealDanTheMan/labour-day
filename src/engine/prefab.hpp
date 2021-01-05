@@ -12,12 +12,12 @@ namespace Engine
     {
         public:
         Prefab(const Entity &entity);
+        Prefab(const std::vector<std::unique_ptr<Entity>> &entities);
         void Unload() override;
-
-        const Entity* const PrefabEntity() const;
+        std::vector<const Entity*> GetRootEntities() const;
 
         private:
-        std::unique_ptr<Entity> m_entity;
+        std::vector<std::unique_ptr<Entity>> m_entities;
 
     };
 }

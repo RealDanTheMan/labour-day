@@ -47,9 +47,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
     //pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
 
     // ECS setup
-    m_core->ECS()->CreateEntity(prf1);
+    auto torus = m_core->ECS()->CreateEntity(prf1);
     auto player = m_core->ECS()->CreateEntity(prf2);
-    auto terr = m_core->ECS()->CreateEntity(prf3);
+    //auto terr = m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
 
@@ -58,7 +58,12 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
 
     // Tmp - Lower ground plane test
-    terr->Components().Get<Engine::Components::ModelComponent>()->GetModelInstance()->GetTransform().Translate(Vec3(0,-5,0));
+    //terr->Components().Get<Engine::Components::ModelComponent>()->GetModelInstance()->GetTransform().Translate(Vec3(0,-5,0));
+
+    // Tmp - Testing nested transforms
+    player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(5,0,0));
+    player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetScale(Vec3(0.2,0.2,0.2));
+    player->SetParent(torus);
 }
 
 Engine::Camera* TestScene::Cam()

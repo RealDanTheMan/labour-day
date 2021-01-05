@@ -1,4 +1,5 @@
 #include "contentserialisation.hpp"
+#include "debugging.hpp"
 #include <iostream>
 #include <sstream>
 
@@ -40,6 +41,7 @@ std::unique_ptr<ContentEntityInfo> ContentEntityInfo::FromJSON(const configuru::
         auto info = std::make_unique<ContentEntityInfo>();
         info->m_name = json["name"].as_string();
 
+        // Read all component data
         if(json.has_key("components") && json["components"].is_array())
         {
             for (const configuru::Config& element : json["components"].as_array()) 
@@ -50,6 +52,21 @@ std::unique_ptr<ContentEntityInfo> ContentEntityInfo::FromJSON(const configuru::
                 if(cInfo != nullptr)
                 {
                     info->m_components.push_back(std::move(cInfo));
+                }
+            }
+        }
+
+        // Read all children entities (recursive)
+        if(json.has_key("children") && json["children"].is_array())
+        {
+            for (const configuru::Config& element : json["children"].as_array()) 
+            {
+                std::unique_ptr<ContentEntityInfo> cInfo = ContentEntityInfo::FromJSON(element);
+                assert (cInfo != nullptr);
+
+                if(cInfo != nullptr)
+                {
+                    info->m_children.push_back(std::move(cInfo));
                 }
             }
         }

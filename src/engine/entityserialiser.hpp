@@ -27,7 +27,7 @@ namespace Engine
         template <typename T>
         static void RegisterComponentSerialiser();
         static const EntityComponentSerialiser * const GetComponentSerialiser(const std::string className);
-        static std::unique_ptr<Entity> Deserialise(const ContentEntityInfo * sourceContent);
+        static std::vector<std::unique_ptr<Entity>> Deserialise(const ContentEntityInfo * sourceContent);
 
         private:
         static void DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser, const ContentEntityComponentInfo * pComponentInfo);

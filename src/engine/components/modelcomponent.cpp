@@ -55,12 +55,12 @@ bool ModelComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEnti
     return false;
 }
 
-ModelComponent::ModelComponent():
+ModelComponent::ModelComponent(): TransformComponent(),
     m_modelInstance(nullptr)
 {
 }
 
-ModelComponent::ModelComponent(const ModelComponent &rhs):
+ModelComponent::ModelComponent(const ModelComponent &rhs): TransformComponent(rhs),
     m_modelInstance(std::make_unique<ModelInstance>(*rhs.m_modelInstance)),
     m_modelName(rhs.m_modelName)
 {
@@ -99,4 +99,13 @@ void ModelComponent::Init()
 std::unique_ptr<Engine::EntityComponent> ModelComponent::Duplicate() const
 {
     return std::make_unique<ModelComponent>(*this);
+}
+
+void ModelComponent::OnTransformChanged(const Transform &tr)
+{
+    // Propagate component transform to the model instance
+    if(m_modelInstance != nullptr)
+    {
+        m_modelInstance->GetTransform().Set(tr);
+    }
 }
