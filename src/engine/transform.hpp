@@ -35,14 +35,21 @@ namespace Engine
         void SetScale(const Vec3 &scale);
         void SetScale(const float scale);
         void Set(const Transform &tr);
+        void Reset();
         void TransformBy(const Transform &tr);
+        void TransformByInv(const Transform &tr);
 
         Vec3 Translation() const;
         Vec3 Scale() const;
+        Vec3 Rotation() const;
 
         Event<ChangedDelegate>& ChangedEvent();
 
         static Mat4 IdentityMatrix();
+        static float XAngle(const Mat4 &mat);
+        static float YAngle(const Mat4 &mat);
+        static float ZAngle(const Mat4 &mat);
+        static void Decompose(const Mat4 &mat, Vec3 &tr, Vec3 &rot, Vec3 &scale);
 
         private:
         void ComputeMatrix();
