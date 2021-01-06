@@ -17,10 +17,17 @@ void ECSSys::Init(const uint32_t poolSize)
 
 void ECSSys::Update(const double deltaTime)
 {
+    // Make sure all components are fully initialised
+    std::vector<EntityComponent*> coms = GetAllComponentNotReady();
+    for(auto &com : coms)
+    {
+        com->PreInit();
+    }
+
+    // Invoke all component precesses update ticks
     for(uint32_t i=0; i < m_procs.size(); i++)
     {
-        std::vector<Entity*> entities;
-        AllAssets(entities);
+        std::vector<Entity*> entities = GetAllEntities();
         m_procs[i]->ProcessEntities(entities, deltaTime);
     }
 }
@@ -69,10 +76,30 @@ Entity* ECSSys::CreateEntity(const Prefab * const pref)
     return root;
 }
 
-void ECSSys::AllAssets(std::vector<Entity*>& outVec)
+std::vector<Entity*> ECSSys::GetAllEntities()
 {
-    for(uint32_t i=0; i < m_liveEntities.size(); i++)
+    std::vector<Entity*> entities;
+    for(auto &entity : m_liveEntities)
     {
-        outVec.push_back(m_liveEntities[i].get());
+        entities.push_back(entity.get());
     }
+
+    return entities;
+}
+
+std::vector<EntityComponent*> ECSSys::GetAllComponentNotReady()
+{
+    std::vector<EntityComponent*> coms;
+    for(auto &entity : m_liveEntities)
+    {
+        for(auto &com : entity->Components().Get())
+        {
+            if(!com->IsReady())
+            {
+                coms.push_back(com);
+            }
+        }
+    }
+
+    return coms;
 }

@@ -29,7 +29,10 @@ namespace Engine
 
         template <typename T>
         void AssetsByComponent(std::vector<Entity*>& outVec);
-        void AllAssets(std::vector<Entity*>& outVec);
+
+
+        std::vector<Entity*> GetAllEntities();
+        std::vector<EntityComponent*> GetAllComponentNotReady();
 
 
         private:
@@ -53,7 +56,7 @@ namespace Engine
         static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
         for(uint32_t i=0; i < m_liveEntities.size(); i++)
         {
-            if(m_liveEntities[i]->Components().Get<T>() != nullptr)
+            if(m_liveEntities[i]->Components().GetFirst<T>() != nullptr)
             {
                 outVec.push_back(m_liveEntities[i].get());
             }

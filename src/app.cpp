@@ -84,7 +84,7 @@ void App::DrawGame()
     m_core->ECS()->AssetsByComponent<Engine::Components::CameraComponent>(cams);
     if(cams.size() > 0)
     {
-        Engine::Components::CameraComponent* cCam = cams[0]->Components().Get<Engine::Components::CameraComponent>();
+        Engine::Components::CameraComponent* cCam = cams[0]->Components().GetFirst<Engine::Components::CameraComponent>();
         if(cCam->IsActive())
         {
             m_core->Renderer()->SetCamera(cCam->CameraHandle());

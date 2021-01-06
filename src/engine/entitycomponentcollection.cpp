@@ -28,3 +28,14 @@ Event<ComponentAddedDelegate> & EntityComponentCollection::ComponentAddedEvent()
 {
     return m_componentAdded;
 }
+
+std::vector<EntityComponent*> EntityComponentCollection::Get()
+{
+    std::vector<EntityComponent*> all;
+    for(auto &com : m_components)
+    {
+        all.push_back(com.get());
+    }
+
+    return all;
+}

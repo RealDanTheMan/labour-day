@@ -5,3 +5,14 @@ using namespace Engine;
 
 
 EntityComponent::~EntityComponent() {}
+
+void EntityComponent::PreInit()
+{
+    Init();
+    m_isReady = true;
+}
+
+bool EntityComponent::IsReady() const
+{
+    return m_isReady;
+}

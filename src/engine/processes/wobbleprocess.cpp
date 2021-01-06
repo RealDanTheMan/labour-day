@@ -6,8 +6,8 @@ using namespace Engine::Processes;
 
 void WobbleProcess::OnUpdate(Entity * const entity)
 {
-    auto cWobble = entity->Components().Get<Engine::Components::WobbleComponent>();
-    auto cTr = entity->Components().Get<Engine::Components::TransformComponent>();
+    auto cWobble = entity->Components().GetFirst<Engine::Components::WobbleComponent>();
+    auto cTr = entity->Components().GetFirst<Engine::Components::TransformComponent>();
     
     assert (cWobble != nullptr);
     assert (cTr != nullptr);
@@ -45,8 +45,8 @@ void WobbleProcess::OnUpdate(Entity * const entity)
 
 bool WobbleProcess::IsValidEntity (Entity * const entity)
 {
-    if (entity->Components().Get<Components::WobbleComponent>() != nullptr && 
-        entity->Components().Get<Components::TransformComponent>() != nullptr)
+    if (entity->Components().GetFirst<Components::WobbleComponent>() != nullptr && 
+        entity->Components().GetFirst<Components::TransformComponent>() != nullptr)
     {
         return true;
     }

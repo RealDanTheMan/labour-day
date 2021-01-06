@@ -5,6 +5,7 @@
 #include "engine/components/modelcomponent.hpp"
 #include "engine/components/cameracomponent.hpp"
 #include "engine/components/transformcomponent.hpp"
+#include "engine/components/playercontrollercomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/material.hpp"
 #include "engine/types.hpp"
@@ -61,9 +62,11 @@ void TestScene::Initialize(Engine::EngineCore *core)
     //terr->Components().Get<Engine::Components::ModelComponent>()->GetModelInstance()->GetTransform().Translate(Vec3(0,-5,0));
 
     // Tmp - Testing nested transforms
-    player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(5,0,0));
-    player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetScale(Vec3(0.2,0.2,0.2));
-    player->SetParent(torus);
+    //player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(5,0,0));
+    //player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetScale(Vec3(0.2,0.2,0.2));
+    //player->SetParent(torus);
+    
+    player->Components().Add<Engine::Components::PlayerControllerComponent>();
 }
 
 Engine::Camera* TestScene::Cam()

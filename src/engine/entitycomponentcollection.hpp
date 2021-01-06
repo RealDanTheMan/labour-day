@@ -27,10 +27,12 @@ namespace Engine
             T* const  Add();
 
             template<typename T>
-            T* const Get();
+            T* const GetFirst();
 
             template <typename T>
             std::vector<T*> GetAll();
+
+            std::vector<EntityComponent*> Get();
 
         private:
             uint32_t m_count;
@@ -52,7 +54,7 @@ namespace Engine
     }
 
     template<typename T>
-    T* const EntityComponentCollection::Get()
+    T* const EntityComponentCollection::GetFirst()
     {
         static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
         for(auto& com : m_components)
