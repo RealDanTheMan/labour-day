@@ -19,6 +19,4 @@ std::unique_ptr<Engine::EntityComponent> PlayerControllerComponent::Duplicate() 
 
 void PlayerControllerComponent::SetupInputActions() 
 {
-    D_MSG ("Setting up controller input actions !");
-    std::cin.ignore();
 }
