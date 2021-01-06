@@ -75,7 +75,7 @@ void Entity::SetParent(Entity *parent)
     // Remove Child references
     if(m_parent != nullptr)
     {
-        auto parentTr = m_parent->Components().Get<Components::TransformComponent>();
+        auto parentTr = m_parent->GetTransform();
         if(parentTr != nullptr)
         {
             parentTr->GetTransform().ChangedEvent().RemoveHandler(&OnParentTransformChangedDelegate);
@@ -118,7 +118,7 @@ void Entity::SetParent(Entity *parent)
         {
             if(m_parent != nullptr)
             {
-                auto parentTr = m_parent->Components().Get<Components::TransformComponent>();
+                auto parentTr = m_parent->GetTransform();
                 if(parentTr != nullptr)
                 {
                     Transform global(parentTr->GetTransform());
@@ -189,7 +189,7 @@ void Entity::OnLocalTransformChanged(int param)
 
 void Entity::UpdateEntityTransforms()
 {
-    auto parentTr = GetParent()->Components().Get<Components::TransformComponent>();
+    auto parentTr = GetParent()->GetTransform();
     if(parentTr != nullptr)
     {
         // Transform all local transform by the parent transform matrix
@@ -203,4 +203,9 @@ void Entity::UpdateEntityTransforms()
             tr->GetTransform().Set(parent);
         }
     }
+}
+
+Components::TransformComponent * Entity::GetTransform()
+{
+    return Components().GetFirst<Components::TransformComponent>();
 }

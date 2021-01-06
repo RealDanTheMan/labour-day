@@ -6,6 +6,11 @@
 
 namespace Engine
 {
+    namespace Components
+    {
+        class TransformComponent;
+    }
+
     class Entity
     {
         public:
@@ -18,11 +23,13 @@ namespace Engine
             void SetParent(Entity *parent);
             Entity * GetParent();
             bool IsRoot() const;
+
+            Components::TransformComponent * GetTransform();
         private:
             uint32_t m_uuid;
             std::unique_ptr<EntityComponentCollection> m_components;
-            Entity* m_parent;
             std::vector<Entity*> m_children;
+            Entity* m_parent;
 
             // Event delegates
             ComponentAddedDelegate OnComponentAddedDelegate;
