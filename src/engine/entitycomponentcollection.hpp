@@ -3,12 +3,15 @@
 
 
 #include "entitycomponent.hpp"
+#include "event.hpp"
 #include <stdint.h>
 #include <vector>
 #include <memory>
 
 namespace Engine
 {
+    using ComponentAddedDelegate = EventDelegate<void, EntityComponent*>;
+
     class EntityComponentCollection
     {
         public:
@@ -17,6 +20,8 @@ namespace Engine
 
             const uint32_t Count() const;
             std::unique_ptr<EntityComponentCollection> Duplicate() const;
+
+            Event<ComponentAddedDelegate> & ComponentAddedEvent();
             
             template<typename T> 
             T* const  Add();
@@ -30,6 +35,7 @@ namespace Engine
         private:
             uint32_t m_count;
             std::vector<std::unique_ptr<EntityComponent>> m_components;
+            Event<ComponentAddedDelegate> m_componentAdded;
     };
 
 
@@ -40,6 +46,8 @@ namespace Engine
         auto com = std::make_unique<T>();
         m_components.push_back(std::move(com));
 
+        // Invoke component added event & return handle to the new component
+        ComponentAddedEvent().Invoke(m_components.back().get());
         return dynamic_cast<T*>(m_components.back().get());
     }
 

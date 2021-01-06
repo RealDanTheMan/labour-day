@@ -23,3 +23,8 @@ std::unique_ptr<EntityComponentCollection> EntityComponentCollection::Duplicate(
 
     return dup;
 }
+
+Event<ComponentAddedDelegate> & EntityComponentCollection::ComponentAddedEvent()
+{
+    return m_componentAdded;
+}
