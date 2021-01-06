@@ -7,9 +7,12 @@ Entity::Entity():
     m_uuid(0),
     m_components(nullptr),
     m_parent(nullptr),
-    OnParentTransformChangedDelegate(ChangedDelegate(std::bind(&Entity::OnParentTransformChanged, this, std::placeholders::_1)))
+    OnComponentAddedDelegate(ComponentAddedDelegate(std::bind(&Entity::OnComponentAdded, this, std::placeholders::_1))),
+    OnParentTransformChangedDelegate(ChangedDelegate(std::bind(&Entity::OnParentTransformChanged, this, std::placeholders::_1))),
+    OnLocalTransformChangedDelegate(ChangedDelegate(std::bind(&Entity::OnLocalTransformChanged, this, std::placeholders::_1)))
 {
     m_components = std::make_unique<EntityComponentCollection>();
+    m_components->ComponentAddedEvent().AddHandler(&OnComponentAddedDelegate);
 }
 
 EntityComponentCollection& Entity::Components()
@@ -20,11 +23,16 @@ EntityComponentCollection& Entity::Components()
 
 std::unique_ptr<Entity> Entity::Duplicate() const 
 {
-    // TODO : Should we duplicate whole hierarchy chain ?
-
     auto dup = std::make_unique<Entity>();
     dup->m_components = m_components->Duplicate();
     dup->m_parent = m_parent;
+
+    // Hookup transform event callbacks
+    auto transforms = dup->Components().GetAll<Components::TransformComponent>();
+    for(auto &tr : transforms)
+    {
+        tr->GetTransformLocal().ChangedEvent().AddHandler(&dup->OnLocalTransformChangedDelegate);
+    }
 
     return dup;
 }
@@ -39,6 +47,14 @@ std::vector<std::unique_ptr<Entity>> Entity::DuplicateHierarchy() const
         std::vector<std::unique_ptr<Entity>> dups = child->DuplicateHierarchy();
         for(auto & dupChild : dups)
         {
+            // Hookup transform event callbacks
+            auto transforms = dupChild->Components().GetAll<Components::TransformComponent>();
+            for(auto &tr : transforms)
+            {
+                tr->GetTransformLocal().ChangedEvent().AddHandler(&dupChild->OnLocalTransformChangedDelegate);
+            }
+
+            // Update hierarchy parents & children
             dupChild->SetParent(entities[0].get());
             entities.push_back(std::move(dupChild));
         }
@@ -49,17 +65,20 @@ std::vector<std::unique_ptr<Entity>> Entity::DuplicateHierarchy() const
 
 void Entity::SetParent(Entity *parent)
 {
+    if(parent == m_parent)
+    {
+        // Early exit if we not actually changing parents
+        return;
+    }
+
     // Unhook old parent transform callbacks
     // Remove Child references
     if(m_parent != nullptr)
     {
-        auto parentTrs = m_parent->Components().GetAll<Components::TransformComponent>();
-        if(parentTrs.size() > 0)
+        auto parentTr = m_parent->Components().Get<Components::TransformComponent>();
+        if(parentTr != nullptr)
         {
-            for(auto& cTr : parentTrs)
-            {
-                cTr->GetTransform().ChangedEvent().RemoveHandler(&OnParentTransformChangedDelegate);
-            }
+            parentTr->GetTransform().ChangedEvent().RemoveHandler(&OnParentTransformChangedDelegate);
         }
 
         m_parent->m_children.erase(std::remove(
@@ -68,30 +87,66 @@ void Entity::SetParent(Entity *parent)
             m_parent->m_children.end());
     }
 
-    // Push transform to local
-    auto localTrs = Components().GetAll<Components::TransformComponent>();
-    for(auto &tr : localTrs)
+    if(parent != nullptr)
     {
-        tr->SetLocalTranslation(tr->GetTransform().Translation());
-        tr->SetLocalRotation(tr->GetTransform().Rotation());
-        tr->SetLocalScale(tr->GetTransform().Scale());
-        //tr->GetTransform().Reset();
-    }
-
-    // Hookup new parent transform callbacks
-    auto parentTrs = parent->Components().GetAll<Components::TransformComponent>();
-    if(parentTrs.size() > 0)
-    {
-        for(auto &cTr : parentTrs)
+        // Push transform to local
+        auto localTrs = Components().GetAll<Components::TransformComponent>();
+        for(auto &tr : localTrs)
         {
-            cTr->GetTransform().ChangedEvent().AddHandler(&OnParentTransformChangedDelegate);
+            tr->SetLocalTranslation(tr->GetTransform().Translation());
+            tr->SetLocalRotation(tr->GetTransform().Rotation());
+            tr->SetLocalScale(tr->GetTransform().Scale());
+            tr->GetTransform().Reset();
+        }
+    
+        // Hookup new parent transform callbacks
+        auto parentTrs = parent->Components().GetAll<Components::TransformComponent>();
+        if(parentTrs.size() > 0)
+        {
+            for(auto &cTr : parentTrs)
+            {
+                cTr->GetTransform().ChangedEvent().AddHandler(&OnParentTransformChangedDelegate);
+            }
         }
     }
+    else
+    {
+        // No parent - this will be a root object
+        // Apply local transforms to world so that global position remains unchanged
+        auto localTrs = Components().GetAll<Components::TransformComponent>();
+        for(auto &tr : localTrs)
+        {
+            if(m_parent != nullptr)
+            {
+                auto parentTr = m_parent->Components().Get<Components::TransformComponent>();
+                if(parentTr != nullptr)
+                {
+                    Transform global(parentTr->GetTransform());
+                    global.TransformBy(tr->GetTransformLocal());
+                    tr->GetTransform().Set(global);
+                }
+            }
+            else
+            {
+                //Transform local(tr->GetTransformLocal());
+                //local.TransformBy(tr->GetTransform());
+                //tr->GetTransform().Set(local);
+
+                //tr->SetLocalTranslation(Vec3());
+                //tr->SetLocalRotation(Vec3());
+                //tr->SetLocalScale(Vec3(1,1,1));
+            }
+        }
+    }
+    
 
     // Update parent handle & child references
     m_parent = parent;
-    m_parent->m_children.push_back(this);
-    OnParentTransformChanged(0);
+    if(parent != nullptr)
+    {
+        m_parent->m_children.push_back(this);
+        OnParentTransformChanged(0);
+    }
 }
 
 Entity * Entity::GetParent()
@@ -109,10 +164,31 @@ bool Entity::IsRoot() const
     return false;
 }
 
+void Entity::OnComponentAdded(EntityComponent *com)
+{
+    auto *tr = dynamic_cast<Components::TransformComponent*>(com);
+    if(tr != nullptr)
+    {
+        tr->GetTransformLocal().ChangedEvent().AddHandler(&OnLocalTransformChangedDelegate);
+    }
+}
+
 void Entity::OnParentTransformChanged(int param)
 {
     assert (GetParent() != nullptr);
+    UpdateEntityTransforms();
+}
 
+void Entity::OnLocalTransformChanged(int param)
+{
+    if(m_parent != nullptr)
+    {
+        UpdateEntityTransforms();
+    }
+}
+
+void Entity::UpdateEntityTransforms()
+{
     auto parentTr = GetParent()->Components().Get<Components::TransformComponent>();
     if(parentTr != nullptr)
     {
@@ -120,21 +196,11 @@ void Entity::OnParentTransformChanged(int param)
         auto localTrs = Components().GetAll<Components::TransformComponent>();
         for(auto &tr : localTrs)
         {
-            //Transform local(tr->GetTransformLocal());
-            //local.TransformBy(parentTr->GetTransform());
-            //tr->GetTransform().Set(local);
-
             Transform parent(parentTr->GetTransform());
-            Transform child(tr->GetTransform());
             Transform childLocal(tr->GetTransformLocal());
 
             parent.TransformBy(childLocal);
-
             tr->GetTransform().Set(parent);
-            //Transform delta(parentTr->GetTransform());
-            //delta.TransformByInv(tr->GetTransform());
-            //tr->GetTransform().TransformBy(delta);
-            
         }
     }
 }

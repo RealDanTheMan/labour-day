@@ -24,8 +24,16 @@ namespace Engine
             Entity* m_parent;
             std::vector<Entity*> m_children;
 
+            // Event delegates
+            ComponentAddedDelegate OnComponentAddedDelegate;
             ChangedDelegate OnParentTransformChangedDelegate;
+            ChangedDelegate OnLocalTransformChangedDelegate;
+
+            // Event handlers
+            void OnComponentAdded(EntityComponent *com);
             void OnParentTransformChanged(int);
+            void OnLocalTransformChanged(int);
+            void UpdateEntityTransforms();
     };
 }
 
