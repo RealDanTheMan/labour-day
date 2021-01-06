@@ -30,8 +30,10 @@ namespace Engine
             std::unique_ptr<EntityComponent> Duplicate() const override;
 
             Transform & GetTransform();
+            Transform & GetTransformLocal();
             const Transform & GetTransform() const;
             const Transform & GetTransformLocal() const;
+            
             void HandleTransformChanged(int);
             virtual void OnTransformChanged(const Transform &tr);
 
@@ -47,7 +49,6 @@ namespace Engine
             Transform m_tr;
             Transform m_local;
             ChangedDelegate OnTransformChangedDelegate;
-            void PushLocalTransform();
         } ;
     }
 }

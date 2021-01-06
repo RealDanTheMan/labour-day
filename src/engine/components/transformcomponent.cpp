@@ -101,6 +101,11 @@ const Engine::Transform & TransformComponent::GetTransform() const
     return m_tr;
 }
 
+Engine::Transform & TransformComponent::GetTransformLocal()
+{
+    return m_local;
+}
+
 const Engine::Transform & TransformComponent::GetTransformLocal() const
 {
     return m_local;
@@ -119,19 +124,16 @@ void TransformComponent::OnTransformChanged(const Transform &tr)
 void TransformComponent::SetLocalTranslation(const Vec3 &translation)
 {
     m_local.SetTranslation(translation);
-    PushLocalTransform();
 }
 
 void TransformComponent::SetLocalRotation(const Vec3 &rotation)
 {
     m_local.SetRotation(rotation);
-    PushLocalTransform();
 }
 
 void TransformComponent::SetLocalScale(const Vec3 &scale)
 {
     m_local.SetScale(scale);
-    PushLocalTransform();
 }
 
 Vec3 TransformComponent::GetLocalTranslation() const
@@ -147,11 +149,4 @@ Vec3 TransformComponent::GetLocalRotation() const
 Vec3 TransformComponent::GetLocalScale() const
 {
     return GetTransformLocal().Scale();
-}
-
-void TransformComponent::PushLocalTransform()
-{
-    //Transform tr (GetTransformLocal());
-    //tr.TransformBy(GetTransform());
-    //GetTransform().Set(tr);
 }
