@@ -3,16 +3,28 @@
 
 #include "transformcomponent.hpp"
 
+#include "../keymap.hpp"
+#include <functional>
+
 namespace Engine
 {
     namespace Components
     {
         struct ControllerAction
         {
+            enum KeyState
+            {
+                Up = 0,
+                Down = 1
+            };
+
+            ControllerAction(const std::string &name, const uint32_t key, KeyState state);
             std::string m_name;
+            uint32_t m_key;
+            KeyState m_state;
         };
 
-        class ControllerComponent : public TransformComponent
+        class ControllerComponent : public EntityComponent
         {
             public:
             ControllerComponent() = default;
@@ -20,13 +32,17 @@ namespace Engine
             virtual ~ControllerComponent() override;
 
             virtual void Init() override;
-            virtual std::unique_ptr<EntityComponent> Duplicate() const override;
+            virtual std::unique_ptr<Engine::EntityComponent> Duplicate() const =0;
             virtual void SetupInputActions()=0;
+            virtual void OnAction(const ControllerAction &action)=0;
 
             std::vector<std::unique_ptr<ControllerAction>> & InputActions();
+            void CaptureComponent(EntityComponent * target);
+            EntityComponent * CapturedComponent();
 
             private:
             std::vector<std::unique_ptr<ControllerAction>> m_actions;
+            EntityComponent * m_captured;
         };
     }
 }
