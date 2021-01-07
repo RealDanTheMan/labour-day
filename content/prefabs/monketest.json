@@ -16,6 +16,29 @@
                     "type" : "Vec3"
                 }
             ]
+        },
+        {
+            "type": "MovementComponentClass",
+            "name": "Movement",
+
+            "properties":
+            [
+                {
+                    "name" : "Speed",
+                    "value" : "1",
+                    "type" : "float"
+                },
+                {
+                    "name" : "Direction",
+                    "value" : "0,0,1",
+                    "type" : "Vec3"
+                },
+                {
+                    "name" : "Stop",
+                    "value" : "true",
+                    "type" : "bool"
+                }
+            ]
         }
     ],
 
