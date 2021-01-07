@@ -15,8 +15,15 @@ namespace Engine
             virtual ~PlayerControllerComponent() override;
             
             virtual void Init() override;
-            virtual std::unique_ptr<EntityComponent> Duplicate() const override;
+            virtual std::unique_ptr<Engine::EntityComponent> Duplicate() const override;
             virtual void SetupInputActions() override;
+            virtual void OnAction(const ControllerAction &action) override;
+
+            private:
+            void OnForwardAction();
+            void OnBackwardAction();
+            void OnLeftAction();
+            void OnRightAction();
         };
     }
 }
