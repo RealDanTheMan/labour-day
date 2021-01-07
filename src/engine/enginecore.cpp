@@ -2,6 +2,12 @@
 #include "debugging.hpp"
 #include "inputmanager.hpp"
 
+#include "components/modelcomponent.hpp"
+#include "components/wobblecomponent.hpp"
+#include "components/cameracomponent.hpp"
+#include "components/transformcomponent.hpp"
+#include "components/movementcomponent.hpp"
+
 using namespace Engine;
 
 EngineCore::EngineCore():
@@ -173,6 +179,7 @@ void EngineCore::RegisterStdComponents()
     EntitySerialiser::RegisterComponentSerialiser<Components::WobbleComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::CameraComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::TransformComponentSerialiser>();
+    EntitySerialiser::RegisterComponentSerialiser<Components::MovementComponentSerialiser>();
 }
 
 void EngineCore::IncrementTime()

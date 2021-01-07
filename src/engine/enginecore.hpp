@@ -13,10 +13,6 @@
 #include "fpscounter.hpp"
 #include <memory>
 
-#include "components/modelcomponent.hpp"
-#include "components/wobblecomponent.hpp"
-#include "components/cameracomponent.hpp"
-
 namespace Engine
 {
     struct EngineCoreSettings
