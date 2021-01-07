@@ -7,6 +7,7 @@
 #include "engine/components/transformcomponent.hpp"
 #include "engine/components/playercontrollercomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
+#include "engine/processes/controllerprocess.hpp"
 #include "engine/material.hpp"
 #include "engine/types.hpp"
 
@@ -53,6 +54,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     //auto terr = m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
+    m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
 
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
@@ -66,7 +68,8 @@ void TestScene::Initialize(Engine::EngineCore *core)
     //player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetScale(Vec3(0.2,0.2,0.2));
     //player->SetParent(torus);
     
-    player->Components().Add<Engine::Components::PlayerControllerComponent>();
+    auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
+    ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::TransformComponent>());
 }
 
 Engine::Camera* TestScene::Cam()
