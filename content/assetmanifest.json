@@ -13,6 +13,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/plane_10.obj",
             "key": "Plane10"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/pawn.obj",
+            "key": "Pawn"
         }
     ],
     "textures":
@@ -51,6 +55,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/terrainmodel.json",
             "key": "TerrainModel"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/pawnmodel.json",
+            "key": "PawnModel"
         }
     ],
     "prefabs":
@@ -66,6 +74,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/terraintest.json",
             "key": "TerrainTest"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/prefabs/pawnobject.json",
+            "key": "PawnObject"
         }
     ]
 }
