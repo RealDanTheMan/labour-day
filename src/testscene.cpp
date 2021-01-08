@@ -64,11 +64,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     // Tmp - Lower ground plane test
     terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(0,-3,0));
-
-    // Tmp - Testing nested transforms
-    //player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(5,0,0));
-    //player->Components().Get<Engine::Components::TransformComponent>()->GetTransform().SetScale(Vec3(0.2,0.2,0.2));
-    //player->SetParent(torus);
+    terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetScale(5);
     
     auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
     ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
