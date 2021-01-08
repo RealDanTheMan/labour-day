@@ -2,6 +2,7 @@
 #define PLAYER_CONTROLLER_COMPONENT_HPP_
 
 #include "controllercomponent.hpp"
+#include "movementcomponent.hpp"
 
 namespace Engine
 {
@@ -19,11 +20,8 @@ namespace Engine
             virtual void SetupInputActions() override;
             virtual void OnAction(const ControllerAction &action) override;
 
-            private:
-            void OnForwardAction();
-            void OnBackwardAction();
-            void OnLeftAction();
-            void OnRightAction();
+            protected:
+            MovementComponent * GetCapturedMovement();
         };
     }
 }

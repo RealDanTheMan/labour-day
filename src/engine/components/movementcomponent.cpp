@@ -36,14 +36,6 @@ bool MovementComponentSerialiser::Deserialise(EntityComponent* pComponent, const
 
             continue;
         }
-
-        if(prop->m_name == "Stop")
-        {
-            bool stop = SerialisationUtils::BoolFromString(prop->m_value);
-            pCom->ToggleStop(stop);
-
-            continue;
-        }
     }
 
     return true;
@@ -92,9 +84,9 @@ void MovementComponent::SetDirection(const Vec3 &dir)
     m_direction = dir;
 }
 
-void MovementComponent::ToggleStop(bool state)
+void MovementComponent::SetPendingMovement(bool state)
 {
-    m_stop = state;
+    m_pending = state;
 }
 
 float MovementComponent::GetSpeed() const
@@ -107,7 +99,7 @@ Vec3 MovementComponent::GetDirection() const
     return m_direction;
 }
 
-bool MovementComponent::GetStop() const
+bool MovementComponent::IsPendingMovement() const
 {
-    return m_stop;
+    return m_pending;
 }

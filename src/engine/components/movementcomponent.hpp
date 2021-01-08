@@ -30,16 +30,16 @@ namespace Engine
 
             void SetSpeed(const float speed);
             void SetDirection(const Vec3 &dir);
-            void ToggleStop(const bool state);
+            void SetPendingMovement(const bool state);
 
             float GetSpeed() const;
             Vec3 GetDirection() const;
-            bool GetStop() const;
+            bool IsPendingMovement() const;
 
             private:
             float m_speed;
             Vec3 m_direction;
-            bool m_stop;
+            bool m_pending;
         };
     }
 }

@@ -24,36 +24,24 @@ void PlayerControllerComponent::SetupInputActions()
     auto backward = std::make_unique<ControllerAction>("Backward", KEY_S, ControllerAction::KeyState::Down);
     auto left = std::make_unique<ControllerAction>("Left", KEY_A, ControllerAction::KeyState::Down);
     auto right = std::make_unique<ControllerAction>("Right", KEY_D, ControllerAction::KeyState::Down);
-
-    auto forwardStop = std::make_unique<ControllerAction>("Forward", KEY_W, ControllerAction::KeyState::Up);
-    auto backwardStop = std::make_unique<ControllerAction>("Backward", KEY_S, ControllerAction::KeyState::Up);
-    auto leftStop = std::make_unique<ControllerAction>("Left", KEY_A, ControllerAction::KeyState::Up);
-    auto rightStop = std::make_unique<ControllerAction>("Right", KEY_D, ControllerAction::KeyState::Up);
     
     InputActions().push_back(std::move(forward));
     InputActions().push_back(std::move(backward));
     InputActions().push_back(std::move(left));
     InputActions().push_back(std::move(right));
-
-    InputActions().push_back(std::move(forwardStop));
-    InputActions().push_back(std::move(backwardStop));
-    InputActions().push_back(std::move(leftStop));
-    InputActions().push_back(std::move(rightStop));
 }
 
 void PlayerControllerComponent::OnAction(const ControllerAction &action)
 {
-    if(CapturedComponent() == nullptr)
+    if(GetCapturedMovement() == nullptr)
     {
         // If we arent posessing anything in the scene 
         // there is no need for us to do anything
         return;
     }
 
-    TransformComponent *tr = dynamic_cast<TransformComponent*>(CapturedComponent());
-    assert (tr != nullptr);
-
     const float scale = 0.1f;
+    Vec3 dir = Vec3(0,0,0);
 
     // TMP for testing
     // TODO: Implement and use character movement component instead of doing logic here
@@ -61,22 +49,41 @@ void PlayerControllerComponent::OnAction(const ControllerAction &action)
     {
         if(action.m_name == "Forward")
         {
-            tr->GetTransform().Translate(Vec3(0,0,scale));
+            dir.z = 1.0f;
+            //tr->GetTransform().Translate(Vec3(0,0,scale));
         }
 
         if(action.m_name == "Backward")
         {
-            tr->GetTransform().Translate(Vec3(0,0,-scale));
+            dir.z = -1.0f;
+            //tr->GetTransform().Translate(Vec3(0,0,-scale));
         }
 
         if(action.m_name == "Left")
         {
-            tr->GetTransform().Translate(Vec3(scale,0,0));
+            dir.x = 1.0f;
+            //tr->GetTransform().Translate(Vec3(scale,0,0));
         }
 
         if(action.m_name == "Right")
         {
-            tr->GetTransform().Translate(Vec3(-scale,0,0));
+            dir.x = -1.0f;
+            //tr->GetTransform().Translate(Vec3(-scale,0,0));
         }
     }
+
+    if(dir == Vec3(0,0,0))
+    {
+        GetCapturedMovement()->SetPendingMovement(false);
+    }
+    else
+    {
+        GetCapturedMovement()->SetDirection(glm::normalize(dir));
+        GetCapturedMovement()->SetPendingMovement(true);
+    }
+}
+
+MovementComponent * PlayerControllerComponent::GetCapturedMovement()
+{
+    return dynamic_cast<MovementComponent*>(CapturedComponent());
 }
