@@ -1,0 +1,107 @@
+{
+    "type": "Entity",
+    "name": "PawnObject",
+    
+    "components": 
+    [
+        {
+            "type": "TransformComponentClass",
+            "name": "RootTransform",
+
+            "properties":
+            [
+                {
+                    "name" : "Translation",
+                    "value" : "0,0,0",
+                    "type" : "Vec3"
+                }
+            ]
+        },
+        {
+            "type": "MovementComponentClass",
+            "name": "Movement",
+
+            "properties":
+            [
+                {
+                    "name" : "Speed",
+                    "value" : "10",
+                    "type" : "float"
+                },
+                {
+                    "name" : "Direction",
+                    "value" : "0,0,1",
+                    "type" : "Vec3"
+                }
+            ]
+        }
+    ],
+
+    "children":
+    [
+        {
+            "type": "Entity",
+            "name": "PawnEntity",
+            
+            "components": 
+            [
+                {
+                    "type": "ModelComponentClass",
+                    "name": "MainModelComponent",
+        
+                    "properties":
+                    [
+                        {
+                            "name" : "model",
+                            "value" : "PawnModel",
+                            "type" : "name"
+                        }
+                    ]
+                },
+                {
+                    "type": "CameraComponentClass",
+                    "name": "MainCam",
+        
+                    "properties":
+                    [
+                        {
+                            "name" : "IsActive",
+                            "value" : "true",
+                            "type" : "bool"
+                        },
+                        {
+                            "name" : "NearClip",
+                            "value" : "0.001",
+                            "type" : "float"
+                        },
+                        {
+                            "name" : "FarClip",
+                            "value" : "1000000.0",
+                            "type" : "float"
+                        },
+                        {
+                            "name" : "FOV",
+                            "value" : "45.0",
+                            "type" : "float"
+                        },
+                        {
+                            "name" : "Aspect",
+                            "value" : "1.777777",
+                            "type" : "float"
+                        },
+                        {
+                            "name" : "OffsetTranslation",
+                            "value": "0,10,-10",
+                            "type" : "Vec3"
+                        },
+                        {
+                            "name" : "OffsetRotation",
+                            "value": "45,0,0",
+                            "type" : "Vec3"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
