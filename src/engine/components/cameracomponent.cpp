@@ -83,34 +83,24 @@ bool CameraComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEnt
 }
 
 CameraComponent::CameraComponent():
-m_isActive(false),
-m_tr(Engine::Transform()),
-m_offset(Engine::Transform()),
-OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1)))
+m_isActive(false)
 {
     // Some default camera values that work
     SetFOV(30.0f);
     SetAspect(1.77777);
-
-    m_tr.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
-    m_offset.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
 }
 
 CameraComponent::CameraComponent(const CameraComponent &rhs):
 m_isActive(rhs.m_isActive),
-m_tr(Engine::Transform(rhs.m_tr)),
-m_offset(Engine::Transform(rhs.m_offset)),
 m_cam(rhs.m_cam),
-OnTransformChangedDelegate(ChangedDelegate(std::bind(&CameraComponent::OnTransformChanged, this, std::placeholders::_1)))
+m_offset(rhs.m_offset)
 {
-    m_tr.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
-    m_offset.ChangedEvent().AddHandler(&OnTransformChangedDelegate);
+
 }
 
 CameraComponent::~CameraComponent()
 {
-    m_tr.ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
-    m_offset.ChangedEvent().RemoveHandler(&OnTransformChangedDelegate);
+
 }
 
 void CameraComponent::SetActive(const bool active)
@@ -180,13 +170,7 @@ Vec3 CameraComponent::GetOffsetTranslation() const
 
 Vec3 CameraComponent::GetOffsetRotation() const
 {
-    // TODO: Not yet implemented 
-    return Vec3();
-}
-
-Engine::Transform & CameraComponent::GetTransform()
-{
-    return m_tr;
+    return m_offset.Rotation();
 }
 
 const Engine::Camera * const CameraComponent::CameraHandle() const
@@ -205,15 +189,9 @@ std::unique_ptr<Engine::EntityComponent> CameraComponent::Duplicate() const
     return dup;
 }
 
-void CameraComponent::UpdateTransform()
+void CameraComponent::OnTransformChanged(const Transform &tr)
 {
-    Transform tr(m_tr);
-    tr.TransformBy(m_offset);
-    
-    m_cam.SetTransform(tr);
-}
-
-void CameraComponent::OnTransformChanged(int param)
-{
-    UpdateTransform();
+    Transform global(tr);
+    global.TransformBy(m_offset);
+    m_cam.SetTransform(global);
 }

@@ -5,6 +5,7 @@
 #include "../entityserialiser.hpp"
 #include "../transform.hpp"
 #include "../camera.hpp"
+#include "transformcomponent.hpp"
 
 namespace Engine
 {
@@ -19,7 +20,7 @@ namespace Engine
             virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
         };
 
-        class CameraComponent: public EntityComponent
+        class CameraComponent: public TransformComponent
         {
             public:
             CameraComponent();
@@ -30,7 +31,6 @@ namespace Engine
             
             void SetActive(const bool active);
             bool IsActive() const;
-            Transform & GetTransform();
 
             void SetNearClip(const float val);
             void SetFarClip(const float val);
@@ -47,16 +47,14 @@ namespace Engine
             Vec3 GetOffsetRotation() const;
             const Camera * const CameraHandle() const;
 
-            void OnTransformChanged(int);
-            ChangedDelegate OnTransformChangedDelegate;
+            virtual void OnTransformChanged(const Transform &tr) override;
 
 
             private:
             void UpdateTransform();
 
-            Camera m_cam;
-            Transform m_tr;
             Transform m_offset;
+            Camera m_cam;
             bool m_isActive;
         };
     }
