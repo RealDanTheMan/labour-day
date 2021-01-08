@@ -32,7 +32,7 @@
                     "name" : "Direction",
                     "value" : "0,0,1",
                     "type" : "Vec3"
-                },
+                }
             ]
         }
     ],
