@@ -56,6 +56,7 @@ ${PROJECT_SOURCE_DIR}/engine/components/playercontrollercomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/movementcomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/wobbleprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/controllerprocess.cpp
+${PROJECT_SOURCE_DIR}/engine/processes/movementprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/ecssys.cpp
 ${PROJECT_SOURCE_DIR}/engine/entityprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/texture2d.cpp
