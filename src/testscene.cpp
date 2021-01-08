@@ -31,7 +31,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     Engine::Texture2D* ptex = m_cache->GetTexture("TestTexture01");
     Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
-    Engine::Prefab* prf2 = m_cache->GetPrefab("MonkeTest");
+    Engine::Prefab* prf2 = m_cache->GetPrefab("PawnObject");
     Engine::Prefab* prf3 = m_cache->GetPrefab("TerrainTest");
 
 
