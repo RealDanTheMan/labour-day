@@ -1,0 +1,6 @@
+{
+    "type": "Model",
+    "name": "PawnModel",
+    "mesh": "Pawn",
+    "material": "DiffMaterial"
+}
