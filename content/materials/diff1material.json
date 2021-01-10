@@ -1,5 +1,19 @@
 {
     "type":"Material",
     "name": "Diff1Material",
-    "shader": "diff1"
+    "shader": "diff1",
+
+    "parameters":
+    [
+        {
+            "name": "tiling",
+            "value": "10,10",
+            "type": "Vec2"
+        },
+        {
+            "name": "diff1map",
+            "value": "TestTexture01",
+            "type": "Texture2D"
+        }
+    ]
 }
