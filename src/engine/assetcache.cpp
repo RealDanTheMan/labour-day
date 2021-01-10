@@ -76,6 +76,61 @@ bool AssetCache::AddMaterial(const std::string &filepath, const std::string &key
         Material *pData = mat.get();
         mat.release();
 
+        // TODO: Push shader param values
+        for (auto &param : matInfo->m_params)
+        {
+            SerialisationUtils::ValueType paramType = SerialisationUtils::GetTypeFromTypeString(param->m_type);
+            if(paramType == SerialisationUtils::ValueType::Texture2D)
+            {
+                // Texture parameters
+                Texture2D * tex = GetTexture(param->m_value);
+                assert (tex != nullptr);
+
+                pData->ShaderParameters()->SetTexValue(param->m_name, tex);
+            }
+            else 
+            {
+                switch (paramType)
+                {
+                    case SerialisationUtils::ValueType::Int:
+                    {
+                        int val = SerialisationUtils::IntFromString(param->m_value);
+                        pData->ShaderParameters()->SetValue(param->m_name, val);
+                        break;
+                    }
+                    case SerialisationUtils::ValueType::Float:
+                    {
+                        float val = SerialisationUtils::FloatFromString(param->m_value);
+                        pData->ShaderParameters()->SetValue(param->m_name, val);
+                        break;
+                    }
+                    case SerialisationUtils::ValueType::Vector2:
+                    {
+                        Vec2 val = SerialisationUtils::Vec2FromString(param->m_value);
+                        pData->ShaderParameters()->SetValue(param->m_name, val);
+                        break;
+                    }
+                    case SerialisationUtils::ValueType::Vector3:
+                    {
+                        Vec3 val = SerialisationUtils::Vec3FromString(param->m_value);
+                        pData->ShaderParameters()->SetValue(param->m_name, val);
+                        break;
+                    }
+                    case SerialisationUtils::ValueType::Vector4:
+                    {
+                        Vec4 val = SerialisationUtils::Vec4FromString(param->m_value);
+                        pData->ShaderParameters()->SetValue(param->m_name, val);
+                        break;
+                    }
+                    default:
+                    {
+                        throw std::runtime_error("Value type handling not yet implemented !");
+                        break;
+                    }
+                }
+            }
+        }
+
         Consume<Material>(pData, key);
         return true;
     }
