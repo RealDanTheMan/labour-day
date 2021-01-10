@@ -2,5 +2,5 @@
     "type": "Model",
     "name": "TerrainModel",
     "mesh": "Plane10",
-    "material": "DiffMaterial"
+    "material": "Diff1Material"
 }
