@@ -132,6 +132,7 @@ namespace Engine
         in vec2 texcoord0;
 
         uniform sampler2D diff1map;
+        uniform vec2 tiling = vec2(1,1);
 
         out vec4 SV_OUT_COLOR;
         void main()
@@ -139,7 +140,7 @@ namespace Engine
             vec3 lightdir = vec3(0, 1, 0);
             float ndotl = dot(lightdir, normalize(vnormal));
             float hLambert = ndotl * 0.5 + 0.5;
-            vec3 tex = texture(diff1map, texcoord0).rgb;
+            vec3 tex = texture(diff1map, texcoord0 * tiling).rgb;
             vec3 diff = hLambert * tex;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
