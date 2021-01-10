@@ -7,6 +7,15 @@
 
 namespace Engine
 {
+    struct ContentPropertyInfo
+    {
+        std::string m_name;
+        std::string m_value;
+        std::string m_type;
+
+        static std::unique_ptr<ContentPropertyInfo> FromJSON(const configuru::Config &json);
+    };
+
     struct ContentModelInfo
     {
         public:
@@ -24,17 +33,9 @@ namespace Engine
 
         std::string m_name;
         std::string m_shaderKey;
+        std::vector<std::unique_ptr<ContentPropertyInfo>> m_params;
 
         static std::unique_ptr<ContentMaterialInfo> FromJSON(const configuru::Config &json);
-    };
-
-    struct ContentPropertyInfo
-    {
-        std::string m_name;
-        std::string m_value;
-        std::string m_type;
-
-        static std::unique_ptr<ContentPropertyInfo> FromJSON(const configuru::Config &json);
     };
 
     struct ContentEntityComponentInfo
@@ -76,13 +77,35 @@ namespace Engine
     class SerialisationUtils 
     {
         public:
+        enum ValueType 
+        {
+            Unknown=0,
+            Int,
+            Float,
+            Vector2,
+            Vector3,
+            Vector4,
+            Matrix4,
+            Texture2D
+        };
+
         static bool BoolFromString (const std::string &str);
+        static int IntFromString(const std::string &str);
+        static float FloatFromString(const std::string &str);
         static Vec2 Vec2FromString(const std::string &str);
         static Vec3 Vec3FromString(const std::string &str);
         static Vec4 Vec4FromString(const std::string &str);
 
         static std::vector<std::string> SplitString(const std::string &str, const char delimiter);
-        static float FloatFromString(const std::string &str);
+        static ValueType GetTypeFromTypeString(const std::string &str);
+
+        private:
+        static const std::string IntTypeStr;
+        static const std::string FloatTypeStr;
+        static const std::string Vector2TypeStr;
+        static const std::string Vector3TypeStr;
+        static const std::string Vector4TypeStr;
+        static const std::string Texture2DTypeStr;
     };
 }
 

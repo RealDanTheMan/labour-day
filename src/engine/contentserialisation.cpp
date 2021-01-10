@@ -13,6 +13,19 @@ std::unique_ptr<ContentMaterialInfo> ContentMaterialInfo::FromJSON(const configu
         info->m_name = json["name"].as_string();
         info->m_shaderKey = json["shader"].as_string();
 
+        if(json.has_key("parameters") && json["parameters"].is_array())
+        {
+            for(const configuru::Config &elem : json["parameters"].as_array())
+            {
+                auto param = std::make_unique<ContentPropertyInfo>();
+                param->m_name = elem["name"].as_string();
+                param->m_value = elem["value"].as_string();
+                param->m_type = elem["type"].as_string();
+
+                info->m_params.push_back(std::move(param));
+            }
+        }
+
         return info;
     }
 
@@ -226,6 +239,13 @@ void ContentManifestInfo::Printout() const
     std::cout << "--- -------------- ---" << std::endl << std::endl;
 }
 
+const std::string SerialisationUtils::IntTypeStr = "Integer";
+const std::string SerialisationUtils::FloatTypeStr = "Float";
+const std::string SerialisationUtils::Vector2TypeStr = "Vec2";
+const std::string SerialisationUtils::Vector3TypeStr = "Vec3";
+const std::string SerialisationUtils::Vector4TypeStr = "Vec4";
+const std::string SerialisationUtils::Texture2DTypeStr = "Texture2D";
+
 bool SerialisationUtils::BoolFromString(const std::string &str)
 {
     if(str == "true" || str == "1")
@@ -315,8 +335,62 @@ float SerialisationUtils::FloatFromString(const std::string &str)
     }
     catch(const std::exception& e)
     {
-        throw std::invalid_argument("String value does not contain a number !");
+        throw std::invalid_argument("String value does not contain a float number !");
     }
     
     return val;
+}
+
+int SerialisationUtils::IntFromString(const std::string &str)
+{
+    int val;
+    try
+    {
+        val = stoi(str);
+    }
+    catch(const std::exception& e)
+    {
+        throw std::invalid_argument("String value does not contain an integer number !");
+    }
+    
+    return val;
+}
+
+SerialisationUtils::ValueType SerialisationUtils::GetTypeFromTypeString(const std::string &str)
+{
+    // TODO:
+    // This is awfully explicit 
+    // Need to find a better way to handle value types coming from text
+
+    if(str == IntTypeStr)
+    {
+        return SerialisationUtils::ValueType::Int;
+    }
+
+    if(str == FloatTypeStr)
+    {
+        return SerialisationUtils::ValueType::Float;
+    }
+
+    if(str == Vector2TypeStr)
+    {
+        return SerialisationUtils::ValueType::Vector2;
+    }
+
+    if(str == Vector3TypeStr)
+    {
+        return SerialisationUtils::ValueType::Vector3;
+    }
+
+    if(str == Vector4TypeStr)
+    {
+        return SerialisationUtils::ValueType::Vector4;
+    }
+
+    if(str == Texture2DTypeStr)
+    {
+        return SerialisationUtils::ValueType::Texture2D;
+    }
+
+    return SerialisationUtils::ValueType::Unknown;
 }
