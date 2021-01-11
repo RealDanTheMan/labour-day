@@ -6,6 +6,7 @@
 #include "engine/components/cameracomponent.hpp"
 #include "engine/components/transformcomponent.hpp"
 #include "engine/components/playercontrollercomponent.hpp"
+#include "engine/components/terraincomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/processes/controllerprocess.hpp"
 #include "engine/processes/movementprocess.hpp"
@@ -29,7 +30,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     D_MSG("Asset cache size");
     D_MSG(m_cache->Count());
 
-    Engine::Texture2D* ptex = m_cache->GetTexture("TestTexture01");
+    Engine::Texture2D* ptex = m_cache->GetTexture("TerrainTest01");
     Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
     Engine::Prefab* prf2 = m_cache->GetPrefab("PawnObject");
     Engine::Prefab* prf3 = m_cache->GetPrefab("TerrainTest");
@@ -42,9 +43,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
 
     // Load texture to GPU
-    assert (ptex->Ready());
-    ptex->GLPush();
-    assert (ptex->GLReady());
+    //assert (ptex->Ready());
+    //ptex->GLPush();
+    //assert (ptex->GLReady());
 
     // Setup material properties
     //pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
@@ -52,7 +53,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // ECS setup
     auto torus = m_core->ECS()->CreateEntity(prf1);
     auto player = m_core->ECS()->CreateEntity(prf2);
-    auto terr = m_core->ECS()->CreateEntity(prf3);
+    //auto terr = m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
@@ -63,11 +64,19 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
 
     // Tmp - Lower ground plane test
-    terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(0,-3,0));
-    terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetScale(5);
+    //terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(0,-3,0));
+    //terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetScale(5);
     
     auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
     ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
+
+    // New terrain component testing
+    auto newTerr = m_core->ECS()->CreateEntity();
+    newTerr->Components().Add<Engine::Components::TerrainComponent>();
+    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetTileSize(1.0f);
+    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetRows(64);
+    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetColumns(64);
+    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("Diff1Material"));
 }
 
 Engine::Camera* TestScene::Cam()
