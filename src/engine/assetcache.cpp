@@ -37,6 +37,8 @@ bool AssetCache::AddTexture(const std::string &filepath, const std::string &key)
         tex.release();
 
         Consume<Texture2D>(pdata, key);
+        GetTexture(key)->GLPush();
+        
         return true;
     }
 
