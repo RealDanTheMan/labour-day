@@ -76,7 +76,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetTileSize(1.0f);
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetRows(64);
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetColumns(64);
-    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("Diff1Material"));
+    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("TerrainMaterial"));
 }
 
 Engine::Camera* TestScene::Cam()
