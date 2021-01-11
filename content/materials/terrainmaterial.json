@@ -1,0 +1,19 @@
+{
+    "type":"Material",
+    "name": "TerrainMaterial",
+    "shader": "diff1",
+
+    "parameters":
+    [
+        {
+            "name": "tiling",
+            "value": "10,10",
+            "type": "Vec2"
+        },
+        {
+            "name": "diff1map",
+            "value": "TerrainTest01",
+            "type": "Texture2D"
+        }
+    ]
+}

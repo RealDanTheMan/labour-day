@@ -43,8 +43,11 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/diff1material.json",
             "key": "Diff1Material"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/materials/terrainmaterial.json",
+            "key": "TerrainMaterial"
         }
-        
     ],
     "models":
     [
