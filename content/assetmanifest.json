@@ -24,6 +24,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/test-01.jpg",
             "key": "TestTexture01"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/textures/terrain-debug-01.png",
+            "key": "TerrainTest01"
         }
     ],
     "materials":
