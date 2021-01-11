@@ -54,6 +54,7 @@ ${PROJECT_SOURCE_DIR}/engine/components/cameracomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/controllercomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/playercontrollercomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/movementcomponent.cpp
+${PROJECT_SOURCE_DIR}/engine/components/terraincomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/wobbleprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/controllerprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/movementprocess.cpp
