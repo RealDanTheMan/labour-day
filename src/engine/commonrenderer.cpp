@@ -150,7 +150,11 @@ void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
         for(auto &cModel : cModels)
         {
             DrawModel(cModel);
-            DrawModelWire(cModel);
+
+            if(GetRenderSettings().m_wireframe)
+            {
+                DrawModelWire(cModel);
+            }
         }
     }
 }
@@ -187,9 +191,19 @@ void CommonRenderer::SetCamera(const Camera *cam)
     m_activeCam = cam;
 }
 
+void CommonRenderer::SetRenderSettings(const RenderSettings &settings)
+{
+    m_settings = RenderSettings(settings);
+}
+
 const Camera * const CommonRenderer::GetCamera() const
 {
     return m_activeCam;
+}
+
+const RenderSettings & CommonRenderer::GetRenderSettings() const
+{
+    return m_settings;
 }
 
 void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Transform *tr) const

@@ -16,6 +16,11 @@ namespace Engine
         Wireframe
     };
 
+    struct RenderSettings
+    {
+        bool m_wireframe;
+    };
+
     class CommonRenderer
     {
         public:
@@ -34,8 +39,10 @@ namespace Engine
         void ClearQueue();
         void AddToQueue(const Renderable *renderable);
         void SetCamera(const Camera *cam);
+        void SetRenderSettings(const RenderSettings &settings);
 
         const Camera * const GetCamera() const;
+        const RenderSettings & GetRenderSettings() const;
 
         private:
 
@@ -47,6 +54,7 @@ namespace Engine
         const Camera* m_activeCam;
         const RuntimeShaders * const m_runtimeShaders;
         std::unique_ptr<Renderable> m_locator;
+        RenderSettings m_settings;
     };
 }
 
