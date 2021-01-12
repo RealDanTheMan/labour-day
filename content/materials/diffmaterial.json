@@ -1,5 +1,14 @@
 {
     "type":"Material",
     "name": "DiffMaterial",
-    "shader": "diff"
+    "shader": "diff",
+
+    "parameters":
+    [
+        {
+            "name": "tint",
+            "value": "0.8, 0.2,0.45",
+            "type": "Vec3"
+        }
+    ]
 }
