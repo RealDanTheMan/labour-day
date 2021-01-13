@@ -14,6 +14,7 @@ void DebugOverlay::OnUpdate()
 {
     DrawPerfStats();
     DrawCameraInfo();
+    DrawRenderSettings();
 }
 
 void DebugOverlay::DrawPerfStats() const
@@ -60,4 +61,24 @@ void DebugOverlay::DrawCameraInfo() const
     ImGui::Text(aspect.c_str(), nullptr);
 
     ImGui::End();
+}
+
+void DebugOverlay::DrawRenderSettings ()
+{
+    UpdateEngineRenderSettings();
+
+    ImGui::Begin("Render Settings");
+    ImGui::AlignTextToFramePadding();
+
+    ImGui::Text("Wireframe: ", nullptr); ImGui::SameLine();
+    ImGui::Checkbox("", &m_renderSettings.m_wireframe);
+    ImGui::End();
+}
+
+void DebugOverlay::UpdateEngineRenderSettings()
+{
+    RenderSettings settings(m_core->Renderer()->GetRenderSettings());
+    settings.m_wireframe = m_renderSettings.m_wireframe;
+
+    m_core->Renderer()->SetRenderSettings(settings);
 }
