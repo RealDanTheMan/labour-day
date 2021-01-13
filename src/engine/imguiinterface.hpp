@@ -13,6 +13,7 @@ namespace Engine
     class IMGuiPanel
     {
         public:
+        virtual void OnInit()=0;
         virtual void OnUpdate()=0;
     };
 

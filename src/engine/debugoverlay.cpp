@@ -10,8 +10,15 @@ m_core(engine)
 
 }
 
+void DebugOverlay::OnInit()
+{
+    // Make sure local render setting first defaut to engine default settings
+    m_renderSettings = RenderSettings(m_core->Renderer()->GetRenderSettings());
+}
+
 void DebugOverlay::OnUpdate()
 {
+    // Issue panel drawing commands
     DrawPerfStats();
     DrawCameraInfo();
     DrawRenderSettings();

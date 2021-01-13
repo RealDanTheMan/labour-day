@@ -47,4 +47,5 @@ void IMGuiInterface::Render()
 void IMGuiInterface::AddPanel(IMGuiPanel * const panel)
 {
     m_panels.push_back(panel);
+    m_panels.back()->OnInit();
 }

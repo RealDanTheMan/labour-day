@@ -9,7 +9,8 @@ namespace Engine
     {
         public:
         DebugOverlay(EngineCore * const engine);
-        void OnUpdate() override;
+        virtual void OnInit() override;
+        virtual void OnUpdate() override;
 
         private:
         EngineCore * const m_core;
