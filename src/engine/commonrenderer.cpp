@@ -19,6 +19,9 @@ m_runtimeShaders(rtShaders)
     m_locator = std::make_unique<Renderable>();
     m_locator->Init(*msh);
     m_locator->BindShader(rtShaders->FlatWhite());
+
+    // Default render settings
+    m_settings.m_wireframe = true;
 }
 
 
