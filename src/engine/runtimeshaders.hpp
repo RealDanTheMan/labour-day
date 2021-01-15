@@ -88,14 +88,15 @@ namespace Engine
         in vec3 vnormal;
         in vec2 texcoord0;
 
+        uniform float SV_MAIN_LIGHT_INTENSITY;
+        uniform vec3 SV_MAIN_LIGHT_DIR;
         uniform vec3 tint;
 
         out vec4 SV_OUT_COLOR;
         void main()
         {
-            vec3 lightdir = vec3(0, 1, 0);
-            float ndotl = dot(lightdir, normalize(vnormal));
-            float hLambert = ndotl * 0.5 + 0.5;
+            float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
+            float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
             vec3 diff = hLambert * vec3(1, 1, 1) * tint;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
@@ -131,15 +132,17 @@ namespace Engine
         in vec3 vnormal;
         in vec2 texcoord0;
 
+        uniform float SV_MAIN_LIGHT_INTENSITY;
+        uniform vec3 SV_MAIN_LIGHT_DIR;
+
         uniform sampler2D diff1map;
         uniform vec2 tiling = vec2(1,1);
 
         out vec4 SV_OUT_COLOR;
         void main()
         {
-            vec3 lightdir = vec3(0, 1, 0);
-            float ndotl = dot(lightdir, normalize(vnormal));
-            float hLambert = ndotl * 0.5 + 0.5;
+            float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
+            float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
             vec3 tex = texture(diff1map, texcoord0 * tiling).rgb;
             vec3 diff = hLambert * tex;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
