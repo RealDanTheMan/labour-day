@@ -22,6 +22,10 @@ m_runtimeShaders(rtShaders)
 
     // Default render settings
     m_settings.m_wireframe = true;
+
+    // Fallback light setup
+    m_defaultLight.SetDirection(Vec3(0,1,0));
+    m_defaultLight.SetIntensity(1.0f);
 }
 
 
@@ -51,11 +55,12 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
     {
         case DrawMode::Wireframe:
             glUseProgram(m_runtimeShaders->FlatWhite()->GetHandle());
-            PushUniformShaderParams(renderable->GetShader(), tr);
+            PushUniformShaderParams(m_runtimeShaders->FlatWhite(), tr);
             break;
         default:
             glUseProgram(renderable->GetShader()->GetHandle());
             PushUniformShaderParams(renderable->GetShader(), tr);
+            PushLightShaderParams(renderable->GetShader());
             if(mat != nullptr)
             {
                 PushMaterialShaderParams(*renderable->GetShader(), *mat);
@@ -209,11 +214,22 @@ const RenderSettings & CommonRenderer::GetRenderSettings() const
     return m_settings;
 }
 
+LightsCache & CommonRenderer::GetLightsCache() 
+{
+    return m_lightsCache;
+}
+
+const LightsCache & CommonRenderer::GetLightsCache() const
+{
+    return m_lightsCache;
+}
+
 void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Transform *tr) const
 {
     assert (shader != nullptr);
     assert (tr != nullptr);
 
+    // Update MVP transform matrices
     GLint svViewLoc = glGetUniformLocation(shader->GetHandle(), SV_VIEW);
     GLint svProjLoc = glGetUniformLocation(shader->GetHandle(), SV_PROJECTION);
     GLint svModelLoc = glGetUniformLocation(shader->GetHandle(), SV_MODEL);
@@ -226,6 +242,38 @@ void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Tra
     glUniformMatrix4fv(svViewLoc, 1, GL_FALSE, &m_activeCam->View()[0][0]);
     glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_activeCam->Projection()[0][0]);
     glUniformMatrix4fv(svModelLoc, 1, GL_FALSE, &tr->Matrix()[0][0]);
+}
+
+void CommonRenderer::PushLightShaderParams(const ShaderProg *pShader) const 
+{
+    // Fetch main light
+    // If sunlight light has not been set in light cache then use fallback (engine) one
+    const DirectionalLight * pMainLight = GetLightsCache().GetSunLight();
+    if(pMainLight == nullptr)
+    {
+        pMainLight = &m_defaultLight;
+    }
+
+    // Set main light intensity shader param
+    GLint svLightIntensityLoc = glGetUniformLocation(pShader->GetHandle(), SV_MAIN_LIGHT_INTENSITY);
+    if(svLightIntensityLoc != -1)
+    {
+        assert (pMainLight != nullptr);
+        glUniform1f(svLightIntensityLoc, (GLfloat)pMainLight->GetIntensity());
+    }
+
+    // Set main light direction shader param
+    GLint svLightDirLoc = glGetUniformLocation(pShader->GetHandle(), SV_MAIN_LIGHT_DIR);
+    if(svLightDirLoc != -1)
+    {
+        assert (pMainLight != nullptr);
+
+        const GLfloat x = (GLfloat)pMainLight->GetDirection().x;
+        const GLfloat y = (GLfloat)pMainLight->GetDirection().y;
+        const GLfloat z = (GLfloat)pMainLight->GetDirection().z;
+        
+        glUniform3f(svLightDirLoc, x, y, z);
+    }
 }
 
 void CommonRenderer::PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const

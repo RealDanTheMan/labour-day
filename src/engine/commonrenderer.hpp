@@ -4,8 +4,10 @@
 #include "components/modelcomponent.hpp"
 #include "components/transformcomponent.hpp"
 #include "camera.hpp"
+#include "lights.hpp"
 #include "runtimeshaders.hpp"
 #include "ecssys.hpp"
+#include "lightscache.hpp"
 #include <vector>
 
 namespace Engine
@@ -43,10 +45,13 @@ namespace Engine
 
         const Camera * const GetCamera() const;
         const RenderSettings & GetRenderSettings() const;
+        const LightsCache & GetLightsCache() const;
+        LightsCache & GetLightsCache();
 
         private:
 
         void PushUniformShaderParams(const ShaderProg *shader, const Transform *transform) const;
+        void PushLightShaderParams(const ShaderProg *shader) const;
         void PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const;
         void BindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
         void UnbindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
@@ -55,6 +60,9 @@ namespace Engine
         const RuntimeShaders * const m_runtimeShaders;
         std::unique_ptr<Renderable> m_locator;
         RenderSettings m_settings;
+        LightsCache m_lightsCache;
+        DirectionalLight m_defaultLight;
+
     };
 }
 
