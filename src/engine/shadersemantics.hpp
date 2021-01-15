@@ -10,7 +10,8 @@ namespace Engine
     extern const char* SV_PROJECTION;
     extern const char* SV_VIEW;
     extern const char* SV_MODEL;
-     
+    extern const char* SV_MAIN_LIGHT_DIR;
+    extern const char* SV_MAIN_LIGHT_INTENSITY;
 }
 
 #endif
