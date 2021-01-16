@@ -95,7 +95,7 @@ namespace Engine
         out vec4 SV_OUT_COLOR;
         void main()
         {
-            float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
+            float ndotl = dot(normalize(-SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
             vec3 diff = hLambert * vec3(1, 1, 1) * tint;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
@@ -141,7 +141,7 @@ namespace Engine
         out vec4 SV_OUT_COLOR;
         void main()
         {
-            float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
+            float ndotl = dot(normalize(-SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
             vec3 tex = texture(diff1map, texcoord0 * tiling).rgb;
             vec3 diff = hLambert * tex;
