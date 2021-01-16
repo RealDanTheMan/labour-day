@@ -50,6 +50,7 @@ namespace Engine
         static float YAngle(const Mat4 &mat);
         static float ZAngle(const Mat4 &mat);
         static void Decompose(const Mat4 &mat, Vec3 &tr, Vec3 &rot, Vec3 &scale);
+        static Mat4 RotMatrixFromTransform(const Transform &tr);
 
         private:
         void ComputeMatrix();

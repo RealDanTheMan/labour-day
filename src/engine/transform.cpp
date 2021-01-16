@@ -244,3 +244,8 @@ void Transform::Decompose(const Mat4 &mat, Vec3 &tr, Vec3 &rot, Vec3 &scale)
     glm::decompose(mat, scale, orientation, tr, skew, perspective);
     rot = glm::degrees(glm::eulerAngles(orientation));
 }
+
+Mat4 Transform::RotMatrixFromTransform(const Transform &tr)
+{
+    return tr.m_rotZ * tr.m_rotY * tr.m_rotX;
+}
