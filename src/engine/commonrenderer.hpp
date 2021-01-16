@@ -37,6 +37,7 @@ namespace Engine
         void DrawLocator(const Transform * tr) const;
         void DrawModelComponents(ECSSys *ecs) const;
         void DrawTransformComponents(ECSSys *ecs) const;
+        void DrawLightComponents(ECSSys * ecs) const;
 
         void ClearQueue();
         void AddToQueue(const Renderable *renderable);

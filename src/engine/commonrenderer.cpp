@@ -1,5 +1,6 @@
 #include "commonrenderer.hpp"
 #include "meshgen.hpp"
+#include "components/lightcomponent.hpp"
 
 using namespace Engine;
 
@@ -180,6 +181,22 @@ void CommonRenderer::DrawTransformComponents(ECSSys *ecs) const
         for(auto &cTransform : cTransforms)
         {
             DrawLocator(&cTransform->GetTransform());
+        }
+    }
+}
+
+void CommonRenderer::DrawLightComponents(ECSSys * ecs) const
+{
+    std::vector<Engine::Entity*> entities;
+    ecs->AssetsByComponent<Engine::Components::LightComponent>(entities);
+
+    // Draw locator for each transform component
+    for (auto &entity : entities)
+    {
+        auto cLights = entity->Components().GetAll<Engine::Components::LightComponent>();
+        for(auto &cLight : cLights)
+        {
+            DrawLocator(&cLight->GetTransform());
         }
     }
 }

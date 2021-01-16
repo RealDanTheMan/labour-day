@@ -96,7 +96,10 @@ void App::DrawGame()
 
     // Ecs based drawing
     m_core->Renderer()->DrawModelComponents(m_core->ECS());
+
+    // Draw component gizmos for debugging 
     m_core->Renderer()->DrawTransformComponents(m_core->ECS());
+    m_core->Renderer()->DrawLightComponents(m_core->ECS());
 
     // Draw UI layer to the screen
     DrawUI();
