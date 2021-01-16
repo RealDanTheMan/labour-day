@@ -10,8 +10,7 @@ namespace Engine
         public:
         enum LightType
         {
-            Directional,
-            Point,
+            Directional
         };
 
         Light(LightType type);
