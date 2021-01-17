@@ -26,13 +26,15 @@ m_frameBuffer(0)
 void ShadowFrameBuffer::Init()
 {
     assert (!Ready());
+    assert (Width() > 0);
+    assert (Height() > 0);
 
     // Generate and bind texture object for this frame buffer
     glGenTextures(1, &m_shadowMap);
     glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 
     // Generate shadow map texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, Width(), Height(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, Width(), Height(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr );
 
 
     // Configure shadow map texture parameters
@@ -50,6 +52,8 @@ void ShadowFrameBuffer::Init()
     glGenFramebuffers(1, &m_frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, m_shadowMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
 
     // Unbind frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
