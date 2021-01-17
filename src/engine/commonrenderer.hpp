@@ -8,6 +8,7 @@
 #include "runtimeshaders.hpp"
 #include "ecssys.hpp"
 #include "lightscache.hpp"
+#include "shadowmaprenderer.hpp"
 #include <vector>
 
 namespace Engine
@@ -20,6 +21,8 @@ namespace Engine
 
     struct RenderSettings
     {
+        uint32_t m_resx;
+        uint32_t m_resy;
         bool m_wireframe;
         bool m_shadows;
     };
@@ -28,7 +31,7 @@ namespace Engine
     {
         public:
 
-        CommonRenderer(const RuntimeShaders * const rtShaders);
+        CommonRenderer(const RuntimeShaders * const rtShaders, const RenderSettings &settings);
 
         void Clear() const;
         void DrawRenderables() const;
@@ -48,6 +51,7 @@ namespace Engine
         const RenderSettings & GetRenderSettings() const;
         const LightsCache & GetLightsCache() const;
         LightsCache & GetLightsCache();
+        const DirectionalLight * GetMainLight() const;
 
         private:
 
@@ -63,6 +67,7 @@ namespace Engine
         RenderSettings m_settings;
         LightsCache m_lightsCache;
         DirectionalLight m_defaultLight;
+        std::unique_ptr<ShadowmapRenderer> m_shadowRenderer;
 
     };
 }

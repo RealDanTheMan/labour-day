@@ -44,9 +44,16 @@ bool EngineCore::Initialize()
         return false;
     }
 
+    // Setup default render settings
+    RenderSettings rSettings;
+    rSettings.m_resx = m_mainWin->GetWidth();
+    rSettings.m_resy = m_mainWin->GetHeight();
+    rSettings.m_wireframe = true;
+    rSettings.m_shadows = true;
+
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
-    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get(), rSettings);
     m_time = std::make_unique<GameTime>();
     m_imgui = std::make_unique<IMGuiInterface>();
     m_imgui->Init(m_mainWin.get());
@@ -87,10 +94,17 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
         return false;
     }
 
+    // Setup default render settings
+    RenderSettings rSettings;
+    rSettings.m_resx = m_mainWin->GetWidth();
+    rSettings.m_resy = m_mainWin->GetHeight();
+    rSettings.m_wireframe = true;
+    rSettings.m_shadows = true;
+
     InputManager::Instance().Initialize(*m_mainWin);
     m_runtimeShaders = std::make_unique<RuntimeShaders>();
     m_runtimeShaders->Init();
-    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get());
+    m_renderer = std::make_unique<CommonRenderer>(m_runtimeShaders.get(), rSettings);
     m_time = std::make_unique<GameTime>();
     m_imgui = std::make_unique<IMGuiInterface>();
     m_imgui->Init(m_mainWin.get());

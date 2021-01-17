@@ -4,8 +4,9 @@
 
 using namespace Engine;
 
-CommonRenderer::CommonRenderer(const RuntimeShaders * const rtShaders):
-m_runtimeShaders(rtShaders)
+CommonRenderer::CommonRenderer(const RuntimeShaders * const rtShaders, const RenderSettings& settings):
+m_runtimeShaders(rtShaders),
+m_settings(settings)
 {
     assert (rtShaders != nullptr);
     assert (rtShaders->Ready());
@@ -21,13 +22,16 @@ m_runtimeShaders(rtShaders)
     m_locator->Init(*msh);
     m_locator->BindShader(rtShaders->FlatWhite());
 
-    // Default render settings
-    m_settings.m_wireframe = true;
-    m_settings.m_shadows = true;
-
     // Fallback light setup
     m_defaultLight.SetDirection(Vec3(0,-1,0));
     m_defaultLight.SetIntensity(1.0f);
+
+    // Setup shadow rendering
+    ShadowmapSettings shadowSettings;
+    shadowSettings.m_resx = 4096;
+    shadowSettings.m_resy = 4096;
+    m_shadowRenderer = std::make_unique<ShadowmapRenderer>();
+    m_shadowRenderer->Init(shadowSettings);
 }
 
 
@@ -71,6 +75,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             break;
     }
 
+    glViewport(0, 0, GetRenderSettings().m_resx,  GetRenderSettings().m_resy);
     glBindVertexArray(renderable->VertexAttributes());
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -136,18 +141,31 @@ void CommonRenderer::DrawLocator(const Transform * tr) const
 
 void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
 {
-    // Fetch all entities that contain model components
-    std::vector<Engine::Entity*> entities;
-    ecs->AssetsByComponent<Engine::Components::ModelComponent>(entities);
+    assert (ecs != nullptr);
 
-    // Draw each model component
-    for (auto &entity : entities)
+    // Fetch all entities that contain model components
+    std::vector<Components::ModelComponent*> modelComs = ecs->GetAllComponents<Components::ModelComponent>();
+    std::vector<const ModelInstance*> instances;
+
+    // Resolve all model instances
+    for (auto &com : modelComs)
     {
-        auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
-        for(auto &cModel : cModels)
-        {
-            DrawModelInstance(cModel->GetModelInstance());
-        }
+        instances.push_back(com->GetModelInstance());
+    }
+
+    // Shadow render pass for model components
+    if(GetRenderSettings().m_shadows)
+    {
+        assert (m_shadowRenderer != nullptr);
+        assert (GetMainLight() != nullptr);
+        
+        m_shadowRenderer->RenderShadows(instances, -GetMainLight()->GetDirection());
+    }
+
+    // Main scene render pass for model components
+    for (auto &instance : instances)
+    {
+        DrawModelInstance(instance);
     }
 }
 
@@ -219,6 +237,19 @@ LightsCache & CommonRenderer::GetLightsCache()
     return m_lightsCache;
 }
 
+const DirectionalLight * CommonRenderer::GetMainLight() const
+{
+    // Fetch main light
+    // If sunlight light has not been set in light cache then use fallback (engine) one
+    const DirectionalLight * pMainLight = GetLightsCache().GetSunLight();
+    if(pMainLight == nullptr)
+    {
+        pMainLight = &m_defaultLight;
+    }
+
+    return pMainLight;
+}
+
 const LightsCache & CommonRenderer::GetLightsCache() const
 {
     return m_lightsCache;
@@ -246,31 +277,23 @@ void CommonRenderer::PushUniformShaderParams(const ShaderProg *shader, const Tra
 
 void CommonRenderer::PushLightShaderParams(const ShaderProg *pShader) const 
 {
-    // Fetch main light
-    // If sunlight light has not been set in light cache then use fallback (engine) one
-    const DirectionalLight * pMainLight = GetLightsCache().GetSunLight();
-    if(pMainLight == nullptr)
-    {
-        pMainLight = &m_defaultLight;
-    }
-
     // Set main light intensity shader param
     GLint svLightIntensityLoc = glGetUniformLocation(pShader->GetHandle(), SV_MAIN_LIGHT_INTENSITY);
     if(svLightIntensityLoc != -1)
     {
-        assert (pMainLight != nullptr);
-        glUniform1f(svLightIntensityLoc, (GLfloat)pMainLight->GetIntensity());
+        assert (GetMainLight() != nullptr);
+        glUniform1f(svLightIntensityLoc, (GLfloat)GetMainLight()->GetIntensity());
     }
 
     // Set main light direction shader param
     GLint svLightDirLoc = glGetUniformLocation(pShader->GetHandle(), SV_MAIN_LIGHT_DIR);
     if(svLightDirLoc != -1)
     {
-        assert (pMainLight != nullptr);
+        assert (GetMainLight() != nullptr);
 
-        const GLfloat x = (GLfloat)pMainLight->GetDirection().x;
-        const GLfloat y = (GLfloat)pMainLight->GetDirection().y;
-        const GLfloat z = (GLfloat)pMainLight->GetDirection().z;
+        const GLfloat x = -(GLfloat)GetMainLight()->GetDirection().x;
+        const GLfloat y = -(GLfloat)GetMainLight()->GetDirection().y;
+        const GLfloat z = -(GLfloat)GetMainLight()->GetDirection().z;
         
         glUniform3f(svLightDirLoc, x, y, z);
     }
