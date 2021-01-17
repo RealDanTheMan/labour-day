@@ -74,7 +74,7 @@ namespace Engine
 
         for(auto &entity : m_liveEntities)
         {
-            std::vector<T*> entityComs = entity->Components().GetAll<Components::ModelComponent>();
+            std::vector<T*> entityComs = entity->Components().GetAll<T>();
             for(auto &com : entityComs)
             {
                 coms.push_back(com);
