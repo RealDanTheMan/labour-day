@@ -21,6 +21,7 @@ namespace Engine
     struct RenderSettings
     {
         bool m_wireframe;
+        bool m_shadows;
     };
 
     class CommonRenderer
@@ -32,8 +33,7 @@ namespace Engine
         void Clear() const;
         void DrawRenderables() const;
         void DrawRenderable(const Renderable *renderable, const Transform* tr, const DrawMode mode, const Material * const mat) const;
-        void DrawModel(const Components::ModelComponent *model) const;
-        void DrawModelWire(const Components::ModelComponent *model) const;
+        void DrawModelInstance(const ModelInstance *instance) const;
         void DrawLocator(const Transform * tr) const;
         void DrawModelComponents(ECSSys *ecs) const;
         void DrawTransformComponents(ECSSys *ecs) const;

@@ -23,9 +23,10 @@ m_runtimeShaders(rtShaders)
 
     // Default render settings
     m_settings.m_wireframe = true;
+    m_settings.m_shadows = true;
 
     // Fallback light setup
-    m_defaultLight.SetDirection(Vec3(0,1,0));
+    m_defaultLight.SetDirection(Vec3(0,-1,0));
     m_defaultLight.SetIntensity(1.0f);
 }
 
@@ -101,41 +102,28 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
     glBindVertexArray(0);
 }
 
-void CommonRenderer::DrawModel(const Components::ModelComponent *model) const
+void CommonRenderer::DrawModelInstance(const ModelInstance *instance) const
 {
-    assert (model != nullptr);
-    assert (model->GetModelInstance() != nullptr);
-    assert (model->GetModel() != nullptr);
-    assert (model->GetModel()->GetRenderable() != nullptr);
-    assert (model->GetModel()->GetRenderable()->Ready());
+    assert (instance != nullptr);
+    assert (instance->GetModel() != nullptr);
+    assert (instance->GetModel()->GetRenderable() != nullptr);
+    assert (instance->GetModel()->GetRenderable()->Ready());
 
-    const Material *mat = model->GetModel()->GetMaterial();
-    const Renderable *h = model->GetModel()->GetRenderable();
+    const Material *mat = instance->GetModel()->GetMaterial();
+    const Renderable *h = instance->GetModel()->GetRenderable();
 
     // Apply model instance transform
-    Transform tr = Transform(model->GetModelInstance()->GetModel()->GetTransform());
-    tr.TransformBy(model->GetModelInstance()->GetTransform());    
+    Transform tr = Transform(instance->GetModel()->GetTransform());
+    tr.TransformBy(instance->GetTransform());
     
-    // Draw call
+    // Main pass draw call
     DrawRenderable(h, &tr, DrawMode::Fill, mat);
-}
 
-void CommonRenderer::DrawModelWire(const Components::ModelComponent *model) const
-{
-    assert (model != nullptr);
-    assert (model->GetModelInstance() != nullptr);
-    assert (model->GetModel() != nullptr);
-    assert (model->GetModel()->GetRenderable() != nullptr);
-    assert (model->GetModel()->GetRenderable()->Ready());
-
-    const Renderable *h = model->GetModel()->GetRenderable();
-
-    // Apply model instance transform
-    Transform tr = Transform(model->GetModelInstance()->GetModel()->GetTransform());
-    tr.TransformBy(model->GetModelInstance()->GetTransform());   
-
-    // Draw call
-    DrawRenderable(h, &tr, DrawMode::Wireframe, nullptr);
+    // Wireframe draw call
+    if(GetRenderSettings().m_wireframe)
+    {
+        DrawRenderable(h, &tr, DrawMode::Wireframe, nullptr);
+    }
 }
 
 void CommonRenderer::DrawLocator(const Transform * tr) const
@@ -158,12 +146,7 @@ void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
         auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
         for(auto &cModel : cModels)
         {
-            DrawModel(cModel);
-
-            if(GetRenderSettings().m_wireframe)
-            {
-                DrawModelWire(cModel);
-            }
+            DrawModelInstance(cModel->GetModelInstance());
         }
     }
 }
