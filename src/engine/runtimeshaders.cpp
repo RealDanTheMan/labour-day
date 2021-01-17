@@ -5,6 +5,7 @@ using namespace Engine;
 
 void RuntimeShaders::Init()
 {
+    // Unlit flat white shader
     std::unique_ptr<ShaderSource> flatWhiteVS = std::make_unique<ShaderSource>(FLAT_WHITE_VERT_SRC, ShaderSource::ShaderSourceType::Vertex);
     std::unique_ptr<ShaderSource> flatWhitePS = std::make_unique<ShaderSource>(FLAT_WHITE_PIX_SRC, ShaderSource::ShaderSourceType::Pixel);
     flatWhiteVS->Compile();
@@ -22,6 +23,7 @@ void RuntimeShaders::Init()
     flatWhiteVS->Free();
     flatWhitePS->Free();
 
+    // Simple diffuse shader
     std::unique_ptr<ShaderSource> diffVS = std::make_unique<ShaderSource>(DIFF_VERT_SRC, ShaderSource::ShaderSourceType::Vertex);
     std::unique_ptr<ShaderSource> diffPS = std::make_unique<ShaderSource>(DIFF_PIX_SRC, ShaderSource::ShaderSourceType::Pixel);
     diffVS->Compile();
@@ -39,6 +41,7 @@ void RuntimeShaders::Init()
     diffVS->Free();
     diffPS->Free();
 
+    // Simple diffuse map shader
     std::unique_ptr<ShaderSource> diff1VS = std::make_unique<ShaderSource>(DIFF1_VERT_SRC, ShaderSource::ShaderSourceType::Vertex);
     std::unique_ptr<ShaderSource> diff1PS = std::make_unique<ShaderSource>(DIFF1_PIX_SRC, ShaderSource::ShaderSourceType::Pixel);
     diff1VS->Compile();
@@ -69,6 +72,12 @@ void RuntimeShaders::Free()
     {
         m_diff->Free();
         m_diff.reset();
+    }
+
+    if(m_diff1 != nullptr)
+    {
+        m_diff1->Free();
+        m_diff1.reset();
     }
 }
 
