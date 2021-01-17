@@ -30,6 +30,9 @@ namespace Engine
         template <typename T>
         void AssetsByComponent(std::vector<Entity*>& outVec);
 
+        template <typename T>
+        std::vector<T*> GetAllComponents();
+
 
         std::vector<Entity*> GetAllEntities();
         std::vector<EntityComponent*> GetAllComponentNotReady();
@@ -61,6 +64,24 @@ namespace Engine
                 outVec.push_back(m_liveEntities[i].get());
             }
         }
+    }
+
+    template <typename T>
+    std::vector<T*> ECSSys::GetAllComponents()
+    {
+        static_assert (std::is_base_of<EntityComponent, T>::value, "Invalid template type, expected derived from <EntityComponent>");
+        std::vector<T*> coms;
+
+        for(auto &entity : m_liveEntities)
+        {
+            std::vector<T*> entityComs = entity->Components().GetAll<Components::ModelComponent>();
+            for(auto &com : entityComs)
+            {
+                coms.push_back(com);
+            }
+        }
+
+        return coms;
     }
 }
 
