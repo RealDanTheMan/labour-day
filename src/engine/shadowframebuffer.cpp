@@ -54,7 +54,10 @@ void ShadowFrameBuffer::Init()
     // Unbind frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    m_ready = false;
+    if(m_shadowMap != 0 && m_frameBuffer != 0)
+    {
+        m_ready = true;
+    }
 }
 
 bool ShadowFrameBuffer::Ready() const
@@ -75,4 +78,9 @@ uint32_t ShadowFrameBuffer::Height() const
 const GLuint ShadowFrameBuffer::FramebufferHandle() const
 {
     return m_frameBuffer;
+}
+
+const GLuint ShadowFrameBuffer::ShadowMapHandle() const
+{
+    return m_shadowMap;
 }

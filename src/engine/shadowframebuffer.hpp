@@ -16,6 +16,7 @@ namespace Engine
         uint32_t Width() const;
         uint32_t Height() const;
         const GLuint FramebufferHandle() const;
+        const GLuint ShadowMapHandle() const;
 
         void Init();
 
