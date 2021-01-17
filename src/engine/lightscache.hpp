@@ -9,7 +9,7 @@ namespace Engine
     class LightsCache
     {
         public:
-        LightsCache() = default;
+        LightsCache();
         LightsCache(const LightsCache &rhs) = default;
 
         void Add(Light * pLight);

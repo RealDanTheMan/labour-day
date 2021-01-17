@@ -3,6 +3,12 @@
 
 using namespace Engine;
 
+LightsCache::LightsCache():
+m_sunLight(nullptr)
+{
+    
+}
+
 void LightsCache::Add(Light * pLight)
 {
     m_lights.push_back(pLight);
