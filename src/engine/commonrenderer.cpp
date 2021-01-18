@@ -30,6 +30,8 @@ m_settings(settings)
     ShadowmapSettings shadowSettings;
     shadowSettings.m_resx = 4096;
     shadowSettings.m_resy = 4096;
+    shadowSettings.m_minDistance = 0.001;
+    shadowSettings.m_maxDistance = 300;
     m_shadowRenderer = std::make_unique<ShadowmapRenderer>();
     m_shadowRenderer->Init(shadowSettings);
 }
@@ -39,6 +41,8 @@ void CommonRenderer::Clear() const
 {
     glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // TODO: Perhaps clear the shadowmap frame buffer here as well ?!
 }
 
 [[deprecated]]

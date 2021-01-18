@@ -7,6 +7,7 @@ void ShadowmapRenderer::Init(const ShadowmapSettings &settings)
 {
     assert (!Ready());
 
+    // Configure shadow frame buffer
     m_fb = std::make_unique<ShadowFrameBuffer>(settings.m_resx, settings.m_resy);
     m_fb->Init();
 
@@ -15,6 +16,12 @@ void ShadowmapRenderer::Init(const ShadowmapSettings &settings)
         m_ready = true;
     }
 
+    // Generate light projection matrix
+    assert (settings.m_minDistance > 0.0f);
+    assert (settings.m_maxDistance > 0.0f);
+    m_proj= glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, settings.m_minDistance, settings.m_maxDistance);
+
+    // Setup shadow depth vertex shader
     CompileShader();
 }
 
@@ -91,7 +98,7 @@ void ShadowmapRenderer::DrawIntoShadowMap(const ModelInstance *instance, const V
     assert (svModelLoc != -1);
 
     glUniformMatrix4fv(svViewLoc, 1, GL_FALSE, &view[0][0]);
-    //glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_activeCam->Projection()[0][0]);
+    glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_proj[0][0]);
     glUniformMatrix4fv(svModelLoc, 1, GL_FALSE, &tr.Matrix()[0][0]);
 
     // Draw into the shadow buffer

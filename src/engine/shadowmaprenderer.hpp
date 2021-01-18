@@ -10,6 +10,8 @@ namespace Engine
     {
         uint32_t m_resx;
         uint32_t m_resy;
+        float m_minDistance;
+        float m_maxDistance;
     };
 
     class ShadowmapRenderer
@@ -28,6 +30,7 @@ namespace Engine
         bool m_ready;
         std::unique_ptr<ShadowFrameBuffer> m_fb;
         std::unique_ptr<ShaderProg> m_shader;
+        Mat4 m_proj;
     };
 
     // Simple shadow pass vertex shader
