@@ -31,7 +31,7 @@ void ShaderSource::Compile()
     }
 
     assert (m_handle != 0);
-    glShaderSourceARB(m_handle, 1, &m_source, &m_len);
+    glShaderSource(m_handle, 1, &m_source, &m_len);
     glCompileShader(m_handle);
 
     delete[] src;
