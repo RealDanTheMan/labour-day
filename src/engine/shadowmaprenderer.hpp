@@ -21,16 +21,28 @@ namespace Engine
         ShadowmapRenderer(const ShadowmapRenderer &rhs) = delete;
 
         void Init(const ShadowmapSettings &settings);
-        void RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir) const;
+        void RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir);
         bool Ready() const;
+        const ShadowmapSettings & GetSettings() const;
+        const Mat4 & GetShadowProjMatrix() const;
 
         private:
-        void DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir) const;
+        void DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir);
         void CompileShader();
+        void ComputeMatrices(const Vec3 &lightDir);
+
         bool m_ready;
         std::unique_ptr<ShadowFrameBuffer> m_fb;
         std::unique_ptr<ShaderProg> m_shader;
-        Mat4 m_proj;
+        Mat4 m_lightProj;
+        Mat4 m_lightView;
+        Mat4 m_shadowProj;
+        Mat4 m_scaleBias;
+        ShadowmapSettings m_settings;
+
+        static const Vec3 UP_AXIS0;
+        static const Vec3 UP_AXIS1;
+        static const float DEF_DIST;
     };
 
     // Simple shadow pass vertex shader

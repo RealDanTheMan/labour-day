@@ -3,9 +3,23 @@
 
 using namespace Engine;
 
+const Vec3 ShadowmapRenderer::UP_AXIS0 = Vec3(0,1,0);
+const Vec3 ShadowmapRenderer::UP_AXIS1 = Vec3(0,0,1);
+const float ShadowmapRenderer::DEF_DIST = 50.0f;
+
 void ShadowmapRenderer::Init(const ShadowmapSettings &settings) 
 {
     assert (!Ready());
+
+    // Set all matrices to identity
+    m_lightView = Transform::IdentityMatrix();
+    m_lightProj = Transform::IdentityMatrix();
+    m_scaleBias = Transform::IdentityMatrix();
+    m_shadowProj = Transform::IdentityMatrix();
+
+    // Store shadow settings
+    // For now shadow settings are static for the lifetime of the renderer
+    m_settings = ShadowmapSettings(settings);
 
     // Configure shadow frame buffer
     m_fb = std::make_unique<ShadowFrameBuffer>(settings.m_resx, settings.m_resy);
@@ -15,11 +29,6 @@ void ShadowmapRenderer::Init(const ShadowmapSettings &settings)
     {
         m_ready = true;
     }
-
-    // Generate light projection matrix
-    assert (settings.m_minDistance > 0.0f);
-    assert (settings.m_maxDistance > 0.0f);
-    m_proj= glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, settings.m_minDistance, settings.m_maxDistance);
 
     // Setup shadow depth vertex shader
     CompileShader();
@@ -35,7 +44,7 @@ bool ShadowmapRenderer::Ready() const
     return false;
 }
 
-void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir) const
+void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir)
 {
     assert (Ready());
     assert (m_fb->Ready());
@@ -58,6 +67,7 @@ void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instanc
     glPolygonOffset(2.0f, 4.0f);
     
     // Draw geometry into shadow map
+    ComputeMatrices(lightDir);
     for(auto &instance : instances)
     {
         DrawIntoShadowMap(instance, lightDir);
@@ -68,7 +78,7 @@ void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instanc
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void ShadowmapRenderer::DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir) const
+void ShadowmapRenderer::DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir)
 {
     assert (Ready());
     assert (instance != nullptr);
@@ -82,11 +92,6 @@ void ShadowmapRenderer::DrawIntoShadowMap(const ModelInstance *instance, const V
     Transform tr = Transform(instance->GetModel()->GetTransform());
     tr.TransformBy(instance->GetTransform());
 
-    // Calculate light view matrix
-    const Vec3 eye = tr.Translation() + (Vec3(1000.0f,1000.0f,1000.0f) * lightDir);
-    const Vec3 target = tr.Translation();
-    const Mat4 view = glm::lookAt(eye, target, Vec3(0.0f,1.0f,0.0f));
-
     // Push shader params
     glUseProgram(m_shader->GetHandle());
     GLint svViewLoc = glGetUniformLocation(m_shader->GetHandle(), SV_VIEW);
@@ -97,8 +102,8 @@ void ShadowmapRenderer::DrawIntoShadowMap(const ModelInstance *instance, const V
     assert (svProjLoc != -1);
     assert (svModelLoc != -1);
 
-    glUniformMatrix4fv(svViewLoc, 1, GL_FALSE, &view[0][0]);
-    glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_proj[0][0]);
+    glUniformMatrix4fv(svViewLoc, 1, GL_FALSE, &m_lightView[0][0]);
+    glUniformMatrix4fv(svProjLoc, 1, GL_FALSE, &m_lightProj[0][0]);
     glUniformMatrix4fv(svModelLoc, 1, GL_FALSE, &tr.Matrix()[0][0]);
 
     // Draw into the shadow buffer
@@ -131,4 +136,48 @@ void ShadowmapRenderer::CompileShader()
 
     shadowPassVS->Free();
     shadowPassPS->Free();
+}
+
+void ShadowmapRenderer::ComputeMatrices(const Vec3 &lightDir)
+{
+    // Compute light view transoform matrix
+    const Vec3 eye = (Vec3(DEF_DIST, DEF_DIST, DEF_DIST) * lightDir);
+    if(glm::abs(glm::dot(glm::normalize(eye), UP_AXIS0)) != 1)
+    {
+        // Use default up axis if light vec is not parallel to default up axis
+        m_lightView = glm::lookAt(eye, Vec3(0,0,0), UP_AXIS0);
+    }
+    else
+    {
+        // Use alternative up axis if light vec is parallel to default up axis
+        m_lightView = glm::lookAt(eye, Vec3(0,0,0), UP_AXIS1);
+    }
+
+    // Cmpute light projection transform matrix
+    assert (GetSettings().m_minDistance > 0.0f);
+    assert (GetSettings().m_maxDistance > 0.0f);
+    m_lightProj = Mat4(glm::frustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, GetSettings().m_maxDistance));
+
+    // Compute shadow scale bias matrix
+    // Do we ever need to change this in the future - perhaps make it static ?
+    const float scale = 0.5f;
+    m_scaleBias = Mat4(
+        Vec4(scale, 0.0f, 0.0f, 0.0f),
+        Vec4(0.0f, scale, 0.0f, 0.0f),
+        Vec4(0.0f, 0.0f, scale, 0.0f),
+        Vec4(scale, scale, scale, 1.0f)
+    );
+
+    // Compute shadow projection matrix
+    m_shadowProj = m_scaleBias * m_lightProj * m_lightView;
+}
+
+const ShadowmapSettings & ShadowmapRenderer::GetSettings() const
+{
+    return m_settings;
+}
+
+const Mat4 & ShadowmapRenderer::GetShadowProjMatrix() const
+{
+    return m_shadowProj;
 }
