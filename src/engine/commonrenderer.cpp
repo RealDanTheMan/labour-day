@@ -71,6 +71,7 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             glUseProgram(renderable->GetShader()->GetHandle());
             PushUniformShaderParams(renderable->GetShader(), tr);
             PushLightShaderParams(renderable->GetShader());
+            PushShadowShaderParams(renderable->GetShader());
             if(mat != nullptr)
             {
                 PushMaterialShaderParams(*renderable->GetShader(), *mat);
@@ -303,6 +304,27 @@ void CommonRenderer::PushLightShaderParams(const ShaderProg *pShader) const
     }
 }
 
+void CommonRenderer::PushShadowShaderParams(const ShaderProg *pShader) const
+{
+    GLint svShadowProj0Loc = glGetUniformLocation(pShader->GetHandle(), SV_SHADOW_PROJ0);
+    if(svShadowProj0Loc != -1)
+    {
+        assert (m_shadowRenderer != nullptr);
+        glUniformMatrix4fv(svShadowProj0Loc, 1, GL_FALSE, &m_shadowRenderer->GetShadowProjMatrix()[0][0]);
+    }
+
+    GLint svShadowMap0Loc = glGetUniformLocation(pShader->GetHandle(), SV_SHADOW_MAP0);
+    if(svShadowMap0Loc != -1)
+    {
+        assert (m_shadowRenderer != nullptr);
+
+        glActiveTexture(GL_TEXTURE0 + SHADOW_MAP0_IDX);
+        glBindTexture(GL_TEXTURE_2D, m_shadowRenderer->GetShadowMapHandle());
+        glUniform1i(svShadowMap0Loc, SHADOW_MAP0_IDX);
+        glBindTextureUnit(SHADOW_MAP0_IDX, m_shadowRenderer->GetShadowMapHandle());
+    }
+}
+
 void CommonRenderer::PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const
 {
     GLint count;
@@ -367,6 +389,8 @@ void CommonRenderer::BindMaterialTextures(const ShaderProg &shader, const Materi
         {
             assert (val.m_tex->Ready());
             assert (val.m_tex->GLReady());
+            assert (val.m_idx < MAX_USER_TEX_COUNT);
+
             glActiveTexture(GL_TEXTURE0 + val.m_idx);
             glBindTexture(GL_TEXTURE_2D, val.m_tex->GLHandle());
 

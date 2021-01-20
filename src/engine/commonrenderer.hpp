@@ -55,8 +55,9 @@ namespace Engine
 
         private:
 
-        void PushUniformShaderParams(const ShaderProg *shader, const Transform *transform) const;
-        void PushLightShaderParams(const ShaderProg *shader) const;
+        void PushUniformShaderParams(const ShaderProg *pShader, const Transform *transform) const;
+        void PushLightShaderParams(const ShaderProg *pShader) const;
+        void PushShadowShaderParams(const ShaderProg *pShader) const;
         void PushMaterialShaderParams(const ShaderProg &shader, const Material &mat) const;
         void BindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
         void UnbindMaterialTextures(const ShaderProg &shader, const Material &mat) const;
