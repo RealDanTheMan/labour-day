@@ -64,6 +64,7 @@ namespace Engine
         uniform mat4 SV_PROJECTION;
         uniform mat4 SV_VIEW;
         uniform mat4 SV_MODEL;
+        uniform mat4 SV_SHADOW_PROJ0;
 
         mat4x4 MVP = SV_PROJECTION * SV_VIEW * SV_MODEL;
 
@@ -73,12 +74,14 @@ namespace Engine
 
         out vec3 vnormal;
         out vec2 texcoord0;
+        out vec4 shadowcoord0;
 
         void main(void)
         {
             gl_Position = MVP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
             vnormal = (SV_MODEL * vec4(SV_NORMAL.x, SV_NORMAL.y, SV_NORMAL.z, 0.0)).xyz;
             texcoord0 = SV_TEXCOORD0;
+            shadowcoord0 = SV_SHADOW_PROJ0 * (SV_MODEL * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0));
         }
     )";
 
@@ -87,17 +90,21 @@ namespace Engine
 
         in vec3 vnormal;
         in vec2 texcoord0;
+        in vec4 shadowcoord0;
 
         uniform float SV_MAIN_LIGHT_INTENSITY;
         uniform vec3 SV_MAIN_LIGHT_DIR;
+        uniform sampler2DShadow SV_SHADOW_MAP0;
         uniform vec3 tint;
+        
 
         out vec4 SV_OUT_COLOR;
         void main()
         {
             float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
-            vec3 diff = hLambert * vec3(1, 1, 1) * tint;
+            float shadow = textureProj(SV_SHADOW_MAP0, shadowcoord0);
+            vec3 diff = hLambert * vec3(1, 1, 1) * tint * shadow;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
     )";
@@ -108,6 +115,7 @@ namespace Engine
         uniform mat4 SV_PROJECTION;
         uniform mat4 SV_VIEW;
         uniform mat4 SV_MODEL;
+        uniform mat4 SV_SHADOW_PROJ0;
 
         mat4x4 MVP = SV_PROJECTION * SV_VIEW * SV_MODEL;
 
@@ -117,12 +125,14 @@ namespace Engine
 
         out vec3 vnormal;
         out vec2 texcoord0;
+        out vec4 shadowcoord0;
 
         void main(void)
         {
             gl_Position = MVP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
             vnormal = (SV_MODEL * vec4(SV_NORMAL.x, SV_NORMAL.y, SV_NORMAL.z, 0.0)).xyz;
             texcoord0 = SV_TEXCOORD0;
+            shadowcoord0 = SV_SHADOW_PROJ0 * (SV_MODEL * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0));
         }
     )";
 
@@ -131,10 +141,11 @@ namespace Engine
 
         in vec3 vnormal;
         in vec2 texcoord0;
+        in vec4 shadowcoord0;
 
         uniform float SV_MAIN_LIGHT_INTENSITY;
         uniform vec3 SV_MAIN_LIGHT_DIR;
-
+        uniform sampler2DShadow SV_SHADOW_MAP0;
         uniform sampler2D diff1map;
         uniform vec2 tiling = vec2(1,1);
 
@@ -143,8 +154,9 @@ namespace Engine
         {
             float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
+            float shadow = textureProj(SV_SHADOW_MAP0, shadowcoord0);
             vec3 tex = texture(diff1map, texcoord0 * tiling).rgb;
-            vec3 diff = hLambert * tex;
+            vec3 diff = hLambert * tex * shadow;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
     )";
