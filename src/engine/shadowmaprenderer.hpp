@@ -21,7 +21,7 @@ namespace Engine
         ShadowmapRenderer(const ShadowmapRenderer &rhs) = delete;
 
         void Init(const ShadowmapSettings &settings);
-        void RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir);
+        void RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &origin, const Vec3 &lightDir);
         bool Ready() const;
         const ShadowmapSettings & GetSettings() const;
         const Mat4 & GetShadowProjMatrix() const;
@@ -30,7 +30,7 @@ namespace Engine
         private:
         void DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir);
         void CompileShader();
-        void ComputeMatrices(const Vec3 &lightDir);
+        void ComputeMatrices(const Vec3 &origin, const Vec3 &lightDir);
 
         bool m_ready;
         std::unique_ptr<ShadowFrameBuffer> m_fb;

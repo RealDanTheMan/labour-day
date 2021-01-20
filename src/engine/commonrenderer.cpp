@@ -23,7 +23,7 @@ m_settings(settings)
     m_locator->BindShader(rtShaders->FlatWhite());
 
     // Fallback light setup
-    m_defaultLight.SetDirection(Vec3(0,-1,0));
+    m_defaultLight.SetDirection(glm::normalize(Vec3(0.5,-1,0.5)));
     m_defaultLight.SetIntensity(1.0f);
 
     // Setup shadow rendering
@@ -31,7 +31,7 @@ m_settings(settings)
     shadowSettings.m_resx = 4096;
     shadowSettings.m_resy = 4096;
     shadowSettings.m_minDistance = 0.001;
-    shadowSettings.m_maxDistance = 300;
+    shadowSettings.m_maxDistance = 100;
     m_shadowRenderer = std::make_unique<ShadowmapRenderer>();
     m_shadowRenderer->Init(shadowSettings);
 }
@@ -164,7 +164,7 @@ void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
         assert (m_shadowRenderer != nullptr);
         assert (GetMainLight() != nullptr);
         
-        m_shadowRenderer->RenderShadows(instances, -GetMainLight()->GetDirection());
+        m_shadowRenderer->RenderShadows(instances, GetCamera()->View()[3], -GetMainLight()->GetDirection());
     }
 
     // Main scene render pass for model components

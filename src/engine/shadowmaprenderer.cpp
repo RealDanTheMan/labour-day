@@ -44,7 +44,7 @@ bool ShadowmapRenderer::Ready() const
     return false;
 }
 
-void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &lightDir)
+void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &origin, const Vec3 &lightDir)
 {
     assert (Ready());
     assert (m_fb->Ready());
@@ -67,7 +67,7 @@ void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instanc
     glPolygonOffset(2.0f, 4.0f);
     
     // Draw geometry into shadow map
-    ComputeMatrices(lightDir);
+    ComputeMatrices(origin, lightDir);
     for(auto &instance : instances)
     {
         DrawIntoShadowMap(instance, lightDir);
@@ -138,19 +138,20 @@ void ShadowmapRenderer::CompileShader()
     shadowPassPS->Free();
 }
 
-void ShadowmapRenderer::ComputeMatrices(const Vec3 &lightDir)
+void ShadowmapRenderer::ComputeMatrices(const Vec3 &origin, const Vec3 &lightDir)
 {
     // Compute light view transoform matrix
-    const Vec3 eye = (Vec3(DEF_DIST, DEF_DIST, DEF_DIST) * lightDir);
-    if(glm::abs(glm::dot(glm::normalize(eye), UP_AXIS0)) != 1)
+    const Vec3 originXZ = Vec3(origin.x, 0.0f, origin.z);
+    const Vec3 eye = originXZ + (Vec3(DEF_DIST, DEF_DIST, DEF_DIST) * lightDir);
+    if(glm::abs(glm::dot(glm::normalize(eye - originXZ), UP_AXIS0)) != 1)
     {
         // Use default up axis if light vec is not parallel to default up axis
-        m_lightView = glm::lookAt(eye, Vec3(0,0,0), UP_AXIS0);
+        m_lightView = glm::lookAt(eye, originXZ, UP_AXIS0);
     }
     else
     {
         // Use alternative up axis if light vec is parallel to default up axis
-        m_lightView = glm::lookAt(eye, Vec3(0,0,0), UP_AXIS1);
+        m_lightView = glm::lookAt(eye, originXZ, UP_AXIS1);
     }
 
     // Cmpute light projection transform matrix
