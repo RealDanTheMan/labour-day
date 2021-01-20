@@ -181,3 +181,9 @@ const Mat4 & ShadowmapRenderer::GetShadowProjMatrix() const
 {
     return m_shadowProj;
 }
+
+const GLuint ShadowmapRenderer::GetShadowMapHandle() const 
+{
+    assert (m_fb != nullptr);
+    return m_fb->ShadowMapHandle();
+}

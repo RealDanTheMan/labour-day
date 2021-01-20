@@ -25,6 +25,7 @@ namespace Engine
         bool Ready() const;
         const ShadowmapSettings & GetSettings() const;
         const Mat4 & GetShadowProjMatrix() const;
+        const GLuint GetShadowMapHandle() const;
 
         private:
         void DrawIntoShadowMap(const ModelInstance *instance, const Vec3 &lightDir);
@@ -57,8 +58,6 @@ namespace Engine
 
         layout(location = 0) in vec3 SV_VERTEX;
 
-        out vec3 vnormal;
-
         void main(void)
         {
             gl_Position = MVP * vec4(SV_VERTEX.x, SV_VERTEX.y, SV_VERTEX.z, 1.0);
@@ -70,12 +69,9 @@ namespace Engine
     const std::string SHADOWPASS_PIX_SRC = R"(
         #version 330
 
-        in vec3 vnormal;
-
         out vec4 SV_OUT_COLOR;
         void main()
         {
-            SV_OUT_COLOR = vec4(1.0);
         }
     )";
 }
