@@ -77,6 +77,9 @@ void TestScene::Initialize(Engine::EngineCore *core)
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetRows(64);
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetColumns(64);
     newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("TerrainMaterial"));
+
+    // Tmp move torus up to test shadows
+    torus->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(0,5,0));
 }
 
 Engine::Camera* TestScene::Cam()
