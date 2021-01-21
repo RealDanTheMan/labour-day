@@ -33,7 +33,6 @@ void DebugOverlay::DrawPerfStats() const
     fps = std::to_string(m_core->FPS()->Get());
     frameTime = std::to_string(m_core->FPS()->GetMilliseconds());
 
-    //ImGui::NewFrame();
     ImGui::Begin("Perf Stats Panel");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("FPS: ", nullptr); ImGui::SameLine();
@@ -42,7 +41,6 @@ void DebugOverlay::DrawPerfStats() const
     ImGui::Text("Frame Time: ", nullptr); ImGui::SameLine();
     ImGui::Text(frameTime.c_str(), nullptr);
     ImGui::End();
-    //ImGui::Render();
 }
 
 void DebugOverlay::DrawCameraInfo() const
@@ -77,8 +75,8 @@ void DebugOverlay::DrawRenderSettings ()
     ImGui::Begin("Render Settings");
     ImGui::AlignTextToFramePadding();
 
-    ImGui::Text("Wireframe: ", nullptr); ImGui::SameLine();
-    ImGui::Checkbox("", &m_renderSettings.m_wireframe);
+    ImGui::Checkbox("Draw Wireframe", &m_renderSettings.m_wireframe);
+    ImGui::Checkbox("Draw Shadows", &m_renderSettings.m_shadows);
     ImGui::End();
 }
 
@@ -86,6 +84,7 @@ void DebugOverlay::UpdateEngineRenderSettings()
 {
     RenderSettings settings(m_core->Renderer()->GetRenderSettings());
     settings.m_wireframe = m_renderSettings.m_wireframe;
+    settings.m_shadows = m_renderSettings.m_shadows;
 
     m_core->Renderer()->SetRenderSettings(settings);
 }

@@ -165,7 +165,15 @@ void CommonRenderer::DrawModelComponents(ECSSys *ecs) const
         assert (m_shadowRenderer != nullptr);
         assert (GetMainLight() != nullptr);
         
+        m_shadowRenderer->ClearShadows();
         m_shadowRenderer->RenderShadows(instances, GetCamera()->View()[3], -GetMainLight()->GetDirection());
+    }
+    else if(!GetRenderSettings().m_shadows && m_shadowRenderer != nullptr)
+    {
+        // If we disable shadows after they were draw at least once 
+        // we have to clear the shadow map at least or shadow will be stuck on screen
+        // at last recorded position
+        m_shadowRenderer->ClearShadows();
     }
 
     // Main scene render pass for model components

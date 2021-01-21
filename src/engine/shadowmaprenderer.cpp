@@ -44,6 +44,25 @@ bool ShadowmapRenderer::Ready() const
     return false;
 }
 
+void ShadowmapRenderer::ClearShadows()
+{
+    assert (Ready());
+    assert (m_fb->Ready());
+    assert (m_fb->Width() > 0);
+    assert (m_fb->Height() > 0);
+
+    // Bind frame buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fb->FramebufferHandle());
+
+    // Guard against corrupted shadow frame buffer
+    assert (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+
+    // Clear current contents of the shadow buffer & unbind
+    glClearDepth(1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &origin, const Vec3 &lightDir)
 {
     assert (Ready());
@@ -54,13 +73,6 @@ void ShadowmapRenderer::RenderShadows(std::vector<const ModelInstance*> &instanc
     // Bind frame buffer and setup viewport
     glBindFramebuffer(GL_FRAMEBUFFER, m_fb->FramebufferHandle());
     glViewport(0, 0, m_fb->Width(), m_fb->Height());
-
-    // Guard against corrupted shadow frame buffer
-    assert (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-
-    // Clear current contents of the shadow buffer
-    glClearDepth(1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT);
 
     // Draw into the shadow buffer
     glEnable(GL_POLYGON_OFFSET_FILL);

@@ -22,6 +22,7 @@ namespace Engine
         ShadowmapRenderer(const ShadowmapRenderer &rhs) = delete;
 
         void Init(const ShadowmapSettings &settings);
+        void ClearShadows();
         void RenderShadows(std::vector<const ModelInstance*> &instances, const Vec3 &origin, const Vec3 &lightDir);
         bool Ready() const;
         const ShadowmapSettings & GetSettings() const;
