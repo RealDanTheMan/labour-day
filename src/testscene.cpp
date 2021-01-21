@@ -33,7 +33,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     Engine::Texture2D* ptex = m_cache->GetTexture("TerrainTest01");
     Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
     Engine::Prefab* prf2 = m_cache->GetPrefab("PawnObject");
-    Engine::Prefab* prf3 = m_cache->GetPrefab("TerrainTest");
+    Engine::Prefab* prf3 = m_cache->GetPrefab("MonkeTest");
 
 
     assert (ptex != nullptr);
@@ -53,7 +53,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // ECS setup
     auto torus = m_core->ECS()->CreateEntity(prf1);
     auto player = m_core->ECS()->CreateEntity(prf2);
-    //auto terr = m_core->ECS()->CreateEntity(prf3);
+    auto monke = m_core->ECS()->CreateEntity(prf3);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
@@ -62,10 +62,6 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
-
-    // Tmp - Lower ground plane test
-    //terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetTranslation(Vec3(0,-3,0));
-    //terr->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().SetScale(5);
     
     auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
     ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
@@ -80,6 +76,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     // Tmp move torus up to test shadows
     torus->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(0,5,0));
+    monke->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(10, 0.0f, 0.0f));
 }
 
 Engine::Camera* TestScene::Cam()
