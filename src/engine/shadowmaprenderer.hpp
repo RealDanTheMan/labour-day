@@ -12,6 +12,7 @@ namespace Engine
         uint32_t m_resy;
         float m_minDistance;
         float m_maxDistance;
+        float m_biasOffset;
     };
 
     class ShadowmapRenderer

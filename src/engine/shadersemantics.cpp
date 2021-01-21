@@ -12,3 +12,4 @@ const char* Engine::SV_MAIN_LIGHT_DIR = "SV_MAIN_LIGHT_DIR";
 const char* Engine::SV_MAIN_LIGHT_INTENSITY = "SV_MAIN_LIGHT_INTENSITY";
 const char* Engine::SV_SHADOW_PROJ0 = "SV_SHADOW_PROJ0";
 const char* Engine::SV_SHADOW_MAP0 = "SV_SHADOW_MAP0";
+const char* Engine::SV_SHADOW_BIAS0 = "SV_SHADOW_BIAS0";

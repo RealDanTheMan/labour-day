@@ -19,6 +19,7 @@ namespace Engine
     extern const char* SV_MAIN_LIGHT_INTENSITY;
     extern const char* SV_SHADOW_PROJ0;
     extern const char* SV_SHADOW_MAP0;
+    extern const char* SV_SHADOW_BIAS0;
 }
 
 #endif

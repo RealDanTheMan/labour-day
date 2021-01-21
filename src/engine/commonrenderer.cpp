@@ -32,6 +32,7 @@ m_settings(settings)
     shadowSettings.m_resy = 4096;
     shadowSettings.m_minDistance = 0.001;
     shadowSettings.m_maxDistance = 100;
+    shadowSettings.m_biasOffset = 0.0f;
     m_shadowRenderer = std::make_unique<ShadowmapRenderer>();
     m_shadowRenderer->Init(shadowSettings);
 }
@@ -311,6 +312,13 @@ void CommonRenderer::PushShadowShaderParams(const ShaderProg *pShader) const
     {
         assert (m_shadowRenderer != nullptr);
         glUniformMatrix4fv(svShadowProj0Loc, 1, GL_FALSE, &m_shadowRenderer->GetShadowProjMatrix()[0][0]);
+    }
+
+    GLint svShadowBias0Loc = glGetUniformLocation(pShader->GetHandle(), SV_SHADOW_BIAS0);
+    if(svShadowBias0Loc != -1)
+    {
+        assert (m_shadowRenderer != nullptr);
+        glUniform1f(svShadowBias0Loc, m_shadowRenderer->GetSettings().m_biasOffset);
     }
 
     GLint svShadowMap0Loc = glGetUniformLocation(pShader->GetHandle(), SV_SHADOW_MAP0);

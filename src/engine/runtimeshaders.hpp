@@ -95,16 +95,24 @@ namespace Engine
         uniform float SV_MAIN_LIGHT_INTENSITY;
         uniform vec3 SV_MAIN_LIGHT_DIR;
         uniform sampler2DShadow SV_SHADOW_MAP0;
+        uniform float SV_SHADOW_BIAS0;
         uniform vec3 tint;
         
 
         out vec4 SV_OUT_COLOR;
         void main()
         {
+            // Direction lambert term
             float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
-            float shadow = textureProj(SV_SHADOW_MAP0, shadowcoord0);
-            vec3 diff = hLambert * vec3(1, 1, 1) * tint * shadow;
+
+            // Calculate shadow using bias based on the slope
+            float shadowBias = 0.005 * tan(acos(ndotl)) + SV_SHADOW_BIAS0;
+            shadowBias = clamp(shadowBias, 0, 0.1);
+            float shadow = textureProj(SV_SHADOW_MAP0, vec4(shadowcoord0.x, shadowcoord0.y, shadowcoord0.z - shadowBias, shadowcoord0.w));
+
+            // Composite & output
+            vec3 diff = hLambert * tint * shadow;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
     )";
@@ -146,16 +154,26 @@ namespace Engine
         uniform float SV_MAIN_LIGHT_INTENSITY;
         uniform vec3 SV_MAIN_LIGHT_DIR;
         uniform sampler2DShadow SV_SHADOW_MAP0;
+        uniform float SV_SHADOW_BIAS0;
         uniform sampler2D diff1map;
         uniform vec2 tiling = vec2(1,1);
 
         out vec4 SV_OUT_COLOR;
         void main()
         {
+            // Direction lambert term
             float ndotl = dot(normalize(SV_MAIN_LIGHT_DIR), normalize(vnormal));
             float hLambert = (ndotl * 0.5 + 0.5) * SV_MAIN_LIGHT_INTENSITY;
-            float shadow = textureProj(SV_SHADOW_MAP0, shadowcoord0);
+            
+            // Calculate shadow using bias based on the slope
+            float shadowBias = 0.005 * tan(acos(ndotl)) + SV_SHADOW_BIAS0;
+            shadowBias = clamp(shadowBias, 0, 0.1);
+            float shadow = textureProj(SV_SHADOW_MAP0, vec4(shadowcoord0.x, shadowcoord0.y, shadowcoord0.z - shadowBias, shadowcoord0.w));
+
+            // Diffuse texture lookup & tiling
             vec3 tex = texture(diff1map, texcoord0 * tiling).rgb;
+
+            // Composite & output
             vec3 diff = hLambert * tex * shadow;
             SV_OUT_COLOR = vec4(diff.x, diff.y, diff.z, 1);
         }
