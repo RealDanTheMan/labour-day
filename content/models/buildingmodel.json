@@ -1,0 +1,6 @@
+{
+    "type": "Model",
+    "name": "BuildingModel",
+    "mesh": "Building",
+    "material": "DiffMaterial"
+}

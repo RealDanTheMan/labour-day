@@ -17,6 +17,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/pawn.obj",
             "key": "Pawn"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/building.obj",
+            "key": "Building"
         }
     ],
     "textures":
@@ -66,6 +70,10 @@
         {
             "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/pawnmodel.json",
             "key": "PawnModel"
+        },
+        {
+            "path": "/home/dantheman/local/dev/games/labour-day/labour-day/content/models/buildingmodel.json",
+            "key": "BuildingModel"
         }
     ],
     "prefabs":
