@@ -7,6 +7,7 @@
 #include "components/cameracomponent.hpp"
 #include "components/transformcomponent.hpp"
 #include "components/movementcomponent.hpp"
+#include "components/terraincomponent.hpp"
 
 using namespace Engine;
 
@@ -194,6 +195,7 @@ void EngineCore::RegisterStdComponents()
     EntitySerialiser::RegisterComponentSerialiser<Components::CameraComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::TransformComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::MovementComponentSerialiser>();
+    EntitySerialiser::RegisterComponentSerialiser<Components::TerrainComponentSerialiser>();
 }
 
 void EngineCore::IncrementTime()
@@ -223,3 +225,4 @@ FpsCounter * const EngineCore::FPS() const
 {
     return m_fpsCounter.get();
 }
+#include "components/movementcomponent.hpp"

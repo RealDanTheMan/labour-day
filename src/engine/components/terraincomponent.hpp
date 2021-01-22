@@ -8,6 +8,16 @@ namespace Engine
 {
     namespace Components
     {
+
+        class TerrainComponentSerialiser : public EntityComponentSerialiser
+        {
+            public :
+            TerrainComponentSerialiser();
+            virtual ~TerrainComponentSerialiser();
+            virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const override;
+            virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
+        };
+
         class TerrainComponent : public ModelComponent
         {
             public:
@@ -26,6 +36,10 @@ namespace Engine
             float GetTileSize() const;
             uint32_t GetColumns() const;
             uint32_t GetRows() const;
+
+            // Override base ModelComponent IModelRef interface impl
+            virtual void SetModel(Model *pModel) override;
+            virtual const bool InternalModelRefOnly() const;
 
             private:
             float m_tileSize;
