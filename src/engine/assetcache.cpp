@@ -180,9 +180,12 @@ bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
             auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
             for(auto &cModel : cModels)
             {
-                Model * model = GetModel(cModel->m_modelName);
-                assert (model != nullptr);
-                cModel->SetModel(model);
+                if(!cModel->InternalModelRefOnly())
+                {
+                    Model * model = GetModel(cModel->GetModelRefName());
+                    assert (model != nullptr);
+                    cModel->SetModel(model);
+                }
             }
         }
 

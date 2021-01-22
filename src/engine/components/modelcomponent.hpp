@@ -21,7 +21,7 @@ namespace Engine
             virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
         };
 
-        class ModelComponent: public TransformComponent
+        class ModelComponent: public TransformComponent, IModelRef
         {
             public:
             ModelComponent();
@@ -31,17 +31,20 @@ namespace Engine
             virtual void Init() override;
             virtual std::unique_ptr<Engine::EntityComponent> Duplicate() const override;
 
-            void SetModel(Model * model);
             ModelInstance * GetModelInstance();
             const ModelInstance * GetModelInstance() const;
-            const Model * GetModel() const;
             void OnTransformChanged(const Transform &tr) override;
 
-            public:
-            std::string m_modelName;
+            // IModelRef interface impl
+            virtual void SetModel(Model *pModel) override;
+            virtual void SetModelRefName(const std::string &name) override;
+            virtual const Model * GetModel() const override;
+            virtual const std::string & GetModelRefName() const override;
+            virtual const bool InternalModelRefOnly() const;
 
             private:
             std::unique_ptr<ModelInstance> m_modelInstance; 
+            std::string m_modelName;
         };
     }
 }

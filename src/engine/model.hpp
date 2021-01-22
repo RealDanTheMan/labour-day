@@ -24,6 +24,19 @@ namespace Engine
         Transform m_tr;
         Material* m_mat;
     };
+
+    class IModelRef
+    {
+        public:
+        IModelRef() = default;
+        IModelRef(const IModelRef &rhs) = default;
+        
+        virtual void SetModel(Model *pModel) =0;
+        virtual void SetModelRefName(const std::string &name) =0;
+        virtual const Model * GetModel() const =0;
+        virtual const std::string & GetModelRefName() const =0;
+        virtual const bool InternalModelRefOnly() const =0;
+    };
 }
 
 #endif

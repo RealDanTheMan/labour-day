@@ -26,7 +26,7 @@ bool ModelComponentSerialiser::Deserialise(EntityComponent* pComponent, const Co
         const ContentPropertyInfo * property = pComponentInfo->m_properties[i].get();
         if(property->m_name == "model")
         {
-            pCmp->m_modelName = property->m_value;
+            pCmp->SetModelRefName(property->m_value);
             isGood = true;
         }
     }
@@ -75,6 +75,11 @@ void ModelComponent::SetModel(Model * model)
     m_modelInstance = std::make_unique<ModelInstance>(model);
 }
 
+void ModelComponent::SetModelRefName(const std::string &name)
+{
+    m_modelName = name;
+}
+
 const Engine::ModelInstance * ModelComponent::GetModelInstance() const
 {
     return m_modelInstance.get();
@@ -89,6 +94,16 @@ const Engine::Model * ModelComponent::GetModel() const
 {
     assert (m_modelInstance != nullptr);
     return m_modelInstance->GetModel();
+}
+
+const std::string & ModelComponent::GetModelRefName() const
+{
+    return m_modelName;
+}
+
+const bool ModelComponent::InternalModelRefOnly() const
+{
+    return false;
 }
 
 void ModelComponent::Init()
