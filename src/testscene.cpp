@@ -34,12 +34,14 @@ void TestScene::Initialize(Engine::EngineCore *core)
     Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
     Engine::Prefab* prf2 = m_cache->GetPrefab("PawnObject");
     Engine::Prefab* prf3 = m_cache->GetPrefab("MonkeTest");
+    Engine::Prefab* prf4 = m_cache->GetPrefab("TerrainTest");
 
 
     assert (ptex != nullptr);
     assert (prf1 != nullptr);
     assert (prf2 != nullptr);
     assert (prf3 != nullptr);
+    assert (prf4 != nullptr);
 
 
     // Load texture to GPU
@@ -54,6 +56,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     auto torus = m_core->ECS()->CreateEntity(prf1);
     auto player = m_core->ECS()->CreateEntity(prf2);
     auto monke = m_core->ECS()->CreateEntity(prf3);
+    auto terrain = m_core->ECS()->CreateEntity(prf4);
     m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
@@ -67,12 +70,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
 
     // New terrain component testing
-    auto newTerr = m_core->ECS()->CreateEntity();
-    newTerr->Components().Add<Engine::Components::TerrainComponent>();
-    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetTileSize(1.0f);
-    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetRows(64);
-    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetColumns(64);
-    newTerr->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("TerrainMaterial"));
+    terrain->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("TerrainMaterial"));
 
     // Tmp move torus up to test shadows
     torus->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(0,5,0));

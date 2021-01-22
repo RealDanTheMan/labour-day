@@ -1,19 +1,29 @@
 {
     "type": "Entity",
     "name": "TerrainTest",
-    
+
     "components": 
     [
         {
-            "type": "ModelComponentClass",
-            "name": "MainModelComponent",
+            "type": "TerrainComponentClass",
+            "name": "Terrain",
 
             "properties":
             [
                 {
-                    "name" : "model",
-                    "value" : "TerrainModel",
-                    "type" : "name"
+                    "name" : "TileSize",
+                    "value" : "1.0",
+                    "type" : "Float"
+                },
+                {
+                    "name" : "Columns",
+                    "value" : "64",
+                    "type" : "Int"
+                },
+                {
+                    "name" : "Rows",
+                    "value" : "64",
+                    "type" : "Int"
                 }
             ]
         }
