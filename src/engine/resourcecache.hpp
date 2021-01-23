@@ -16,13 +16,14 @@ namespace Engine
 
         virtual void Free();
         uint32_t Count() const;
+        bool HasResourceKey(const std::string &key) const;
+        IResource * const GetResource(const std::string &key) const;
 
         protected:
         template <typename T>
         void Consume(T *pdata, const std::string &key);
-        bool HasResourceKey(const std::string &key) const;
         uint32_t ResourceIdx(const std::string &key) const;
-        IResource * const GetResource(const std::string &key) const;
+        
 
         private:
         std::vector<std::unique_ptr<IResource>> m_resources;
