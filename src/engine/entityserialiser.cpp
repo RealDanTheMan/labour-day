@@ -23,22 +23,27 @@ const std::string& EntityComponentSerialiser::ClassName() const
 
 std::map<std::string, std::unique_ptr<EntityComponentSerialiser>> EntitySerialiser::m_cmpSerialisers = {};
 
-std::vector<std::unique_ptr<Entity>> EntitySerialiser::Deserialise (const ContentEntityInfo * sourceContent)
+std::vector<std::unique_ptr<Entity>> EntitySerialiser::Deserialise (
+    const ContentEntityInfo * pSourceContent, 
+    const ResourceCache *pResourceCache)
 {
+    assert (pSourceContent != nullptr);
+    assert (pResourceCache != nullptr);
+    
     std::vector<std::unique_ptr<Entity>> all;
 
     auto pEntity = std::make_unique<Entity>();
-    for (uint32_t i=0; i < sourceContent->m_components.size(); i++)
+    for (uint32_t i=0; i < pSourceContent->m_components.size(); i++)
     {
-        std::string className = sourceContent->m_components[i]->m_type;
+        std::string className = pSourceContent->m_components[i]->m_type;
         const EntityComponentSerialiser *cmpSerialiser = EntitySerialiser::GetComponentSerialiser(className);
         assert (cmpSerialiser != nullptr);
-        EntitySerialiser::DeserialiserEntityComponent(pEntity.get(), cmpSerialiser, sourceContent->m_components[i].get());
+        EntitySerialiser::DeserialiserEntityComponent(pEntity.get(), cmpSerialiser, pSourceContent->m_components[i].get(), pResourceCache);
     }
 
-    for(auto& childInfo : sourceContent->m_children)
+    for(auto& childInfo : pSourceContent->m_children)
     {
-        std::vector<std::unique_ptr<Entity>> children = Deserialise(childInfo.get());
+        std::vector<std::unique_ptr<Entity>> children = Deserialise(childInfo.get(), pResourceCache);
         for(auto &child : children)
         {
             child->SetParent(pEntity.get());
@@ -56,11 +61,16 @@ const EntityComponentSerialiser * const EntitySerialiser::GetComponentSerialiser
     return m_cmpSerialisers.at(className).get();
 }
 
-void EntitySerialiser::DeserialiserEntityComponent(Entity *pEntity, const EntityComponentSerialiser *pSerialiser, const ContentEntityComponentInfo * pComponentInfo)
+void EntitySerialiser::DeserialiserEntityComponent(
+    Entity *pEntity, 
+    const EntityComponentSerialiser *pSerialiser, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache)
 {
     assert (pEntity != nullptr);
     assert (pSerialiser != nullptr);
+    assert (pResourceCache != nullptr);
 
-    bool deserialised = pSerialiser->DeserialiseAdd(pEntity, pComponentInfo);
+    bool deserialised = pSerialiser->DeserialiseAdd(pEntity, pComponentInfo, pResourceCache);
     assert (deserialised);
 }

@@ -10,7 +10,10 @@ WobbleComponentSerialiser::~WobbleComponentSerialiser()
 {
 }
 
-bool WobbleComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+bool WobbleComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pComponent != nullptr);
 
@@ -48,14 +51,17 @@ bool WobbleComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
     return true;
 }
 
-bool WobbleComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+bool WobbleComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pEntity != nullptr);
     assert (pComponentInfo != nullptr);
     auto pCmp = pEntity->Components().Add<WobbleComponent>();
     assert (pCmp != nullptr);
 
-    bool stat = Deserialise(pCmp, pComponentInfo);
+    bool stat = Deserialise(pCmp, pComponentInfo, pResourceCache);
     if(stat)
     {
         return true;

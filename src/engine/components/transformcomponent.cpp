@@ -12,7 +12,10 @@ TransformComponentSerialiser::~TransformComponentSerialiser()
 
 }
 
-bool TransformComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+bool TransformComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pComponent != nullptr);
 
@@ -45,14 +48,17 @@ bool TransformComponentSerialiser::Deserialise(EntityComponent* pComponent, cons
     return true;
 }
 
-bool TransformComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+bool TransformComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pEntity != nullptr);
     assert (pComponentInfo != nullptr);
     auto pCmp = pEntity->Components().Add<TransformComponent>();
     assert (pCmp != nullptr);
 
-    bool stat = Deserialise(pCmp, pComponentInfo);
+    bool stat = Deserialise(pCmp, pComponentInfo, pResourceCache);
     if(stat)
     {
         return true;

@@ -12,7 +12,10 @@ MovementComponentSerialiser::~MovementComponentSerialiser()
     
 }
 
-bool MovementComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+bool MovementComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pComponent != nullptr);
 
@@ -41,7 +44,10 @@ bool MovementComponentSerialiser::Deserialise(EntityComponent* pComponent, const
     return true;
 }
 
-bool MovementComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+bool MovementComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pEntity != nullptr);
     assert (pComponentInfo != nullptr);
@@ -49,7 +55,7 @@ bool MovementComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentE
     auto pCom = pEntity->Components().Add<MovementComponent>();
     assert (pCom != nullptr);
 
-    bool stat = Deserialise(pCom, pComponentInfo);
+    bool stat = Deserialise(pCom, pComponentInfo, pResourceCache);
     if(stat)
     {
         return true;

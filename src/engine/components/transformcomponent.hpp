@@ -14,8 +14,16 @@ namespace Engine
             public:
             TransformComponentSerialiser();
             virtual ~TransformComponentSerialiser();
-            virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const override;
-            virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
+            
+            virtual bool Deserialise(
+                EntityComponent* pComponent, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
+
+            virtual bool DeserialiseAdd(
+                Entity* pEntity, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
         };
 
 

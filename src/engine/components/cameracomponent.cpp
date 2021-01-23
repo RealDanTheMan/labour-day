@@ -10,12 +10,15 @@ CameraComponentSerialiser::~CameraComponentSerialiser()
 {
 }
 
-bool CameraComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+bool CameraComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pComponent != nullptr);
 
-    auto pCmp = reinterpret_cast<CameraComponent*>(pComponent);
-    assert (pCmp != nullptr);
+    auto pCom = reinterpret_cast<CameraComponent*>(pComponent);
+    assert (pCom != nullptr);
 
     for(uint32_t i=0; i<pComponentInfo->m_properties.size(); i++)
     {
@@ -23,57 +26,60 @@ bool CameraComponentSerialiser::Deserialise(EntityComponent* pComponent, const C
         if(pPropertyInfo->m_name == "IsActive")
         {
             bool isActive = SerialisationUtils::BoolFromString(pPropertyInfo->m_value);
-            pCmp->SetActive(isActive);
+            pCom->SetActive(isActive);
         }
 
         if(pPropertyInfo->m_name == "NearClip")
         {
             float nearClip = stof(pPropertyInfo->m_value, nullptr);
-            pCmp->SetNearClip(nearClip);
+            pCom->SetNearClip(nearClip);
         }
 
         if(pPropertyInfo->m_name == "FarClip")
         {
             float farClip = stof(pPropertyInfo->m_value, nullptr);
-            pCmp->SetFarClip(farClip);
+            pCom->SetFarClip(farClip);
         }
 
         if(pPropertyInfo->m_name == "FOV")
         {
             float fov = stof(pPropertyInfo->m_value, nullptr);
-            pCmp->SetFOV(fov);
+            pCom->SetFOV(fov);
         }
 
         if(pPropertyInfo->m_name == "Aspect")
         {
             float aspect = stof(pPropertyInfo->m_value, nullptr);
-            pCmp->SetAspect(aspect);
+            pCom->SetAspect(aspect);
         }
 
         if(pPropertyInfo->m_name == "OffsetTranslation")
         {
             Vec3 offset = SerialisationUtils::Vec3FromString(pPropertyInfo->m_value);
-            pCmp->SetOffsetTranslation(offset);
+            pCom->SetOffsetTranslation(offset);
         }
 
         if(pPropertyInfo->m_name == "OffsetRotation")
         {
             Vec3 offset = SerialisationUtils::Vec3FromString(pPropertyInfo->m_value);
-            pCmp->SetOffsetRotation(offset);
+            pCom->SetOffsetRotation(offset);
         }
     }
 
     return true;
 }
 
-bool CameraComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+bool CameraComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pEntity != nullptr);
     assert (pComponentInfo != nullptr);
-    auto pCmp = pEntity->Components().Add<CameraComponent>();
-    assert (pCmp != nullptr);
+    auto pCom = pEntity->Components().Add<CameraComponent>();
+    assert (pCom != nullptr);
 
-    bool stat = Deserialise(pCmp, pComponentInfo);
+    bool stat = Deserialise(pCom, pComponentInfo, pResourceCache);
     if(stat)
     {
         return true;

@@ -14,8 +14,15 @@ namespace Engine
             MovementComponentSerialiser();
             virtual ~MovementComponentSerialiser();
 
-            virtual bool Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const override;
-            virtual bool DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const override;
+            virtual bool Deserialise(
+                EntityComponent* pComponent, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
+
+            virtual bool DeserialiseAdd(
+                Entity* pEntity, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
         };
 
         class MovementComponent : public EntityComponent

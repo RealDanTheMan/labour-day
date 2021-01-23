@@ -166,22 +166,7 @@ bool AssetCache::AddPrefab(const std::string &filepath, const std::string &key)
     if(entityInfo != nullptr)
     {
         // Entities are a bit more complex to deserialise so we invoke bespoke implementation
-        std::vector<std::unique_ptr<Entity>> entities = EntitySerialiser::Deserialise(entityInfo.get());
-
-        // Check if entity references any model resources and link them
-        for (auto &entity : entities)
-        {
-            auto cModels = entity->Components().GetAll<Engine::Components::ModelComponent>();
-            for(auto &cModel : cModels)
-            {
-                if(!cModel->InternalModelRefOnly())
-                {
-                    Model * model = GetModel(cModel->GetModelRefName());
-                    assert (model != nullptr);
-                    cModel->SetModel(model);
-                }
-            }
-        }
+        std::vector<std::unique_ptr<Entity>> entities = EntitySerialiser::Deserialise(entityInfo.get(), this);
 
         // Create prefab & consume it
         auto prefab = std::make_unique<Prefab>(entities);

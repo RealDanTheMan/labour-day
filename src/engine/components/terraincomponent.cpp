@@ -13,7 +13,10 @@ TerrainComponentSerialiser::~TerrainComponentSerialiser()
 
 }
 
-bool TerrainComponentSerialiser::Deserialise(EntityComponent* pComponent, const ContentEntityComponentInfo * pComponentInfo) const
+bool TerrainComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pComponent != nullptr);
 
@@ -43,19 +46,34 @@ bool TerrainComponentSerialiser::Deserialise(EntityComponent* pComponent, const 
             pCom->SetRows(rows);
             continue;
         }
+
+        if(pPropertyInfo->m_name == "Material")
+        {
+            assert (pResourceCache != nullptr);
+            assert (pResourceCache->HasResourceKey(pPropertyInfo->m_value));
+
+            auto pRes = pResourceCache->GetResource(pPropertyInfo->m_value);
+            Material *pMat = dynamic_cast<Material*>(pRes);
+            
+            assert (pMat != nullptr);
+            pCom->SetMaterial(pMat);
+        }
     }
 
     return true;
 }
 
-bool TerrainComponentSerialiser::DeserialiseAdd(Entity* pEntity, const ContentEntityComponentInfo * pComponentInfo) const
+bool TerrainComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
 {
     assert (pEntity != nullptr);
     assert (pComponentInfo != nullptr);
-    auto pCmp = pEntity->Components().Add<TerrainComponent>();
-    assert (pCmp != nullptr);
+    auto pCom = pEntity->Components().Add<TerrainComponent>();
+    assert (pCom != nullptr);
 
-    bool stat = Deserialise(pCmp, pComponentInfo);
+    bool stat = Deserialise(pCom, pComponentInfo, pResourceCache);
     if(stat)
     {
         return true;
@@ -93,6 +111,7 @@ std::unique_ptr<Engine::EntityComponent> TerrainComponent::Duplicate() const
     dup->SetTileSize(GetTileSize());
     dup->SetColumns(GetColumns());
     dup->SetRows(GetRows());
+    dup->SetMaterial(m_mat);
 
     return dup;
 }
