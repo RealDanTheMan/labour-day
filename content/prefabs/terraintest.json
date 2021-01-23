@@ -11,6 +11,11 @@
             "properties":
             [
                 {
+                    "name" : "Material",
+                    "value" : "TerrainMaterial",
+                    "type" : "MaterialRef"
+                },
+                {
                     "name" : "TileSize",
                     "value" : "1.0",
                     "type" : "Float"

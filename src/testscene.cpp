@@ -69,9 +69,6 @@ void TestScene::Initialize(Engine::EngineCore *core)
     auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
     ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
 
-    // New terrain component testing
-    terrain->Components().GetFirst<Engine::Components::TerrainComponent>()->SetMaterial(m_cache->GetMaterial("TerrainMaterial"));
-
     // Tmp move torus up to test shadows
     torus->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(0,5,0));
     monke->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(10, 0.0f, 0.0f));
