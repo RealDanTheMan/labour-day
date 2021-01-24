@@ -1,0 +1,33 @@
+{
+    "type":"Level",
+    "name": "Test01",
+
+    "objects":
+    [
+        {
+            "type": "LevelObject",
+            "id": "TerrainTest",
+            "position": "0,0,0"
+        },
+        {
+            "type": "LevelObject",
+            "id": "TorusTest",
+            "position": "0,5,0"
+        },
+        {
+            "type": "LevelObject",
+            "id": "PawnObject",
+            "position": "0,0,0"
+        },
+        {
+            "type": "LevelObject",
+            "id": "MonkeTest",
+            "position": "7,0,0"
+        },
+        {
+            "type": "LevelObject",
+            "id": "MonkeTest",
+            "position": "-7,0,0"
+        }
+    ]
+}

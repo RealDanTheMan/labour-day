@@ -45,6 +45,7 @@ ${PROJECT_SOURCE_DIR}/engine/entity.cpp
 ${PROJECT_SOURCE_DIR}/engine/entityserialiser.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/entitycomponentcollection.cpp
+${PROJECT_SOURCE_DIR}/engine/level.cpp
 ${PROJECT_SOURCE_DIR}/engine/lights.cpp
 ${PROJECT_SOURCE_DIR}/engine/lightscache.cpp
 ${PROJECT_SOURCE_DIR}/engine/model.cpp

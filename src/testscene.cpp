@@ -1,19 +1,8 @@
 #include "testscene.hpp"
-#include "testentity.hpp"
-#include "testproc.hpp"
-#include "engine/meshgen.hpp"
-#include "engine/components/modelcomponent.hpp"
-#include "engine/components/cameracomponent.hpp"
-#include "engine/components/transformcomponent.hpp"
-#include "engine/components/playercontrollercomponent.hpp"
-#include "engine/components/terraincomponent.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/processes/controllerprocess.hpp"
 #include "engine/processes/movementprocess.hpp"
-#include "engine/material.hpp"
-#include "engine/types.hpp"
-
-
+#include "engine/level.hpp"
 
 void TestScene::Initialize(Engine::EngineCore *core)
 {
@@ -30,34 +19,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     D_MSG("Asset cache size");
     D_MSG(m_cache->Count());
 
-    Engine::Texture2D* ptex = m_cache->GetTexture("TerrainTest01");
-    Engine::Prefab* prf1 = m_cache->GetPrefab("TorusTest");
-    Engine::Prefab* prf2 = m_cache->GetPrefab("PawnObject");
-    Engine::Prefab* prf3 = m_cache->GetPrefab("MonkeTest");
-    Engine::Prefab* prf4 = m_cache->GetPrefab("TerrainTest");
-
-
-    assert (ptex != nullptr);
-    assert (prf1 != nullptr);
-    assert (prf2 != nullptr);
-    assert (prf3 != nullptr);
-    assert (prf4 != nullptr);
-
-
-    // Load texture to GPU
-    //assert (ptex->Ready());
-    //ptex->GLPush();
-    //assert (ptex->GLReady());
-
-    // Setup material properties
-    //pModel->GetMaterial()->ShaderParameters()->SetTexValue("diff1map", ptex);
-
     // ECS setup
-    auto torus = m_core->ECS()->CreateEntity(prf1);
-    auto player = m_core->ECS()->CreateEntity(prf2);
-    auto monke = m_core->ECS()->CreateEntity(prf3);
-    auto terrain = m_core->ECS()->CreateEntity(prf4);
-    m_core->ECS()->CreateProcess<TestProc>();
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::MovementProcess>();
@@ -65,13 +27,10 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
     m_camera->GetTransform().Translate(Vec3(0, 0, -10));
-    
-    auto ctrl = player->Components().Add<Engine::Components::PlayerControllerComponent>();
-    ctrl->CaptureComponent(player->Components().GetFirst<Engine::Components::MovementComponent>());
 
-    // Tmp move torus up to test shadows
-    torus->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(0,5,0));
-    monke->Components().GetFirst<Engine::Components::TransformComponent>()->GetTransform().Translate(Vec3(10, 0.0f, 0.0f));
+    // Load Level
+    auto level = std::make_unique<Engine::Level>(m_cache.get(), m_core->ECS());
+    level->AddObjectsFromManifest("/home/dantheman/local/dev/games/labour-day/labour-day/content/levels/test-01.json");
 }
 
 Engine::Camera* TestScene::Cam()
