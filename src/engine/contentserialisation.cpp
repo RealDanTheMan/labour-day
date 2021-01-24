@@ -239,6 +239,68 @@ void ContentManifestInfo::Printout() const
     std::cout << "--- -------------- ---" << std::endl << std::endl;
 }
 
+std::unique_ptr<ContentLevelObjectInfo> ContentLevelObjectInfo::FromJSON(const configuru::Config & json)
+{
+    if(json.has_key("type") && json["type"] == "LevelObject")
+    {
+        auto info = std::make_unique<ContentLevelObjectInfo>();
+        
+        if(json.has_key("id") && json["id"].as_string().size() > 0)
+        {
+            info->m_id = json["id"].as_string();
+        }
+
+        if(json.has_key("position") && json["position"].as_string().size() > 0)
+        {
+            info->m_pos = json["position"].as_string();
+        }
+
+        return info;
+    }
+
+    return nullptr;
+}
+
+std::string ContentLevelObjectInfo::ToString() const
+{
+    std::stringstream ss;
+    ss << "LevelObject of " << m_id << " at [" << m_pos << "]";
+
+    return ss.str();
+}
+
+std::unique_ptr<ContentLevelInfo> ContentLevelInfo::FromJSON(const configuru::Config & json)
+{
+    if(json.has_key("type") && json["type"] == "Level")
+    {
+        auto info = std::make_unique<ContentLevelInfo>();
+        
+        if(json.has_key("name") && json["name"].as_string().size() > 0)
+        {
+            info->m_name = json["name"].as_string();
+        }
+        else
+        {
+            info->m_name = "<none>";
+        }
+        
+        if(json.has_key("objects") && json["objects"].is_array())
+        {
+            for (auto &elem : json["objects"].as_array())
+            {
+                auto objInfo = ContentLevelObjectInfo::FromJSON(elem);
+                assert (objInfo != nullptr);
+
+                info->m_objects.push_back(std::move(objInfo));
+            }
+        }
+
+        return info;
+    }
+
+    return nullptr;
+}
+
 const std::string SerialisationUtils::IntTypeStr = "Integer";
 const std::string SerialisationUtils::FloatTypeStr = "Float";
 const std::string SerialisationUtils::Vector2TypeStr = "Vec2";

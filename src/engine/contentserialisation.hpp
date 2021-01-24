@@ -74,6 +74,23 @@ namespace Engine
         void Printout() const;
     };
 
+    struct ContentLevelObjectInfo
+    {
+        std::string m_id;
+        std::string m_pos;
+
+        static std::unique_ptr<ContentLevelObjectInfo> FromJSON(const configuru::Config &json);
+        std::string ToString() const;
+    };
+
+    struct ContentLevelInfo
+    {
+        std::string m_name;
+        std::vector<std::unique_ptr<ContentLevelObjectInfo>> m_objects;
+
+        static std::unique_ptr<ContentLevelInfo> FromJSON(const configuru::Config &json);
+    };
+
     class SerialisationUtils 
     {
         public:
