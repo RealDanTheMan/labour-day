@@ -2,6 +2,8 @@
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/processes/controllerprocess.hpp"
 #include "engine/processes/movementprocess.hpp"
+#include "engine/components/playercontrollercomponent.hpp"
+#include "engine/components/movementcomponent.hpp"
 #include "engine/level.hpp"
 
 void TestScene::Initialize(Engine::EngineCore *core)
@@ -31,6 +33,19 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // Load Level
     auto level = std::make_unique<Engine::Level>(m_cache.get(), m_core->ECS());
     level->AddObjectsFromManifest("/home/dantheman/local/dev/games/labour-day/labour-day/content/levels/test-01.json");
+
+    auto players = level->GetEntitiesByTag("Player");
+    if(players.size() > 0)
+    {
+        auto cMov = players[0]->Components().GetFirst<Engine::Components::MovementComponent>();
+        auto cCtrl = players[0]->Components().GetFirst<Engine::Components::PlayerControllerComponent>();
+        
+        assert (cMov != nullptr);
+        assert (cCtrl != nullptr);
+
+        cCtrl->CaptureComponent(cMov);
+    }
+
 }
 
 Engine::Camera* TestScene::Cam()

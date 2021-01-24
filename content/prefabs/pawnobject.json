@@ -1,6 +1,13 @@
 {
     "type": "Entity",
     "name": "PawnObject",
+
+    "tags":
+    [
+        {
+            "value": "Player"
+        }
+    ],
     
     "components": 
     [
@@ -34,6 +41,10 @@
                     "type" : "Vec3"
                 }
             ]
+        },
+        {
+            "type": "PlayerControllerComponentClass",
+            "name": "PlayerController"
         }
     ],
 
