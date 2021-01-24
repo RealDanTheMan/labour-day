@@ -3,6 +3,7 @@
 
 #include "entitycomponentcollection.hpp"
 #include "transform.hpp"
+#include "tags.hpp"
 
 namespace Engine
 {
@@ -11,7 +12,7 @@ namespace Engine
         class TransformComponent;
     }
 
-    class Entity
+    class Entity : public ITagged
     {
         public:
             Entity();
@@ -23,6 +24,7 @@ namespace Engine
             void SetParent(Entity *parent);
             Entity * GetParent();
             bool IsRoot() const;
+            virtual Tags *  GetTags() override;
 
             Components::TransformComponent * GetTransform();
         private:
@@ -30,6 +32,8 @@ namespace Engine
             std::unique_ptr<EntityComponentCollection> m_components;
             std::vector<Entity*> m_children;
             Entity* m_parent;
+            Tags m_tags;
+
 
             // Event delegates
             ComponentAddedDelegate OnComponentAddedDelegate;

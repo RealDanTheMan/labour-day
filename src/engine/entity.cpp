@@ -126,16 +126,6 @@ void Entity::SetParent(Entity *parent)
                     tr->GetTransform().Set(global);
                 }
             }
-            else
-            {
-                //Transform local(tr->GetTransformLocal());
-                //local.TransformBy(tr->GetTransform());
-                //tr->GetTransform().Set(local);
-
-                //tr->SetLocalTranslation(Vec3());
-                //tr->SetLocalRotation(Vec3());
-                //tr->SetLocalScale(Vec3(1,1,1));
-            }
         }
     }
     
@@ -162,6 +152,11 @@ bool Entity::IsRoot() const
     }
 
     return false;
+}
+
+Tags * Entity::GetTags()
+{
+    return &m_tags;
 }
 
 void Entity::OnComponentAdded(EntityComponent *com)
