@@ -1,5 +1,5 @@
 #ifndef ASSET_CACHE_HPP_
-#define ASSET_CACHE_HPP
+#define ASSET_CACHE_HPP_
 
 #include "texture2d.hpp"
 #include "resourcecache.hpp"
