@@ -44,3 +44,17 @@ void Level::AddObjectsFromManifest(const std::string &filepath)
         }
     }
 }
+
+std::vector<Entity*> Level::GetEntitiesByTag(const std::string &tag)
+{
+    std::vector<Entity*> entities;
+    for(auto entity : m_entities)
+    {
+        if(entity->GetTags()->Has(tag))
+        {
+            entities.push_back(entity);
+        }
+    }
+
+    return entities;
+}

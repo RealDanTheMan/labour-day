@@ -13,6 +13,7 @@ namespace Engine
         Level(const Level &rhs) = delete;
 
         void AddObjectsFromManifest(const std::string &filepath);
+        std::vector<Entity*> GetEntitiesByTag(const std::string &tag);
 
         private:
         std::vector<Entity*> m_entities;
