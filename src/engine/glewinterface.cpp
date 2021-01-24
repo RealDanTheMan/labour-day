@@ -23,5 +23,11 @@ void GLEWInterface::ErrCallback( GLenum source,
                  const GLchar* msg,
                  const void* userParam )
 {
+    if(id == 131185)
+    {
+        // Skip buffer detailed info output message spamming the console
+        return;
+    }
+    
     fprintf(stderr, "GL Error: %d -> %s \n", id, msg);
 }
