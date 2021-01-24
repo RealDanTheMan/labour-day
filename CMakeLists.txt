@@ -53,6 +53,7 @@ ${PROJECT_SOURCE_DIR}/engine/modelinstance.cpp
 ${PROJECT_SOURCE_DIR}/engine/ecssys.cpp
 ${PROJECT_SOURCE_DIR}/engine/entityprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/texture2d.cpp
+${PROJECT_SOURCE_DIR}/engine/tags.cpp
 ${PROJECT_SOURCE_DIR}/engine/gltex.cpp
 ${PROJECT_SOURCE_DIR}/engine/sysutils.cpp
 ${PROJECT_SOURCE_DIR}/engine/material.cpp
