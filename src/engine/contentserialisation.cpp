@@ -17,6 +17,10 @@ std::unique_ptr<ContentMaterialInfo> ContentMaterialInfo::FromJSON(const configu
         {
             for(const configuru::Config &elem : json["parameters"].as_array())
             {
+                assert (elem.has_key("name"));
+                assert (elem.has_key("value"));
+                assert (elem.has_key("type"));
+
                 auto param = std::make_unique<ContentPropertyInfo>();
                 param->m_name = elem["name"].as_string();
                 param->m_value = elem["value"].as_string();
@@ -80,6 +84,18 @@ std::unique_ptr<ContentEntityInfo> ContentEntityInfo::FromJSON(const configuru::
                 if(cInfo != nullptr)
                 {
                     info->m_children.push_back(std::move(cInfo));
+                }
+            }
+        }
+
+        // Read entity tags
+        if(json.has_key("tags") && json["tags"].is_array())
+        {
+            for(const configuru::Config &elem : json["tags"].as_array())
+            {
+                if(elem.has_key("value"))
+                {
+                    info->m_tags.push_back(elem["value"].as_string());
                 }
             }
         }

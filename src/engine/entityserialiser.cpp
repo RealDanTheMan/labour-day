@@ -51,6 +51,11 @@ std::vector<std::unique_ptr<Entity>> EntitySerialiser::Deserialise (
         }
     }
 
+    for (auto &tag : pSourceContent->m_tags)
+    {
+        pEntity->GetTags()->Add(tag);
+    }
+
     all.push_back(std::move(pEntity));
     return all;
 }

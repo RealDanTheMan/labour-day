@@ -26,6 +26,7 @@ std::unique_ptr<Entity> Entity::Duplicate() const
     auto dup = std::make_unique<Entity>();
     dup->m_components = m_components->Duplicate();
     dup->m_parent = m_parent;
+    dup->m_tags = Tags(m_tags);
 
     // Hookup transform event callbacks
     auto transforms = dup->Components().GetAll<Components::TransformComponent>();

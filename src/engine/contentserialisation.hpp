@@ -56,6 +56,7 @@ namespace Engine
         std::string m_name;
         std::vector<std::unique_ptr<ContentEntityComponentInfo>> m_components;
         std::vector<std::unique_ptr<ContentEntityInfo>> m_children;
+        std::vector<std::string> m_tags;
 
         static std::unique_ptr<ContentEntityInfo> FromJSON(const configuru::Config &json);
     };
