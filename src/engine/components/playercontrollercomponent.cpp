@@ -2,7 +2,7 @@
 
 using namespace Engine::Components;
 
-PlayerControllerComponentSerialiser::PlayerControllerComponentSerialiser() : EntityComponentSerialiser("PlayerControllerClass")
+PlayerControllerComponentSerialiser::PlayerControllerComponentSerialiser() : EntityComponentSerialiser("PlayerControllerComponentClass")
 {
 
 }
