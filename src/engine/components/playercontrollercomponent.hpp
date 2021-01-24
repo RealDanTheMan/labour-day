@@ -8,6 +8,23 @@ namespace Engine
 {
     namespace Components
     {
+        class PlayerControllerComponentSerialiser : public EntityComponentSerialiser
+        {
+            public:
+            PlayerControllerComponentSerialiser();
+            virtual ~PlayerControllerComponentSerialiser();
+
+            virtual bool Deserialise(
+                EntityComponent* pComponent, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
+
+            virtual bool DeserialiseAdd(
+                Entity* pEntity, 
+                const ContentEntityComponentInfo * pComponentInfo,
+                const ResourceCache *pResourceCache) const override;
+        };
+
         class PlayerControllerComponent : public ControllerComponent
         {
             public:

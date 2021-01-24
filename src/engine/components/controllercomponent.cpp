@@ -10,6 +10,24 @@ ControllerAction::ControllerAction(const std::string &name, const uint32_t key, 
 
 }
 
+ControllerAction::ControllerAction(const ControllerAction &rhs):
+    m_name(rhs.m_name),
+    m_key(rhs.m_key),
+    m_state(rhs.m_state)
+{
+
+}
+
+ControllerComponent::ControllerComponent(const ControllerComponent &rhs):
+m_captured(rhs.m_captured)
+{
+    for(auto &action : rhs.m_actions)
+    {
+        auto dupAction = std::make_unique<ControllerAction>(*action);
+        m_actions.push_back(std::move(dupAction));
+    }
+}
+
 ControllerComponent::~ControllerComponent()
 {
 

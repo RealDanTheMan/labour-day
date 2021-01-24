@@ -2,6 +2,49 @@
 
 using namespace Engine::Components;
 
+PlayerControllerComponentSerialiser::PlayerControllerComponentSerialiser() : EntityComponentSerialiser("PlayerControllerClass")
+{
+
+}
+
+PlayerControllerComponentSerialiser::~PlayerControllerComponentSerialiser()
+{
+    
+}
+
+bool PlayerControllerComponentSerialiser::Deserialise(
+    EntityComponent* pComponent, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
+{
+    assert (pComponent != nullptr);
+
+    auto pCom = reinterpret_cast<PlayerControllerComponent*>(pComponent);
+    assert (pCom != nullptr);
+
+    return true;
+}
+
+bool PlayerControllerComponentSerialiser::DeserialiseAdd(
+    Entity* pEntity, 
+    const ContentEntityComponentInfo * pComponentInfo,
+    const ResourceCache *pResourceCache) const
+{
+    assert (pEntity != nullptr);
+    assert (pComponentInfo != nullptr);
+
+    auto pCom = pEntity->Components().Add<PlayerControllerComponent>();
+    assert (pCom != nullptr);
+
+    bool stat = Deserialise(pCom, pComponentInfo, pResourceCache);
+    if(stat)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 PlayerControllerComponent::~PlayerControllerComponent()
 {
 
@@ -14,7 +57,7 @@ void PlayerControllerComponent::Init()
 
 std::unique_ptr<Engine::EntityComponent> PlayerControllerComponent::Duplicate() const
 {
-    return nullptr;
+    return std::make_unique<PlayerControllerComponent>(*this);
 }
 
 void PlayerControllerComponent::SetupInputActions() 

@@ -19,6 +19,7 @@ namespace Engine
             };
 
             ControllerAction(const std::string &name, const uint32_t key, KeyState state);
+            ControllerAction(const ControllerAction &rhs);
             std::string m_name;
             uint32_t m_key;
             KeyState m_state;
@@ -28,7 +29,7 @@ namespace Engine
         {
             public:
             ControllerComponent() = default;
-            ControllerComponent(const ControllerComponent &rhs) = default;
+            ControllerComponent(const ControllerComponent &rhs);
             virtual ~ControllerComponent() override;
 
             virtual void Init() override;

@@ -8,6 +8,7 @@
 #include "components/transformcomponent.hpp"
 #include "components/movementcomponent.hpp"
 #include "components/terraincomponent.hpp"
+#include "components/playercontrollercomponent.hpp"
 
 using namespace Engine;
 
@@ -196,6 +197,7 @@ void EngineCore::RegisterStdComponents()
     EntitySerialiser::RegisterComponentSerialiser<Components::TransformComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::MovementComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::TerrainComponentSerialiser>();
+    EntitySerialiser::RegisterComponentSerialiser<Components::PlayerControllerComponentSerialiser>();
 }
 
 void EngineCore::IncrementTime()
