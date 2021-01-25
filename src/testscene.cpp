@@ -1,10 +1,4 @@
 #include "testscene.hpp"
-#include "engine/processes/wobbleprocess.hpp"
-#include "engine/processes/controllerprocess.hpp"
-#include "engine/processes/playercontrollerprocess.hpp"
-#include "engine/processes/movementprocess.hpp"
-#include "engine/components/playercontrollercomponent.hpp"
-#include "engine/components/movementcomponent.hpp"
 #include "engine/level.hpp"
 
 void TestScene::Initialize(Engine::EngineCore *core)
@@ -21,12 +15,6 @@ void TestScene::Initialize(Engine::EngineCore *core)
 
     D_MSG("Asset cache size");
     D_MSG(m_cache->Count());
-
-    // ECS setup
-    m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
-    m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
-    m_core->ECS()->CreateProcess<Engine::Processes::MovementProcess>();
-    m_core->ECS()->CreateProcess<Engine::Processes::PlayerControllerProcess>();
 
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);

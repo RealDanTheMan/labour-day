@@ -10,6 +10,11 @@
 #include "components/terraincomponent.hpp"
 #include "components/playercontrollercomponent.hpp"
 
+#include "engine/processes/wobbleprocess.hpp"
+#include "engine/processes/controllerprocess.hpp"
+#include "engine/processes/playercontrollerprocess.hpp"
+#include "engine/processes/movementprocess.hpp"
+
 using namespace Engine;
 
 EngineCore::EngineCore():
@@ -61,9 +66,11 @@ bool EngineCore::Initialize()
     m_imgui->Init(m_mainWin.get());
     m_fpsCounter = std::make_unique<FpsCounter>();
 
+    // Configure ECS
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
     RegisterStdComponents();
+    RegisterStdProcesses();
 
 
     return true;
@@ -112,10 +119,11 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_imgui->Init(m_mainWin.get());
     m_fpsCounter = std::make_unique<FpsCounter>();
     
-
+    // Configure ECS
     m_ecs = std::make_unique<ECSSys>();
     m_ecs->Init(128);
     RegisterStdComponents();
+    RegisterStdProcesses();
 
     return true;
 }
@@ -198,6 +206,16 @@ void EngineCore::RegisterStdComponents()
     EntitySerialiser::RegisterComponentSerialiser<Components::MovementComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::TerrainComponentSerialiser>();
     EntitySerialiser::RegisterComponentSerialiser<Components::PlayerControllerComponentSerialiser>();
+}
+
+void EngineCore::RegisterStdProcesses()
+{
+    assert (ECS() != nullptr);
+    
+    ECS()->CreateProcess<Processes::WobbleProcess>();
+    ECS()->CreateProcess<Processes::ControllerProcess>();
+    ECS()->CreateProcess<Processes::MovementProcess>();
+    ECS()->CreateProcess<Processes::PlayerControllerProcess>();
 }
 
 void EngineCore::IncrementTime()

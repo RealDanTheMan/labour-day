@@ -55,6 +55,7 @@ namespace Engine
 
         private:
         void RegisterStdComponents();
+        void RegisterStdProcesses();
     };
 }
 
