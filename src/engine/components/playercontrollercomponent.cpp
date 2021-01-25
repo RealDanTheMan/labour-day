@@ -22,6 +22,17 @@ bool PlayerControllerComponentSerialiser::Deserialise(
     auto pCom = reinterpret_cast<PlayerControllerComponent*>(pComponent);
     assert (pCom != nullptr);
 
+    for(auto &pProperty : pComponentInfo->m_properties)
+    {
+        if(pProperty->m_name == "AutoPossess")
+        {
+            bool autoPossess = SerialisationUtils::BoolFromString(pProperty->m_value);
+            pCom->ToggleAutoPossess(autoPossess);
+
+            continue;
+        }
+    }
+
     return true;
 }
 
@@ -129,4 +140,14 @@ void PlayerControllerComponent::OnAction(const ControllerAction &action)
 MovementComponent * PlayerControllerComponent::GetCapturedMovement()
 {
     return dynamic_cast<MovementComponent*>(CapturedComponent());
+}
+
+void PlayerControllerComponent::ToggleAutoPossess(const bool toggle)
+{
+    m_autoPossess = toggle;
+}
+
+const bool PlayerControllerComponent::AutoPossesses() const
+{
+    return m_autoPossess;
 }

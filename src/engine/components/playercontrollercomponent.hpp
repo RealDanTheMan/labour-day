@@ -37,8 +37,12 @@ namespace Engine
             virtual void SetupInputActions() override;
             virtual void OnAction(const ControllerAction &action) override;
 
-            protected:
+            void ToggleAutoPossess(const bool toggle);
+            const bool AutoPossesses() const;
             MovementComponent * GetCapturedMovement();
+
+            protected:
+            bool m_autoPossess;
         };
     }
 }
