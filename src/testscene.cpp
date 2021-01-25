@@ -1,6 +1,7 @@
 #include "testscene.hpp"
 #include "engine/processes/wobbleprocess.hpp"
 #include "engine/processes/controllerprocess.hpp"
+#include "engine/processes/playercontrollerprocess.hpp"
 #include "engine/processes/movementprocess.hpp"
 #include "engine/components/playercontrollercomponent.hpp"
 #include "engine/components/movementcomponent.hpp"
@@ -25,6 +26,7 @@ void TestScene::Initialize(Engine::EngineCore *core)
     m_core->ECS()->CreateProcess<Engine::Processes::WobbleProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::ControllerProcess>();
     m_core->ECS()->CreateProcess<Engine::Processes::MovementProcess>();
+    m_core->ECS()->CreateProcess<Engine::Processes::PlayerControllerProcess>();
 
     // Setup main scene camera - Default fallback if there are not camera components in the scene
     m_camera = std::make_unique<Engine::Camera>(30, 1.7777);
@@ -33,19 +35,6 @@ void TestScene::Initialize(Engine::EngineCore *core)
     // Load Level
     auto level = std::make_unique<Engine::Level>(m_cache.get(), m_core->ECS());
     level->AddObjectsFromManifest("/home/dantheman/local/dev/games/labour-day/labour-day/content/levels/test-01.json");
-
-    auto players = level->GetEntitiesByTag("Player");
-    if(players.size() > 0)
-    {
-        auto cMov = players[0]->Components().GetFirst<Engine::Components::MovementComponent>();
-        auto cCtrl = players[0]->Components().GetFirst<Engine::Components::PlayerControllerComponent>();
-        
-        assert (cMov != nullptr);
-        assert (cCtrl != nullptr);
-
-        cCtrl->CaptureComponent(cMov);
-    }
-
 }
 
 Engine::Camera* TestScene::Cam()

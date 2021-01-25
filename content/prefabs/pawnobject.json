@@ -44,7 +44,16 @@
         },
         {
             "type": "PlayerControllerComponentClass",
-            "name": "PlayerController"
+            "name": "PlayerController",
+
+            "properties":
+            [
+                {
+                    "name" : "AutoPossess",
+                    "value" : "true",
+                    "type" : "bool"
+                },
+            ]
         }
     ],
 
