@@ -83,6 +83,7 @@ ${PROJECT_SOURCE_DIR}/engine/components/terraincomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/lightcomponent.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/wobbleprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/controllerprocess.cpp
+${PROJECT_SOURCE_DIR}/engine/processes/playercontrollerprocess.cpp
 ${PROJECT_SOURCE_DIR}/engine/processes/movementprocess.cpp
 ${PROJECT_SOURCE_DIR}/external/imgui/imgui.cpp
 ${PROJECT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
