@@ -2,8 +2,9 @@
 #define CONTROLLER_COMPONENT_HPP_
 
 #include "transformcomponent.hpp"
-
+#include "../inputmanager.hpp"
 #include "../keymap.hpp"
+
 #include <functional>
 
 namespace Engine
@@ -12,17 +13,11 @@ namespace Engine
     {
         struct ControllerAction
         {
-            enum KeyState
-            {
-                Up = 0,
-                Down = 1
-            };
-
-            ControllerAction(const std::string &name, const uint32_t key, KeyState state);
+            ControllerAction(const std::string &name, const uint32_t key, InputManager::KeyState state);
             ControllerAction(const ControllerAction &rhs);
             std::string m_name;
             uint32_t m_key;
-            KeyState m_state;
+            InputManager::KeyState m_state;
         };
 
         class ControllerComponent : public EntityComponent

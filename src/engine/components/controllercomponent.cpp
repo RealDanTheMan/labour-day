@@ -2,7 +2,7 @@
 
 using namespace Engine::Components;
 
-ControllerAction::ControllerAction(const std::string &name, const uint32_t key, KeyState state):
+ControllerAction::ControllerAction(const std::string &name, const uint32_t key, InputManager::KeyState state):
     m_name(name),
     m_key(key),
     m_state(state)

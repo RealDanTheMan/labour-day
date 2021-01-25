@@ -9,18 +9,10 @@ void ControllerProcess::OnUpdate(Entity * const entity)
     auto ctrl = entity->Components().GetFirst<Components::ControllerComponent>();
     for(auto &action : ctrl->InputActions())
     {
-        if(Engine::InputManager::Instance().CheckKey(action->m_key) && 
-                action->m_state == Components::ControllerAction::KeyState::Down)
+        Engine::InputManager::KeyState state = Engine::InputManager::Instance().CheckKey(action->m_key);
+        if(action->m_state == state)
         {
             ctrl->OnAction(*action);
-            continue;
-        }
-
-        if(!Engine::InputManager::Instance().CheckKey(action->m_key) && 
-                action->m_state == Components::ControllerAction::KeyState::Up)
-        {
-            ctrl->OnAction(*action);
-            continue;
         }
     }
 }

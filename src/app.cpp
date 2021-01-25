@@ -34,7 +34,8 @@ void App::Run()
 {
     assert (m_core != nullptr);
     
-    while(m_core->MainWindowActive() && !Engine::InputManager::Instance().CheckKey(KEY_ESCAPE))
+    while(m_core->MainWindowActive() && 
+            Engine::InputManager::Instance().CheckKey(KEY_ESCAPE) != Engine::InputManager::KeyState::Active)
     {
         m_core->IncrementTime();
         m_core->FPS()->Sample();
