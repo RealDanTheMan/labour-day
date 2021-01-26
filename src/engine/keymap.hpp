@@ -7,6 +7,7 @@ namespace Engine
 // For now key codes match GLFW keys
 // Standard keys 
 
+#define KEY_MIN_CODE           32
 #define KEY_MAX_CODE          348
 
 #define KEY_SPACE              32

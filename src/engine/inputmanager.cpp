@@ -72,7 +72,7 @@ void InputManager::PrePoll()
 
 void InputManager::PostPoll()
 {
-    for (uint32_t i=0; i < KEY_MAX_CODE; i++)
+    for (uint32_t i=KEY_MIN_CODE; i < KEY_MAX_CODE; i++)
     {
         int state = glfwGetKey(m_win->GetHandle(), i);
         switch(state)
