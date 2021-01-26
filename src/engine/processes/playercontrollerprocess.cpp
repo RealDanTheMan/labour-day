@@ -20,6 +20,22 @@ void PlayerControllerProcess::OnUpdate(Engine::Entity * const entity)
             playerCom->CaptureComponent(movCom);
         }
     }
+
+    // Resolve movmenet on captured component
+    if(playerCom->GetCapturedMovement() != nullptr)
+    {
+        const Vec3 dir = playerCom->GetMovementDir();
+        if(dir == Vec3(0,0,0))
+        {
+            playerCom->GetCapturedMovement()->SetPendingMovement(false);
+        }
+        else
+        {
+            playerCom->GetCapturedMovement()->SetPendingMovement(true);
+            playerCom->GetCapturedMovement()->SetDirection(dir);
+        }
+        
+    }
 }
 
 bool PlayerControllerProcess::IsValidEntity(Engine::Entity * const entity)

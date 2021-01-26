@@ -64,6 +64,11 @@ PlayerControllerComponent::~PlayerControllerComponent()
 void PlayerControllerComponent::Init()
 {
     ControllerComponent::Init();
+    
+    m_forward = 0.0f;
+    m_backward = 0.0f;
+    m_left = 0.0f;
+    m_right = 0.0f;
 }
 
 std::unique_ptr<Engine::EntityComponent> PlayerControllerComponent::Duplicate() const
@@ -74,10 +79,10 @@ std::unique_ptr<Engine::EntityComponent> PlayerControllerComponent::Duplicate() 
 void PlayerControllerComponent::SetupInputActions() 
 {
     // Simple walk input mapping example
-    auto forward = std::make_unique<ControllerAction>("Forward", KEY_W, InputManager::KeyState::Active);
-    auto backward = std::make_unique<ControllerAction>("Backward", KEY_S, InputManager::KeyState::Active);
-    auto left = std::make_unique<ControllerAction>("Left", KEY_A, InputManager::KeyState::Active);
-    auto right = std::make_unique<ControllerAction>("Right", KEY_D, InputManager::KeyState::Active);
+    auto forward = std::make_unique<ControllerAction>("Forward", KEY_W);
+    auto backward = std::make_unique<ControllerAction>("Backward", KEY_S);
+    auto left = std::make_unique<ControllerAction>("Left", KEY_A);
+    auto right = std::make_unique<ControllerAction>("Right", KEY_D);
     
     InputActions().push_back(std::move(forward));
     InputActions().push_back(std::move(backward));
@@ -94,42 +99,64 @@ void PlayerControllerComponent::OnAction(const ControllerAction &action)
         return;
     }
 
-    const float scale = 0.1f;
-    Vec3 dir = Vec3(0,0,0);
-
-    // TMP for testing
-    // TODO: Implement and use character movement component instead of doing logic here
-    if(action.m_state == InputManager::KeyState::Active)
+    if(action.m_name == "Forward")
     {
-        if(action.m_name == "Forward")
+        switch (action.m_state)
         {
-            dir.z = 1.0f;
-        }
-
-        if(action.m_name == "Backward")
-        {
-            dir.z = -1.0f;
-        }
-
-        if(action.m_name == "Left")
-        {
-            dir.x = 1.0f;
-        }
-
-        if(action.m_name == "Right")
-        {
-            dir.x = -1.0f;
+            case InputManager::Active:
+                //D_MSG("Forward State: Active !");
+                m_forward = 1.0f;
+                break;
+            case InputManager::Released:
+                //D_MSG("Forward State: Released !");
+                m_forward = 0.0f;
+                break;
         }
     }
 
-    if(dir == Vec3(0,0,0))
+    if(action.m_name == "Backward")
     {
-        GetCapturedMovement()->SetPendingMovement(false);
+        switch (action.m_state)
+        {
+            case InputManager::Active:
+                //D_MSG("Backward State: Active !");
+                m_backward = 1.0f;
+                break;
+            case InputManager::Released:
+                //D_MSG("Backward State: Released !");
+                m_backward = 0.0f;
+                break;
+        }
     }
-    else
+
+    if(action.m_name == "Left")
     {
-        GetCapturedMovement()->SetDirection(glm::normalize(dir));
-        GetCapturedMovement()->SetPendingMovement(true);
+        switch (action.m_state)
+        {
+            case InputManager::Active:
+                //D_MSG("Left State: Active !");
+                m_left = 1.0f;
+                break;
+            case InputManager::Released:
+                //D_MSG("Left State: Released !");
+                m_left = 0.0f;
+                break;
+        }
+    }
+
+    if(action.m_name == "Right")
+    {
+        switch (action.m_state)
+        {
+            case InputManager::Active:
+                //D_MSG("Right State: Active !");
+                m_right = 1.0f;
+                break;
+            case InputManager::Released:
+                //D_MSG("Right State: Released !");
+                m_right = 0.0f;
+                break;
+        }
     }
 }
 
@@ -146,4 +173,10 @@ void PlayerControllerComponent::ToggleAutoPossess(const bool toggle)
 const bool PlayerControllerComponent::AutoPossesses() const
 {
     return m_autoPossess;
+}
+
+const Vec3 PlayerControllerComponent::GetMovementDir() const
+{
+    const Vec3 tmp = Vec3(m_left - m_right, 0.0f, m_forward - m_backward);
+    return tmp;
 }

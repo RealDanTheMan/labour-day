@@ -2,10 +2,10 @@
 
 using namespace Engine::Components;
 
-ControllerAction::ControllerAction(const std::string &name, const uint32_t key, InputManager::KeyState state):
+ControllerAction::ControllerAction(const std::string &name, const uint32_t key):
     m_name(name),
     m_key(key),
-    m_state(state)
+    m_state(InputManager::KeyState::Inactive)
 {
 
 }

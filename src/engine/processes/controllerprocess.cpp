@@ -10,9 +10,13 @@ void ControllerProcess::OnUpdate(Entity * const entity)
     for(auto &action : ctrl->InputActions())
     {
         Engine::InputManager::KeyState state = Engine::InputManager::Instance().CheckKey(action->m_key);
-        if(action->m_state == state)
+        if(state == InputManager::Active || state == InputManager::Released)
         {
-            ctrl->OnAction(*action);
+            //D_MSG("ControllerComponent -> Action triggered !");
+            
+            Engine::Components::ControllerAction act(*action);
+            act.m_state = state;
+            ctrl->OnAction(act);
         }
     }
 }

@@ -40,9 +40,16 @@ namespace Engine
             void ToggleAutoPossess(const bool toggle);
             const bool AutoPossesses() const;
             MovementComponent * GetCapturedMovement();
+            const Vec3 GetMovementDir() const;
 
             protected:
             bool m_autoPossess;
+
+            private:
+            float m_forward;
+            float m_backward;
+            float m_left;
+            float m_right;
         };
     }
 }

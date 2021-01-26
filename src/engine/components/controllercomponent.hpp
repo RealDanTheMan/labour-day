@@ -13,7 +13,7 @@ namespace Engine
     {
         struct ControllerAction
         {
-            ControllerAction(const std::string &name, const uint32_t key, InputManager::KeyState state);
+            ControllerAction(const std::string &name, const uint32_t key);
             ControllerAction(const ControllerAction &rhs);
             std::string m_name;
             uint32_t m_key;
