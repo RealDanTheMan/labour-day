@@ -1,5 +1,6 @@
 #include "debugoverlay.hpp"
 #include "imguiinterface.hpp"
+#include "inputmanager.hpp"
 
 using namespace Engine;
 
@@ -21,6 +22,7 @@ void DebugOverlay::OnUpdate()
     // Issue panel drawing commands
     DrawPerfStats();
     DrawCameraInfo();
+    DrawInputInfo();
     DrawRenderSettings();
 }
 
@@ -64,6 +66,29 @@ void DebugOverlay::DrawCameraInfo() const
 
     ImGui::Text("Aspect: ", nullptr); ImGui::SameLine();
     ImGui::Text(aspect.c_str(), nullptr);
+
+    ImGui::End();
+}
+
+void DebugOverlay::DrawInputInfo() const
+{
+    ImGui::Begin("Input Info");
+    ImGui::AlignTextToFramePadding();
+
+    const Vec2 mousePos = InputManager::Instance().GetMouseScreenPos();
+    const Vec2 mousePosNCD = InputManager::Instance().GetMouseNDCPos();
+
+    ImGui::Text("Mouse X: ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(mousePos.x).c_str(), nullptr);
+
+    ImGui::Text("Mouse Y: ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(mousePos.y).c_str(), nullptr);
+
+    ImGui::Text("Mouse X (NCD): ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(mousePosNCD.x).c_str(), nullptr);
+
+    ImGui::Text("Mouse Y (NCD): ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(mousePosNCD.y).c_str(), nullptr);
 
     ImGui::End();
 }

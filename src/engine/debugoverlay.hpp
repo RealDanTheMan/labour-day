@@ -17,6 +17,7 @@ namespace Engine
 
         void DrawPerfStats() const;
         void DrawCameraInfo() const;
+        void DrawInputInfo() const;
         void DrawRenderSettings();
 
         void UpdateEngineRenderSettings();
