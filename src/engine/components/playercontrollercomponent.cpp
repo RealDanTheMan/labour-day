@@ -178,5 +178,13 @@ const bool PlayerControllerComponent::AutoPossesses() const
 const Vec3 PlayerControllerComponent::GetMovementDir() const
 {
     const Vec3 tmp = Vec3(m_left - m_right, 0.0f, m_forward - m_backward);
-    return tmp;
+    if(tmp != Vec3(0,0,0))
+    {
+        // GLM math library returns NaN if one attemps to normalize zero vector
+        return glm::normalize(tmp);
+    }
+    else 
+    {
+        return tmp;
+    }
 }
