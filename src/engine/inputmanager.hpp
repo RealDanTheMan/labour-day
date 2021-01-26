@@ -34,9 +34,10 @@ namespace Engine
 
         private:
         void PrePoll();
+        void PostPoll();
 
         private:
-        Window *m_win;
+        const Window *m_win;
         std::unique_ptr<bool[]> m_keyPressStates;
         std::unique_ptr<bool[]> m_keyReleaseStates;
 

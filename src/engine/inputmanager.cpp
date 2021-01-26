@@ -8,25 +8,33 @@ void InputManager::Initialize(const Window &win)
 {
     m_keyPressStates = std::make_unique<bool[]>(KEY_MAX_CODE);
     m_keyReleaseStates = std::make_unique<bool[]>(KEY_MAX_CODE);
+    m_win = &win;
 
-    glfwSetKeyCallback(win.GetHandle(), KeyCallback);
+    //glfwSetInputMode(win.GetHandle(), GLFW_STICKY_KEYS, GLFW_TRUE);
+    //glfwSetKeyCallback(win.GetHandle(), KeyCallback);
 }
 
 void InputManager::Poll()
 {
     PrePoll();
     glfwPollEvents();
+    PostPoll();
 }
 
+[[deprecated]]
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // Dont use this anymore as key callback can get us in a reace condition when input is queried in a ECS loop
+    // Get better synchorisation with direct polling
     switch(action)
     {
         case GLFW_PRESS:
+            D_MSG ("KeyPress -> " + std::to_string(key));
             InputManager::Instance().m_keyPressStates[key] = true;
             InputManager::Instance().m_keyReleaseStates[key] = false;
             break;
         case GLFW_RELEASE:
+            D_MSG ("KeyRelease -> " + std::to_string(key));
             InputManager::Instance().m_keyPressStates[key] = false;
             InputManager::Instance().m_keyReleaseStates[key] = true;
             break;
@@ -43,7 +51,7 @@ InputManager::KeyState InputManager::CheckKey(const uint32_t keyCode) const
     {
         return InputManager::KeyState::Active;
     }
-    else if (m_keyPressStates[keyCode])
+    else if (m_keyReleaseStates[keyCode])
     {
         return InputManager::KeyState::Released;
     }
@@ -59,5 +67,24 @@ void InputManager::PrePoll()
     for (uint32_t i=0; i < KEY_MAX_CODE; i++)
     {
         m_keyReleaseStates[i] = false;
+    }
+}
+
+void InputManager::PostPoll()
+{
+    for (uint32_t i=0; i < KEY_MAX_CODE; i++)
+    {
+        int state = glfwGetKey(m_win->GetHandle(), i);
+        switch(state)
+        {
+            case GLFW_PRESS:
+                InputManager::Instance().m_keyPressStates[i] = true;
+                InputManager::Instance().m_keyReleaseStates[i] = false;
+                break;
+            case GLFW_RELEASE:
+                InputManager::Instance().m_keyPressStates[i] = false;
+                InputManager::Instance().m_keyReleaseStates[i] = true;
+                break;
+        }
     }
 }
