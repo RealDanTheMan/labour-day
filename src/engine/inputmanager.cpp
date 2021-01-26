@@ -87,4 +87,28 @@ void InputManager::PostPoll()
                 break;
         }
     }
+
+    // Update mouse screen position
+    glfwGetCursorPos(m_win->GetHandle(), &m_mousex, &m_mousey);
+
+    // Calculate normalised mouse coords
+    const Vec2 invSize = 1.0f / Vec2(m_win->GetWidth(), m_win->GetHeight());
+    m_ncdx = (2.0f * m_mousex * invSize.x) - 1.0f;
+    m_ncdy = -((2.0f * -m_mousey * invSize.y) + 1.0f);
+}
+
+Vec2 InputManager::GetMouseScreenPos() const
+{
+    // Screen pixel coords
+    // Top left is (0,0)
+    return Vec2(m_mousex, m_mousey);
+}
+
+Vec2 InputManager::GetMouseNDCPos() const
+{
+    // Normalised screen coords
+    // Center Of the screen is (0,0)
+    // Top left is (-1,-1)
+    // Bottom right is (1,1)
+    return Vec2(m_ncdx, m_ncdy);
 }

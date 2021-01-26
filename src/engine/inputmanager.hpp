@@ -3,6 +3,7 @@
 
 #include "window.hpp"
 #include "keymap.hpp"
+#include "types.hpp"
 
 #include <vector>
 
@@ -30,6 +31,9 @@ namespace Engine
         void Initialize(const Window &win);
         void Poll();
         KeyState CheckKey(const uint32_t keyCode) const;
+        Vec2 GetMouseScreenPos() const;
+        Vec2 GetMouseNDCPos() const;
+
         static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
         private:
@@ -41,6 +45,10 @@ namespace Engine
         std::unique_ptr<bool[]> m_keyPressStates;
         std::unique_ptr<bool[]> m_keyReleaseStates;
 
+        double m_mousex;
+        double m_mousey;
+        float m_ncdx;
+        float m_ncdy;
     };
 }
 
