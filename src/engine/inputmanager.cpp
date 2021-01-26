@@ -94,7 +94,7 @@ void InputManager::PostPoll()
     // Calculate normalised mouse coords
     const Vec2 invSize = 1.0f / Vec2(m_win->GetWidth(), m_win->GetHeight());
     m_ncdx = (2.0f * m_mousex * invSize.x) - 1.0f;
-    m_ncdy = -((2.0f * -m_mousey * invSize.y) + 1.0f);
+    m_ncdy = (2.0f * -m_mousey * invSize.y) + 1.0f;
 }
 
 Vec2 InputManager::GetMouseScreenPos() const
@@ -108,7 +108,7 @@ Vec2 InputManager::GetMouseNDCPos() const
 {
     // Normalised screen coords
     // Center Of the screen is (0,0)
-    // Top left is (-1,-1)
-    // Bottom right is (1,1)
+    // Top left is (-1,1)
+    // Bottom right is (1,-1)
     return Vec2(m_ncdx, m_ncdy);
 }
