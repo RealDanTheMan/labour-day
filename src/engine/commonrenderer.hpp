@@ -3,6 +3,7 @@
 
 #include "components/modelcomponent.hpp"
 #include "components/transformcomponent.hpp"
+#include "igraphicsutils.hpp"
 #include "camera.hpp"
 #include "lights.hpp"
 #include "runtimeshaders.hpp"
@@ -27,7 +28,7 @@ namespace Engine
         bool m_shadows;
     };
 
-    class CommonRenderer
+    class CommonRenderer : public IGraphicsUtils
     {
         public:
 
@@ -52,7 +53,11 @@ namespace Engine
         const LightsCache & GetLightsCache() const;
         LightsCache & GetLightsCache();
         const DirectionalLight * GetMainLight() const;
-        Vec3 NDCToWorld(const Vec2 &ndc) const;
+        
+        // IGraphicsUtils interface Impl
+        virtual Vec3 NDCToWorld(const Vec2 &ndc) const override;
+        virtual uint32_t ResolutionX() const;
+        virtual uint32_t ResolutionY() const;
 
         private:
 

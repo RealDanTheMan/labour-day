@@ -285,6 +285,16 @@ Vec3 CommonRenderer::NDCToWorld(const Vec2 &ndc) const
     return Vec3(pos.x, pos.y, pos.z) * (1.0f / pos.w);
 }
 
+uint32_t CommonRenderer::ResolutionX() const
+{
+    return GetRenderSettings().m_resx;
+}
+
+uint32_t CommonRenderer::ResolutionY() const
+{
+    return GetRenderSettings().m_resy;
+}
+
 const LightsCache & CommonRenderer::GetLightsCache() const
 {
     return m_lightsCache;
