@@ -264,6 +264,27 @@ const DirectionalLight * CommonRenderer::GetMainLight() const
     return pMainLight;
 }
 
+Vec3 CommonRenderer::NDCToWorld(const Vec2 &ndc) const
+{
+    assert (GetCamera() != nullptr);
+
+    // Read deppth buffer to get depth value for actual pixel
+    const int screenX = (ndc.x + 1) * 0.5f * GetRenderSettings().m_resx;
+    const int screenY = (ndc.y + 1) * 0.5f * GetRenderSettings().m_resy;
+    
+    float depth = 0.0f;
+    glReadPixels(screenX, screenY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+
+    // Remap from normalised pixel value to normalised depth buffer range
+    depth = (2.0f * depth - 1.0f);
+
+    // Deproject
+    Mat4 vp = GetCamera()->Projection() * GetCamera()->View();
+    Vec4 pos = glm::inverse(vp) * Vec4(ndc.x, ndc.y, depth, 1.0f);
+
+    return Vec3(pos.x, pos.y, pos.z) * (1.0f / pos.w);
+}
+
 const LightsCache & CommonRenderer::GetLightsCache() const
 {
     return m_lightsCache;

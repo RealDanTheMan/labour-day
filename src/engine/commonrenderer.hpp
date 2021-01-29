@@ -52,6 +52,7 @@ namespace Engine
         const LightsCache & GetLightsCache() const;
         LightsCache & GetLightsCache();
         const DirectionalLight * GetMainLight() const;
+        Vec3 NDCToWorld(const Vec2 &ndc) const;
 
         private:
 
