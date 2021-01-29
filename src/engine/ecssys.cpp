@@ -2,13 +2,17 @@
 
 using namespace Engine;
 
-ECSSys::ECSSys()
+ECSSys::ECSSys(const IGraphicsUtils *graphics):
+m_graphics(graphics)
 {
 
 }
 
 void ECSSys::Init(const uint32_t poolSize)
 {
+    assert (poolSize > 0);
+    assert (m_graphics != nullptr);
+
     for(uint32_t i=0; i < poolSize; i++)
     {
         m_pool.push_back(std::make_unique<Entity>());

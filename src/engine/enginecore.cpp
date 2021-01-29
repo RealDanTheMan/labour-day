@@ -67,7 +67,7 @@ bool EngineCore::Initialize()
     m_fpsCounter = std::make_unique<FpsCounter>();
 
     // Configure ECS
-    m_ecs = std::make_unique<ECSSys>();
+    m_ecs = std::make_unique<ECSSys>(m_renderer.get());
     m_ecs->Init(128);
     RegisterStdComponents();
     RegisterStdProcesses();
@@ -120,7 +120,7 @@ bool EngineCore::Initialize(const EngineCoreSettings &settings)
     m_fpsCounter = std::make_unique<FpsCounter>();
     
     // Configure ECS
-    m_ecs = std::make_unique<ECSSys>();
+    m_ecs = std::make_unique<ECSSys>(m_renderer.get());
     m_ecs->Init(128);
     RegisterStdComponents();
     RegisterStdProcesses();

@@ -10,6 +10,11 @@ m_currentTimeDelta(0.0f)
 
 }
 
+void EntityProcess::Init(const IGraphicsUtils *graphics)
+{
+    m_graphics = graphics;
+}
+
 void EntityProcess::ProcessEntities(std::vector<Entity*>& entities, const double deltaTime)
 {
     m_currentTimeDelta = deltaTime;
@@ -41,4 +46,10 @@ float EntityProcess::CurrentTime() const
 float EntityProcess::CurrentTimeDelta() const
 {
     return m_currentTimeDelta;
+}
+
+const IGraphicsUtils * const EntityProcess::Graphics() const
+{
+    assert (m_graphics != nullptr);
+    return m_graphics;
 }

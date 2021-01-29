@@ -15,7 +15,7 @@ namespace Engine
     class ECSSys
     {
         public:
-        ECSSys();
+        ECSSys(const IGraphicsUtils *graphics);
 
         void Init(const uint32_t poolSize);
         void Update(const double deltaTime);
@@ -43,6 +43,7 @@ namespace Engine
         std::vector<std::unique_ptr<Entity>> m_pool;
         std::vector<std::unique_ptr<EntityComponent>> m_components;
         std::vector<std::unique_ptr<EntityProcess>> m_procs;
+        const IGraphicsUtils *m_graphics;
     };
 
     template <typename T>
@@ -50,6 +51,7 @@ namespace Engine
     {
         static_assert (std::is_base_of<EntityProcess, T>::value, "Invalid template type, expected derived from <EntityProcess>");
         m_procs.push_back(std::make_unique<T>());
+        m_procs.back()->Init(m_graphics);
         return reinterpret_cast<T*>(m_procs.back().get());
     }
 
