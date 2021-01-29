@@ -77,6 +77,7 @@ void DebugOverlay::DrawInputInfo() const
 
     const Vec2 mousePos = InputManager::Instance().GetMouseScreenPos();
     const Vec2 mousePosNCD = InputManager::Instance().GetMouseNDCPos();
+    const Vec3 worldMousePos = m_core->Renderer()->NDCToWorld(mousePosNCD);
 
     ImGui::Text("Mouse X: ", nullptr); ImGui::SameLine();
     ImGui::Text(std::to_string(mousePos.x).c_str(), nullptr);
@@ -89,6 +90,15 @@ void DebugOverlay::DrawInputInfo() const
 
     ImGui::Text("Mouse Y (NCD): ", nullptr); ImGui::SameLine();
     ImGui::Text(std::to_string(mousePosNCD.y).c_str(), nullptr);
+
+    ImGui::Text("World Mouse X: ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(worldMousePos.x).c_str(), nullptr);
+
+    ImGui::Text("World Mouse Y: ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(worldMousePos.y).c_str(), nullptr);
+
+    ImGui::Text("World Mouse Z: ", nullptr); ImGui::SameLine();
+    ImGui::Text(std::to_string(worldMousePos.z).c_str(), nullptr);
 
     ImGui::End();
 }
