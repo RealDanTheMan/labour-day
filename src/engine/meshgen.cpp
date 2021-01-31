@@ -232,3 +232,38 @@ std::unique_ptr<Mesh> MeshGen::Box(const float width, const float height, const 
 
     return mesh;
 }
+
+std::unique_ptr<Mesh> MeshGen::Line(const Vec3 &from, const Vec3 &to)
+{
+    const Vec3 vertices[2] = 
+    {
+        from,
+        to
+    };
+
+    const Vec3 normals[24] =
+    {
+        // Front plane
+        Vec3(0.0f, 1.0f, 0.0f),
+        Vec3(0.0f, 1.0f, 0.0f),
+
+    };
+
+    const Vec2 texcoords[24] =
+    {
+        Vec2(0.0, 0.0), 
+        Vec2(0.0, 0.0)
+    };
+    
+    const unsigned int indices[36] = 
+    {
+        0, 1
+    };
+
+    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
+    mesh->SetMeshData(vertices, indices, 2, 2);
+    mesh->SetNormals(normals, 2);
+    mesh->SetTexcoords(texcoords, 2, 0);
+
+    return mesh;
+}
