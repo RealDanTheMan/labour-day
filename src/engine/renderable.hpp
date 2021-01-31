@@ -31,15 +31,16 @@ namespace Engine
         private:
 
         void InitBuffers();
-        void BuffersGood();
 
+        uint32_t m_vertexCount;
+        uint32_t m_indexCount;
+
+        protected:
         std::unique_ptr<glm::vec3[]> m_vertices;
         std::unique_ptr<glm::vec3[]> m_normals;
         std::unique_ptr<glm::vec2[]> m_texcoords0;
         std::unique_ptr<unsigned int[]> m_indices;
         const ShaderProg* m_shader;
-        uint32_t m_vertexCount;
-        uint32_t m_indexCount;
 
         GLuint m_vbo;
         GLuint m_nbo;
