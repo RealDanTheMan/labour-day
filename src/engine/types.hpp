@@ -2,6 +2,8 @@
 #define TYPES_HPP_
 
 #include <memory>
+#include <string>
+#include <sstream>
 #include <glm/glm.hpp>
 
 using Vec2 = glm::vec2;
