@@ -17,10 +17,17 @@ m_settings(settings)
     glEnable(GL_MULTISAMPLE);
     glDisable(GL_DITHER);
 
+    // Init default box locator
     std::unique_ptr<Mesh> msh = MeshGen::Cube(0.1f);
     m_locator = std::make_unique<Renderable>();
     m_locator->Init(*msh);
     m_locator->BindShader(rtShaders->FlatWhite());
+
+    // Init default line gizom
+    std::unique_ptr<Mesh> line = MeshGen::Line(Vec3(0,0,0), Vec3(0,10,0));
+    m_line = std::make_unique<DynamicRenderable>();
+    m_line->Init(*line);
+    m_line->BindShader(rtShaders->FlatWhite());
 
     // Fallback light setup
     m_defaultLight.SetDirection(glm::normalize(Vec3(0.5,-1,0.5)));
@@ -68,6 +75,10 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             glUseProgram(m_runtimeShaders->FlatWhite()->GetHandle());
             PushUniformShaderParams(m_runtimeShaders->FlatWhite(), tr);
             break;
+        case DrawMode::Line:
+            glUseProgram(m_runtimeShaders->FlatWhite()->GetHandle());
+            PushUniformShaderParams(m_runtimeShaders->FlatWhite(), tr);
+            break;
         default:
             glUseProgram(renderable->GetShader()->GetHandle());
             PushUniformShaderParams(renderable->GetShader(), tr);
@@ -96,6 +107,11 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glDepthMask(GL_TRUE);
             break;
+        case DrawMode::Line:
+            //  Remap depth reange since we want to make sure the lines are always on top
+            glDepthRange(0.0, 0.001);
+            glDrawElements(GL_LINES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
+            glDepthRange(0.0, 1);
         default:
             glDrawElements(GL_TRIANGLES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
             break;
@@ -293,6 +309,18 @@ uint32_t CommonRenderer::ResolutionX() const
 uint32_t CommonRenderer::ResolutionY() const
 {
     return GetRenderSettings().m_resy;
+}
+
+void CommonRenderer::DrawLineGizmo(const Vec3 &from, const Vec3 &to) const
+{
+    assert (m_line != nullptr);
+
+    Transform identity;
+    m_line->UpdateVertex(0, from);
+    m_line->UpdateVertex(1, to);
+    m_line->Update();
+
+    DrawRenderable(m_line.get(), &identity, DrawMode::Line, nullptr);
 }
 
 const LightsCache & CommonRenderer::GetLightsCache() const

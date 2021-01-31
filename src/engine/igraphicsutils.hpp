@@ -14,6 +14,9 @@ namespace Engine
         virtual uint32_t ResolutionX() const =0;
         virtual uint32_t ResolutionY() const =0;
         virtual Vec3 NDCToWorld(const Vec2 &ndc) const =0;
+
+        // Imidiate Draw
+        virtual void DrawLineGizmo(const Vec3 &from, const Vec3 &to) const =0;
     };
 }
 

@@ -4,6 +4,7 @@
 #include "components/modelcomponent.hpp"
 #include "components/transformcomponent.hpp"
 #include "igraphicsutils.hpp"
+#include "dynamicrenderable.hpp"
 #include "camera.hpp"
 #include "lights.hpp"
 #include "runtimeshaders.hpp"
@@ -17,7 +18,8 @@ namespace Engine
     enum DrawMode
     {
         Fill,
-        Wireframe
+        Wireframe,
+        Line
     };
 
     struct RenderSettings
@@ -56,8 +58,9 @@ namespace Engine
         
         // IGraphicsUtils interface Impl
         virtual Vec3 NDCToWorld(const Vec2 &ndc) const override;
-        virtual uint32_t ResolutionX() const;
-        virtual uint32_t ResolutionY() const;
+        virtual uint32_t ResolutionX() const override;
+        virtual uint32_t ResolutionY() const override;
+        virtual void DrawLineGizmo (const Vec3 &from, const Vec3 &to) const override;
 
         private:
 
@@ -71,6 +74,7 @@ namespace Engine
         const Camera* m_activeCam;
         const RuntimeShaders * const m_runtimeShaders;
         std::unique_ptr<Renderable> m_locator;
+        std::unique_ptr<DynamicRenderable> m_line;
         RenderSettings m_settings;
         LightsCache m_lightsCache;
         DirectionalLight m_defaultLight;
