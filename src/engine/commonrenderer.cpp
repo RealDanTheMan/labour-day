@@ -109,9 +109,13 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             break;
         case DrawMode::Line:
             //  Remap depth reange since we want to make sure the lines are always on top
-            glDepthRange(0.0, 0.001);
+            //glDepthRange(0.0, 0.001);
+            glDepthMask(GL_FALSE);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_LINES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
-            glDepthRange(0.0, 1);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glDepthMask(GL_TRUE);
+            //glDepthRange(0.0, 1);
         default:
             glDrawElements(GL_TRIANGLES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
             break;

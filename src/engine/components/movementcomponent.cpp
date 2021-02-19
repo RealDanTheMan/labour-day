@@ -71,7 +71,7 @@ MovementComponent::~MovementComponent()
 
 void MovementComponent::Init()
 {
-
+    SetLookAt(Vec3(0,0,1));
 }
 
 std::unique_ptr<Engine::EntityComponent> MovementComponent::Duplicate() const
@@ -90,6 +90,11 @@ void MovementComponent::SetDirection(const Vec3 &dir)
     m_direction = dir;
 }
 
+void MovementComponent::SetLookAt(const Vec3 &dir)
+{
+    m_lookAt = dir;
+}
+
 void MovementComponent::SetPendingMovement(bool state)
 {
     m_pending = state;
@@ -103,6 +108,11 @@ float MovementComponent::GetSpeed() const
 Vec3 MovementComponent::GetDirection() const
 {
     return m_direction;
+}
+
+Vec3 MovementComponent::GetLookAt() const
+{
+    return m_lookAt;
 }
 
 bool MovementComponent::IsPendingMovement() const

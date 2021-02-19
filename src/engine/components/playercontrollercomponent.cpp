@@ -69,6 +69,7 @@ void PlayerControllerComponent::Init()
     m_backward = 0.0f;
     m_left = 0.0f;
     m_right = 0.0f;
+    m_lookAtMouse = true;
 }
 
 std::unique_ptr<Engine::EntityComponent> PlayerControllerComponent::Duplicate() const
@@ -173,6 +174,11 @@ void PlayerControllerComponent::ToggleAutoPossess(const bool toggle)
 const bool PlayerControllerComponent::AutoPossesses() const
 {
     return m_autoPossess;
+}
+
+const bool PlayerControllerComponent::LookAtMouse() const
+{
+    return m_lookAtMouse;
 }
 
 const Vec3 PlayerControllerComponent::GetMovementDir() const

@@ -37,15 +37,18 @@ namespace Engine
 
             void SetSpeed(const float speed);
             void SetDirection(const Vec3 &dir);
+            void SetLookAt(const Vec3 &dir);
             void SetPendingMovement(const bool state);
 
             float GetSpeed() const;
             Vec3 GetDirection() const;
+            Vec3 GetLookAt() const;
             bool IsPendingMovement() const;
 
             private:
             float m_speed;
             Vec3 m_direction;
+            Vec3 m_lookAt;
             bool m_pending;
         };
     }

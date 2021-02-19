@@ -6,6 +6,7 @@ using namespace Engine::Processes;
 void PlayerControllerProcess::OnUpdate(Engine::Entity * const entity)
 {
     auto playerCom = entity->Components().GetFirst<Components::PlayerControllerComponent>();
+    auto trCom = entity->Components().GetFirst<Components::TransformComponent>();
 
     assert (playerCom != nullptr);
     assert (entity->IsRoot());
@@ -34,7 +35,16 @@ void PlayerControllerProcess::OnUpdate(Engine::Entity * const entity)
             playerCom->GetCapturedMovement()->SetPendingMovement(true);
             playerCom->GetCapturedMovement()->SetDirection(dir);
         }
-        
+    }
+
+    // Compute direction vector to look at
+    if(playerCom->LookAtMouse() && trCom != nullptr)
+    {
+        const Vec2 mouseCoords = InputManager::Instance().GetMouseNDCPos();
+        const Vec3 mouseWorld = Graphics()->NDCToWorld(mouseCoords);
+        const Vec3 delta = mouseWorld - trCom->GetTransform().Translation();
+
+        playerCom->GetCapturedMovement()->SetLookAt(glm::normalize(delta));
     }
 }
 

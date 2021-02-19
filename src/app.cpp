@@ -78,7 +78,6 @@ void App::UpdateUI()
 void App::DrawGame()
 {
     assert (m_core != nullptr);
-    m_core->ClearMainWindow();
 
     // Use component camera if one exists
     std::vector<Engine::Entity*> cams;
@@ -92,6 +91,8 @@ void App::DrawGame()
         }
     }
 
+    m_core->Renderer()->Clear();
+
     // Old common rendering
     m_core->RedrawMainWindow();
 
@@ -101,6 +102,12 @@ void App::DrawGame()
     // Draw component gizmos for debugging 
     m_core->Renderer()->DrawTransformComponents(m_core->ECS());
     m_core->Renderer()->DrawLightComponents(m_core->ECS());
+
+    Vec2 pos = Engine::InputManager::Instance().GetMouseNDCPos();
+    Vec3 wpos = m_core->Renderer()->NDCToWorld(pos);
+    Engine::Transform tr;
+    tr.SetTranslation(wpos);
+    m_core->Renderer()->DrawLocator(&tr);
 
     // Draw UI layer to the screen
     DrawUI();

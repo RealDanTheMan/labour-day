@@ -39,11 +39,13 @@ namespace Engine
 
             void ToggleAutoPossess(const bool toggle);
             const bool AutoPossesses() const;
+            const bool LookAtMouse() const;
             MovementComponent * GetCapturedMovement();
             const Vec3 GetMovementDir() const;
 
             protected:
             bool m_autoPossess;
+            bool m_lookAtMouse;
 
             private:
             float m_forward;
