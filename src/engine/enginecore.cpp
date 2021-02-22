@@ -171,6 +171,7 @@ void EngineCore::PresentMainWindow()
     assert (m_renderer != nullptr);
 
     glfwSwapBuffers(m_mainWin->GetHandle());
+    Renderer()->SwapDepthBuffers();
 }
 
 const bool EngineCore::MainWindowActive() const

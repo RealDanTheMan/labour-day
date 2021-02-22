@@ -37,6 +37,7 @@ void App::Run()
     while(m_core->MainWindowActive() && 
             Engine::InputManager::Instance().CheckKey(KEY_ESCAPE) != Engine::InputManager::KeyState::Active)
     {
+        m_core->Renderer()->Clear();
         m_core->IncrementTime();
         m_core->FPS()->Sample();
         Engine::InputManager::Instance().Poll();
@@ -90,8 +91,6 @@ void App::DrawGame()
             m_core->Renderer()->SetCamera(cCam->CameraHandle());
         }
     }
-
-    m_core->Renderer()->Clear();
 
     // Old common rendering
     m_core->RedrawMainWindow();
