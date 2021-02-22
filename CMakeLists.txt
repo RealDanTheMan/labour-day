@@ -71,6 +71,7 @@ ${PROJECT_SOURCE_DIR}/engine/imguiinterface.cpp
 ${PROJECT_SOURCE_DIR}/engine/fpscounter.cpp
 ${PROJECT_SOURCE_DIR}/engine/debugoverlay.cpp
 ${PROJECT_SOURCE_DIR}/engine/event.cpp
+${PROJECT_SOURCE_DIR}/engine/depthframebuffer.cpp
 ${PROJECT_SOURCE_DIR}/engine/shadowframebuffer.cpp
 ${PROJECT_SOURCE_DIR}/engine/shadowmaprenderer.cpp
 ${PROJECT_SOURCE_DIR}/engine/components/transformcomponent.cpp
