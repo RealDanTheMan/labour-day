@@ -11,6 +11,7 @@
 #include "ecssys.hpp"
 #include "lightscache.hpp"
 #include "shadowmaprenderer.hpp"
+#include "depthframebuffer.hpp"
 #include <vector>
 
 namespace Engine
@@ -46,6 +47,7 @@ namespace Engine
         void DrawLightComponents(ECSSys * ecs) const;
 
         void ClearQueue();
+        void SwapDepthBuffers();
         void AddToQueue(const Renderable *renderable);
         void SetCamera(const Camera *cam);
         void SetRenderSettings(const RenderSettings &settings);
@@ -55,6 +57,7 @@ namespace Engine
         const LightsCache & GetLightsCache() const;
         LightsCache & GetLightsCache();
         const DirectionalLight * GetMainLight() const;
+        const DepthFramebuffer * GetLastZBuffer() const;
         
         // IGraphicsUtils interface Impl
         virtual Vec3 NDCToWorld(const Vec2 &ndc) const override;
@@ -79,6 +82,7 @@ namespace Engine
         LightsCache m_lightsCache;
         DirectionalLight m_defaultLight;
         std::unique_ptr<ShadowmapRenderer> m_shadowRenderer;
+        std::unique_ptr<DepthFramebuffer> m_zbuffer;
 
     };
 }

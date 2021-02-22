@@ -42,6 +42,10 @@ m_settings(settings)
     shadowSettings.m_biasOffset = 0.0f;
     m_shadowRenderer = std::make_unique<ShadowmapRenderer>();
     m_shadowRenderer->Init(shadowSettings);
+
+    // Last frame depth buffer
+    m_zbuffer = std::make_unique<DepthFramebuffer>(settings.m_resx, settings.m_resy);
+    m_zbuffer->Init();
 }
 
 
@@ -51,6 +55,27 @@ void CommonRenderer::Clear() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // TODO: Perhaps clear the shadowmap frame buffer here as well ?!
+}
+
+void CommonRenderer::SwapDepthBuffers()
+{
+    assert (m_zbuffer != nullptr);
+    
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GetLastZBuffer()->FramebufferHandle());
+    glBlitFramebuffer(
+            0, 0, 
+            GetRenderSettings().m_resx, 
+            GetRenderSettings().m_resy, 
+            0, 0,
+            GetLastZBuffer()->Width(), 
+            GetLastZBuffer()->Height(),
+            GL_DEPTH_BUFFER_BIT,
+            GL_NEAREST
+    );
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 }
 
 [[deprecated]]
@@ -109,13 +134,11 @@ void CommonRenderer::DrawRenderable(const Renderable *renderable, const Transfor
             break;
         case DrawMode::Line:
             //  Remap depth reange since we want to make sure the lines are always on top
-            //glDepthRange(0.0, 0.001);
-            glDepthMask(GL_FALSE);
+            glDepthRange(0.0, 0.001);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_LINES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            glDepthMask(GL_TRUE);
-            //glDepthRange(0.0, 1);
+            glDepthRange(0.0, 1);
         default:
             glDrawElements(GL_TRIANGLES, renderable->IndexCount(), GL_UNSIGNED_INT, 0);
             break;
@@ -284,16 +307,27 @@ const DirectionalLight * CommonRenderer::GetMainLight() const
     return pMainLight;
 }
 
+const DepthFramebuffer * CommonRenderer::GetLastZBuffer() const 
+{
+    return m_zbuffer.get();
+}
+
 Vec3 CommonRenderer::NDCToWorld(const Vec2 &ndc) const
 {
     assert (GetCamera() != nullptr);
+    assert (GetLastZBuffer() != nullptr);
+    assert (GetLastZBuffer()->Ready());
 
     // Read deppth buffer to get depth value for actual pixel
+    // We are using the last frame depth buffer as the current one may not have drawn yet
     const int screenX = (ndc.x + 1) * 0.5f * GetRenderSettings().m_resx;
     const int screenY = (ndc.y + 1) * 0.5f * GetRenderSettings().m_resy;
     
     float depth = 0.0f;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, GetLastZBuffer()->FramebufferHandle());
+    assert (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
     glReadPixels(screenX, screenY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
     // Remap from normalised pixel value to normalised depth buffer range
     depth = (2.0f * depth - 1.0f);
