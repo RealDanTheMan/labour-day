@@ -1,4 +1,4 @@
 LABOUR-DAY - a not so small top down game project
 -------------------------------------------------
 
- Not so small personal project which was born out of excuse to dive into OpenGL based engine arhitecutre exercise.
+A moderately-sized personal project, initiated as an opportunity to delve into native OpenGL applications. It serves as an exercise to explore real-time engine architecture and game systems.
